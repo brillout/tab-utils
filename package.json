@@ -1,10 +1,10 @@
 {
-  "private": true,
   "name": "tab-utils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
-    "build:parcel": "parcel build src/*.js && && (cd dist/ && npm publish)",
-    "build:movePackageJson": "cp package.json dist/ && sed --in-place '2d' dist/package.json"
+    "build": "parcel build src/*.js",
+    "prepublishOnly": "yarn build && cp -r ./dist/* ./ && rm -rf ./src/",
+    "postpublish": "git clean -fd"
   },
   "devDependencies": {
     "parcel": "^1.12.4"
