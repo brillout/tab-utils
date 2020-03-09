@@ -6,6 +6,9 @@
     "prepublishOnly": "yarn build && cp -r ./dist/* ./",
     "postpublish": "git clean -fd"
   },
+  "files": [
+    "./*.js"
+  ],
   "devDependencies": {
     "parcel": "^1.12.4"
   }
