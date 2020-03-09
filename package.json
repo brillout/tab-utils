@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "scripts": {
     "build": "parcel build src/*.js",
-    "prepublishOnly": "yarn build && cp -r ./dist/* ./ && rm -rf ./src/",
+    "prepublishOnly": "yarn build && cp -r ./dist/* ./",
     "postpublish": "git clean -fd"
   },
   "devDependencies": {
