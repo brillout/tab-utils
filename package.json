@@ -1,0 +1,9 @@
+{
+  "name": "tab-utils",
+  "build": "parcel src/*.js",
+  "release": "yarn build && cp package.json dist/ && (cd dist/ && npm publish)",
+  "version": "0.0.1",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  }
+}
