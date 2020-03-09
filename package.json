@@ -1,11 +1,11 @@
 {
+  "private": true,
   "name": "tab-utils",
-  "scripts": {
-    "build": "parcel build src/*.js && cp package.json dist/",
-    "publish": "(cd dist/ && npm publish)",
-    "release": "yarn build && yarn publish"
-  },
   "version": "0.0.1",
+  "scripts": {
+    "build:parcel": "parcel build src/*.js && && (cd dist/ && npm publish)",
+    "build:movePackageJson": "cp package.json dist/ && sed --in-place '2d' dist/package.json"
+  },
   "devDependencies": {
     "parcel": "^1.12.4"
   }
