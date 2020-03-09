@@ -1,4 +1,4 @@
-import ml from './ml';
+import loadScript from './loadScript';
 import removeAd from './removeAd';
 
 export default loadAd;
@@ -24,13 +24,13 @@ function loadAd(AD_SLOTS) {
   }, 90000);
 }
 function loadAdsByGoogle() {
-  const scriptEl = ml.loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
+  const scriptEl = loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
   scriptEl.setAttribute('data-ad-client', "ca-pub-3994464140431603");
 }
 
 
 function loadGoogleTag() {
-  ml.loadScript("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
+  loadScript("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
 
   window.googletag = window.googletag || {cmd: []};
   googletag.cmd.push(function() {
