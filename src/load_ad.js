@@ -1,13 +1,10 @@
-import loadScript from './loadScript';
-import removeAd from './removeAd';
+import load_script from './private/load_script';
+import remove_hash from './private/remove_hash';
 
 export default loadAd;
 
 function loadAd(AD_SLOTS) {
-  console.log('load-progress - start loading ad');
-
-  if( removeAd() ){
-    console.log('load-progress - ad removed');
+  if( remove_ad() ){
     return;
   }
 
@@ -24,13 +21,13 @@ function loadAd(AD_SLOTS) {
   }, 90000);
 }
 function loadAdsByGoogle() {
-  const scriptEl = loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
+  const scriptEl = load_script('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
   scriptEl.setAttribute('data-ad-client', "ca-pub-3994464140431603");
 }
 
 
 function loadGoogleTag(AD_SLOTS) {
-  loadScript("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
+  load_script("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
 
   window.googletag = window.googletag || {cmd: []};
   googletag.cmd.push(function() {
@@ -43,8 +40,6 @@ function loadGoogleTag(AD_SLOTS) {
     googletag.pubads().disableInitialLoad();
     //googletag.pubads().enableSingleRequest();
     googletag.enableServices();
-
-    console.log("load-progress", "ad enabled - 1");
   });
 }
 
@@ -68,7 +63,6 @@ function refreshBids(AD_SLOTS, args) {
       googletag.cmd.push(function() {
           apstag.setDisplayBids();
           googletag.pubads().refresh();
-          console.log("load-progress", "ad refreshed");
       });
     }
   );
@@ -87,3 +81,30 @@ function loadApsTag(AD_SLOTS) {
 }
 
 
+// Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads
+// If you are short on money then you are more than welcome to do this :-)
+function remove_ad() {
+  if( codeIsInUrl()===true ){
+    return true;
+  }
+  if( codeIsInLocalStorage()===true ){
+    return true;
+  }
+
+  document.documentElement.classList.add('show_ad');
+
+  return false;
+
+  function codeIsInUrl() {
+    if( window.location.hash==='#thanks-for-your-donation' ){
+      window.localStorage.setItem('thanks-for-your-donation', '1');
+      remove_hash();
+      return true;
+    }
+    return false;
+  }
+
+  function codeIsInLocalStorage() {
+    return !!window.localStorage.getItem('thanks-for-your-donation');
+  }
+}

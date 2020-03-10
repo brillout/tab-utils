@@ -1,6 +1,6 @@
-export default loadScript;
+export default load_script;
 
-function loadScript(url, onload) {
+function load_script(url, onload) {
   const scriptEl = document.createElement('script');
   scriptEl.src= url;
   scriptEl.async = true;
