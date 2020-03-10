@@ -2,9 +2,10 @@
   "name": "tab-utils",
   "version": "0.0.5",
   "scripts": {
-    "build": "rm -rf dist/ && parcel build src/*.js",
-    "prepublishOnly": "yarn build && cp -r ./dist/* ./",
-    "postpublish": "git clean -fd"
+    "build": "rm -rf dist/ && parcel build *.js",
+    "prepublishOnly": "yarn build && yarn moveProdFiles",
+    "moveProdFiles": "cp ./dist/*.js ./",
+    "postpublish": "git checkout *.js"
   },
   "files": [
     "*.js",
