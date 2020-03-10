@@ -1,8 +1,8 @@
 {
   "name": "tab-utils",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
-    "build": "rm -r dist/ && parcel build src/*.js",
+    "build": "rm -rf dist/ && parcel build src/*.js",
     "prepublishOnly": "yarn build && cp -r ./dist/* ./",
     "postpublish": "git clean -fd"
   },
