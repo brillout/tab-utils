@@ -12,15 +12,15 @@ function loadAd(AD_SLOTS) {
   }
 
   loadAdsByGoogle();
-  loadGoogleTag();
-  loadApsTag();
+  loadGoogleTag(AD_SLOTS);
+  loadApsTag(AD_SLOTS);
 
   AD_SLOTS.forEach(({slotID}) => {
     googletag.cmd.push(function() { googletag.display(slotID); });
   });
 
   setInterval(function () {
-    refreshBids({timeout: 2e3});
+    refreshBids(AD_SLOTS, {timeout: 2e3});
   }, 90000);
 }
 function loadAdsByGoogle() {
@@ -29,7 +29,7 @@ function loadAdsByGoogle() {
 }
 
 
-function loadGoogleTag() {
+function loadGoogleTag(AD_SLOTS) {
   loadScript("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
 
   window.googletag = window.googletag || {cmd: []};
@@ -48,7 +48,7 @@ function loadGoogleTag() {
   });
 }
 
-function refreshBids(args) {
+function refreshBids(AD_SLOTS, args) {
   apstag.fetchBids(
     {
       slots: AD_SLOTS.map(({slotID, slotName, slotSize}) => {
@@ -74,7 +74,7 @@ function refreshBids(args) {
   );
 }
 
-function loadApsTag() {
+function loadApsTag(AD_SLOTS) {
   !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
 
   apstag.init({
@@ -83,7 +83,7 @@ function loadApsTag() {
      bidTimeout: 2e3
   });
 
-  refreshBids();
+  refreshBids(AD_SLOTS);
 }
 
 
