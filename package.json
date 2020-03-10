@@ -13,5 +13,8 @@
   ],
   "devDependencies": {
     "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "core-js": "3"
   }
 }

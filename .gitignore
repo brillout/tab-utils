@@ -5,6 +5,7 @@
 /dist/
 # Parcel cache
 /.cache/
+/.parcel-cache/
 
 # Yarn/Npm debug info
 npm-debug.log*
