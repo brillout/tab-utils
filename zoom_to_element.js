@@ -1,6 +1,11 @@
+import assert from '@brillout/assert';
+//import add_css from './private/add_css';
+
 export default zoom_to_element;
 
-function zoom_to_element(el,unzoom,opts, zoom_from=document.documentElement){ 
+let fullscreen_state = null;
+
+function zoom_to_element(el,unzoom,opts, {zoom_from=document.documentElement, zoom_from_container}={}){ 
   //TODO
   //-listen change to: element size change + window size change
   // -just add resize listener and onDiffChange listener
@@ -52,7 +57,6 @@ function zoom_to_element(el,unzoom,opts, zoom_from=document.documentElement){
         var elHeight  = sizes.height;
         var botPad    = !opts.bottomElements?0:opts.bottomElements.map(function(elem){return boxSize(elem).height}).reduce(function(i1,i2){return i1+i2});
         var elPos     = getPosition(el);
-        console.log('p',elPos);
 
         //crop top padding
         var elPadTop  = parseInt(ml.element.getStyle(el,'padding-top'),10);
@@ -77,31 +81,65 @@ function zoom_to_element(el,unzoom,opts, zoom_from=document.documentElement){
       zoom_from.style[cssPrefix+'ransform']='translate('+data.scale_offset*data.offset_to_middle[0]+'px,'+data.scale_offset*data.offset_to_middle[1]+'px) scale('+data.scale+')';
     }
 
-    if(el.fullscreenZoomed) {ml.assert(false);return;}
-    el.fullscreenZoomed={};
-    el.fullscreenZoomed.overflow_orginial=zoom_from.style['overflow'];
-    el.fullscreenZoomed.zoomFct=doZoomIn;
-    window.addEventListener('resize',el.fullscreenZoomed.zoomFct);
-    if(opts.posChangeListeners) opts.posChangeListeners.push(el.fullscreenZoomed.zoomFct);
-    zoom_from.style['overflow']='hidden';
+    if( fullscreen_state ){
+      assert(false);
+      return;
+    }
+    const overflow_orginial = zoom_from_container.style['overflow'];
+    fullscreen_state = {
+      overflow_orginial,
+      doZoomIn,
+    };
+    window.addEventListener('resize', doZoomIn);
+    if(opts.posChangeListeners) opts.posChangeListeners.push(doZoomIn);
+
+    zoom_from_container.style['overflow']='hidden';
 
     doZoomIn();
   } 
   function zoomOut(){ 
-    if(!el.fullscreenZoomed) {ml.assert(false);return;}
-    window.removeEventListener('resize',el.fullscreenZoomed.zoomFct);
-    if(opts.posChangeListeners) opts.posChangeListeners.forEach(function(l){if(l===el.fullscreenZoomed.zoomFct) opts.posChangeListeners.splice(opts.posChangeListeners.indexOf(l),1)});
-    var overflow_orginial = el.fullscreenZoomed.overflow_orginial;
-    delete el.fullscreenZoomed;
+    if( !fullscreen_state ){
+      assert(false);
+      return;
+    }
+    const {doZoomIn, overflow_orginial} = fullscreen_state;
+    fullscreen_state = null;
+
+    window.removeEventListener('resize', doZoomIn);
+    if(opts.posChangeListeners) opts.posChangeListeners.forEach(function(l){if(l===doZoomIn) opts.posChangeListeners.splice(opts.posChangeListeners.indexOf(l),1)});
 
     zoom_from.style[cssPrefix+'ransform']='';
     //timeout makes transition of zoom counter smoother
-    setTimeout(function(){zoom_from.style['overflow']=overflow_orginial},TRANSITION_DURATION+100);
+    setTimeout(function(){zoom_from_container.style['overflow']=overflow_orginial},TRANSITION_DURATION+100);
   } 
+
   unzoom?zoomOut():zoomIn();
 }; 
 
+/*
+let once_done = false;
+function once() {
+  if( once_done ) return;
+  once_done = true;
 
+  const CSS = (
+`
+.fullscreen_container, {
+.fullscreen_container * {
+  
+}
+#fullscreen_overlay {
+  position: asolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+}
+`
+  );
+  add_css(CSS);
+}
+*/
 
 function getPosition(el){
   let left = 0;

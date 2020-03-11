@@ -9,6 +9,11 @@ function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}) {
 
   function check() {
     const {hash} = location;
+    /* doesn't work because `location.hash===''` even for `localhost:3000/#`
+    if( hash==='#' ) {
+      remove_hash();
+    }
+    */
     if( IGNORE_LIST && IGNORE_LIST.includes(hash) ){
       return;
     }

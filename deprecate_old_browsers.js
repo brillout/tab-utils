@@ -1,6 +1,7 @@
 // CSS variables
 //  - Supported by all modern browsers.
 //  - Not supported by IE11
+import add_css from './private/add_css';
 
 export default deprecate_old_browsers;
 
@@ -72,12 +73,5 @@ function addStyle() {
 `
   );
 
-  addCss(css_content);
-}
-
-function addCss(content) {
-  const el=document.createElement("style");
-  el.appendChild(document.createTextNode(content));
-  el.setAttribute("type", "text/css");
-  document.getElementsByTagName("head")[0].appendChild(el);
+  add_css(css_content);
 }
