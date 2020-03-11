@@ -1,8 +1,6 @@
-console.log('111');
-
 export default zoom_to_element;
 
-function zoom_to_element(el,unzoom,opts){ 
+function zoom_to_element(el,unzoom,opts, zoom_from=document.documentElement){ 
   //TODO
   //-listen change to: element size change + window size change
   // -just add resize listener and onDiffChange listener
@@ -22,9 +20,9 @@ function zoom_to_element(el,unzoom,opts){
     for(var i=0;i<omPrefixes.length;i++)
     {
       var pre=omPrefixes[i];
-      if(document.documentElement.style[pre+'ransition']!==undefined && document.documentElement.style[pre+'ransform']!==undefined) {
-        document.documentElement.style[pre+'ransition']=opts.noTransition?'none':(prefixes[i]+'transform '+(TRANSITION_DURATION/1000)+'s ease-in-out');
-        if(document.documentElement.style[pre+'ransition']) rightPre=pre;
+      if(zoom_from.style[pre+'ransition']!==undefined && zoom_from.style[pre+'ransform']!==undefined) {
+        zoom_from.style[pre+'ransition']=opts.noTransition?'none':(prefixes[i]+'transform '+(TRANSITION_DURATION/1000)+'s ease-in-out');
+        if(zoom_from.style[pre+'ransition']) rightPre=pre;
       }
     }
     return rightPre;
@@ -61,11 +59,11 @@ function zoom_to_element(el,unzoom,opts){
         elPos.y += elPadTop;
         elHeight-= elPadTop;
 
-        //When zooming: innerHeight/parseInt(ml.element.getStyle(document.documentElement,'height')) === document.documentElement.style.zoom
+        //When zooming: innerHeight/parseInt(ml.element.getStyle(zoom_from,'height')) === zoom_from.style.zoom
         //var winWidth   = window.innerWidth;
         //var winHeight  = window.innerHeight;
-        var winWidth   = parseInt(ml.element.getStyle(document.documentElement,'width' ));
-        var winHeight  = parseInt(ml.element.getStyle(document.documentElement,'height'));
+        var winWidth   = parseInt(ml.element.getStyle(zoom_from,'width' ));
+        var winHeight  = parseInt(ml.element.getStyle(zoom_from,'height'));
         var viewWidth  = elWidth;
         var viewHeight = elHeight+botPad;
 
@@ -76,16 +74,16 @@ function zoom_to_element(el,unzoom,opts){
 
         return ret;
       })(); 
-      document.documentElement.style[cssPrefix+'ransform']='translate('+data.scale_offset*data.offset_to_middle[0]+'px,'+data.scale_offset*data.offset_to_middle[1]+'px) scale('+data.scale+')';
+      zoom_from.style[cssPrefix+'ransform']='translate('+data.scale_offset*data.offset_to_middle[0]+'px,'+data.scale_offset*data.offset_to_middle[1]+'px) scale('+data.scale+')';
     }
 
     if(el.fullscreenZoomed) {ml.assert(false);return;}
     el.fullscreenZoomed={};
-    el.fullscreenZoomed.overflow_orginial=document.documentElement.style['overflow'];
+    el.fullscreenZoomed.overflow_orginial=zoom_from.style['overflow'];
     el.fullscreenZoomed.zoomFct=doZoomIn;
     window.addEventListener('resize',el.fullscreenZoomed.zoomFct);
     if(opts.posChangeListeners) opts.posChangeListeners.push(el.fullscreenZoomed.zoomFct);
-    document.documentElement.style['overflow']='hidden';
+    zoom_from.style['overflow']='hidden';
 
     doZoomIn();
   } 
@@ -96,9 +94,9 @@ function zoom_to_element(el,unzoom,opts){
     var overflow_orginial = el.fullscreenZoomed.overflow_orginial;
     delete el.fullscreenZoomed;
 
-    document.documentElement.style[cssPrefix+'ransform']='';
+    zoom_from.style[cssPrefix+'ransform']='';
     //timeout makes transition of zoom counter smoother
-    setTimeout(function(){document.documentElement.style['overflow']=overflow_orginial},TRANSITION_DURATION+100);
+    setTimeout(function(){zoom_from.style['overflow']=overflow_orginial},TRANSITION_DURATION+100);
   } 
   unzoom?zoomOut():zoomIn();
 }; 
