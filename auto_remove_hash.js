@@ -2,22 +2,19 @@ import remove_hash from './private/remove_hash';
 
 export default auto_remove_hash;
 
-function auto_remove_hash() {
-  const WHITELIST = [
-    '#fullscreen',
-  ];
+function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}) {
+  check();
+  [100, 300, 600, 900].forEach(timeout => setTimeout(check, timeout));
+  window.addEventListener("hashchange", check, {passive: true, capture: false});
 
-  window.addEventListener("hashchange", () => {
-    if( WHITELIST.includes(location.hash) ) {
+  function check() {
+    const {hash} = location;
+    if( IGNORE_LIST && IGNORE_LIST.includes(hash) ){
       return;
     }
-    ;
-  }, false);
-
-  function removeHash () {
-    // `window.location.hash = '';` doesn't remove leading `#` sign.
-    // See https://stackoverflow.com/questions/1397329/how-to-remove-the-hash-from-window-location-url-with-javascript-without-page-r
-    window.history.pushState("", document.title, window.location.pathname + window.location.search);
+    if( INCLUDE_LIST && !INCLUDE_LIST.includes(hash) ){
+      return;
+    }
+    remove_hash();
   }
-
 }
