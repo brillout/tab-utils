@@ -1,0 +1,18 @@
+import './private/more_panel.css';
+import pretty_scroll_area, {scrollToElement} from './pretty_scroll_area';
+
+window.addEventListener('load', more_panel);
+
+function more_panel() {
+  actionize_more_panel_link();
+  pretty_scroll_area();
+}
+
+function actionize_more_panel_link() {
+  const link_source = document.querySelector('#more_panel_jumper');
+  link_source.onclick = ev => {
+    scrollToElement('#more_panel');
+    ev.preventDefault();
+    return false;
+  };
+}
