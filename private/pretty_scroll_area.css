@@ -8,6 +8,10 @@
   overflow-x: hidden;
   transition: width .3s linear;
 }
+.pretty_scroll_area__parent > .pretty_scroll_area > *:first-child,
+.pretty_scroll_area__parent > .pretty_scroll_area > .more_panel {
+  width: 100vw;
+}
 .pretty_scroll_area__parent > .pretty_scroll_area.hide_scroll {
   width: calc(100vw + var(--scroll-bar-width));
 }
