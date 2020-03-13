@@ -63,16 +63,61 @@ function add_on_scroll_listener(on_scroll) {
 function getScroll() {
   return scroll_el.scrollTop;
 }
+function setScroll(newTop, {smooth=false}={}) {
+  if( !smooth ){
+    return jumpTo(newTop);
+  } else {
+    return slideTo(newTop);
+  }
+}
 
-function setScroll(newTop) {
+function jumpTo(newTop) {
   scroll_el.scrollTop = newTop;
+}
+
+async function slideTo(top) {
+  /*
+  const STEPS = 30;
+  const INTERVAL = 10;
+  /*/
+  const STEPS = 30;
+  const INTERVAL = 20;
+  //*/
+
+  let resolvePromise;
+  const promise = new Promise(resolve => resolvePromise = resolve);
+
+  const currentTop = getScroll();
+  const distance = top - currentTop;
+
+  let counter = 0;
+  var timer = setInterval(function () {
+    jumpTo(currentTop + distance * smoothStep(counter++ / STEPS));
+    if (counter > STEPS)
+      clearInterval(timer);
+      resolvePromise();
+  }, INTERVAL);
+
+  return promise;
+
+  function smoothStep(n) {
+    return n * n * (3 - 2 * n);
+  }
 }
 
 function scrollToElement(selector) {
   const el = document.querySelector(selector);
-  const {top} = el.getBoundingClientRect();
-  scroll_el.scrollTo({top, behavior: 'smooth'});
+//const top = el.getBoundingClientRect().top;
+  const top = el.getBoundingClientRect().top + getScroll();
+  setScroll(top, {smooth: true});
+  console.log('tt', top);
+//scroll_el.scrollBy({top, behavior: 'smooth'});
+//scroll_el.scrollTo({top, behavior: 'smooth'});
+//setScroll(top);
+  console.log(getScroll());
 }
+
+
 
 function compute_scrollbar_width() {
   const scroll_bar_width = get_scroll_bar_width();
