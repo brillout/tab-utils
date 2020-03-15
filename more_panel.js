@@ -1,4 +1,3 @@
-import './private/more_panel.css';
 import pretty_scroll_area, {scrollToElement} from './pretty_scroll_area';
 
 window.addEventListener('load', more_panel);
