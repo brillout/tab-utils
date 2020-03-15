@@ -67,6 +67,8 @@ function loadOneTag() {
     a = n.createElement(e); a.async = true; g.cmd = [];
     a.src = "https://onetag-sys.com/main.js"; n.head.appendChild(a);
   }(window, document, "script"));
+  onetag("initAds");
+  onetag("autoPlacements", {pubId: "4e106747f8aa2bc"});
 }
 
 function refreshBids__apsTag(AD_SLOTS, args) {
@@ -94,8 +96,6 @@ function refreshBids__apsTag(AD_SLOTS, args) {
   );
 }
 function refreshBids__oneTag(AD_SLOTS, args) {
-  onetag("initAds");
-  onetag("autoPlacements", {pubId: "4e106747f8aa2bc"});
   googletag.cmd.push(function() {
     var refresh, secureTimeout = 3000;
     var t = setTimeout(refresh = function() {
