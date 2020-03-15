@@ -3,7 +3,7 @@ import remove_hash from './private/remove_hash';
 
 export default loadAd;
 
-function loadAd(AD_SLOTS, {useOneTag=false}) {
+function loadAd(AD_SLOTS, {useOneTag=false}={}) {
   if( remove_ad() ){
     return;
   }
