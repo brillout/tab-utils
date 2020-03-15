@@ -3,21 +3,37 @@ import remove_hash from './private/remove_hash';
 
 export default loadAd;
 
-function loadAd(AD_SLOTS) {
+function loadAd(AD_SLOTS, {useOneTag=false}) {
   if( remove_ad() ){
     return;
   }
 
   loadAdsByGoogle();
-  loadGoogleTag(AD_SLOTS);
-  loadApsTag(AD_SLOTS);
+
+  loadGoogleTag(AD_SLOTS, {useOneTag});
+
+  if( useOneTag ){
+    loadOneTag();
+  } else {
+    loadApsTag(AD_SLOTS);
+  }
+
+  if( useOneTag ){
+    refreshBids__oneTag();
+  } else {
+    refreshBids__apsTag(AD_SLOTS);
+  }
 
   AD_SLOTS.forEach(({slotID}) => {
     googletag.cmd.push(function() { googletag.display(slotID); });
   });
 
   setInterval(function () {
-    refreshBids(AD_SLOTS, {timeout: 2e3});
+    if( useOneTag ){
+      refreshBids__oneTag();
+    } else {
+      refreshBids__apsTag(AD_SLOTS, {timeout: 2e3});
+    }
   }, 90000);
 }
 function loadAdsByGoogle() {
@@ -26,7 +42,7 @@ function loadAdsByGoogle() {
 }
 
 
-function loadGoogleTag(AD_SLOTS) {
+function loadGoogleTag(AD_SLOTS, {useOneTag}) {
   load_script("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
 
   window.googletag = window.googletag || {cmd: []};
@@ -38,12 +54,22 @@ function loadGoogleTag(AD_SLOTS) {
     });
 
     googletag.pubads().disableInitialLoad();
-    //googletag.pubads().enableSingleRequest();
+    if( useOneTag ){
+      googletag.pubads().enableSingleRequest();
+    }
     googletag.enableServices();
   });
 }
 
-function refreshBids(AD_SLOTS, args) {
+function loadOneTag() {
+  (function(o,n,e,t,a,g){
+    if(o.onetag) return; g = o.onetag = function(){ g.cmd.push(arguments) };
+    a = n.createElement(e); a.async = true; g.cmd = [];
+    a.src = "https://onetag-sys.com/main.js"; n.head.appendChild(a);
+  }(window, document, "script"));
+}
+
+function refreshBids__apsTag(AD_SLOTS, args) {
   apstag.fetchBids(
     {
       slots: AD_SLOTS.map(({slotID, slotName, slotSize}) => {
@@ -67,8 +93,24 @@ function refreshBids(AD_SLOTS, args) {
     }
   );
 }
+function refreshBids__oneTag(AD_SLOTS, args) {
+  onetag("initAds");
+  onetag("autoPlacements", {pubId: "4e106747f8aa2bc"});
+  googletag.cmd.push(function() {
+    var refresh, secureTimeout = 3000;
+    var t = setTimeout(refresh = function() {
+      clearTimeout(t);
+      googletag.pubads().refresh();
+    }, secureTimeout);
+    onetag("fastBid", [{
+      pubId: "4e106747f8aa2bc",
+      adserverApi: "googletag",
+      placements: "ALL"
+    }], refresh);
+  });
+}
 
-function loadApsTag(AD_SLOTS) {
+function loadApsTag() {
   !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
 
   apstag.init({
@@ -76,8 +118,6 @@ function loadApsTag(AD_SLOTS) {
      adServer: 'googletag',
      bidTimeout: 2e3
   });
-
-  refreshBids(AD_SLOTS);
 }
 
 
