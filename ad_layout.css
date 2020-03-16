@@ -44,7 +44,6 @@
   position: relative;
   overflow: hidden;
 }
-.ad-content-wrapper .ad_all_devices,
 .ad-content-wrapper .ad_desktop,
 .ad-content-wrapper .ad_mobile {
   position: absolute;
