@@ -110,11 +110,9 @@ function scrollToElement(selector) {
 //const top = el.getBoundingClientRect().top;
   const top = el.getBoundingClientRect().top + getScroll();
   setScroll(top, {smooth: true});
-  console.log('tt', top);
 //scroll_el.scrollBy({top, behavior: 'smooth'});
 //scroll_el.scrollTo({top, behavior: 'smooth'});
 //setScroll(top);
-  console.log(getScroll());
 }
 
 
