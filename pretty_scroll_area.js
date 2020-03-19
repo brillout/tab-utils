@@ -50,7 +50,7 @@ function pretty_scroll_area() {
     const hide_scroll_pos = scroll_pos === getElementScroll(hide_scroll_element);
     hide_scroll_state.is_on_hide_scroll_element = hide_scroll_pos;
     onStateChange();
-  });
+  }, {fireInitialScroll: true});
 
   setTimeout(() => {
     hide_scroll_state.enable_scroll_auto_hide = true;
@@ -60,10 +60,14 @@ function pretty_scroll_area() {
 
 const scrollListeners = [];
 var isAutoScrolling;
-function addScrollListener(scrollListener, {onlyUserScroll}={}) {
+function addScrollListener(scrollListener, {onlyUserScroll=false, fireInitialScroll=false}={}) {
   scrollListener.onlyUserScroll = onlyUserScroll;
   scrollListeners.push(scrollListener);
   add_global_scroll_listener();
+  if( fireInitialScroll ){
+    const scroll_pos = getScroll();
+    scrollListener(scroll_pos);
+  }
 }
 function removeScrollListener(scrollListener) {
   const idx = scrollListeners.indexOf(scrollListener);
