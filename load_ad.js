@@ -114,7 +114,7 @@ function loadApsTag() {
   !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
 
   apstag.init({
-     pubID:  '9f69069e-7132-4170-a8f2-2b572c005f5b',
+     pubID:  'f6d6bc2e-7f12-42a3-83a2-6035f3b14586',
      adServer: 'googletag',
      bidTimeout: 2e3
   });
