@@ -1,6 +1,6 @@
 import pretty_scroll_area, {scrollToElement} from './pretty_scroll_area';
 
-window.addEventListener('load', more_panel);
+export default more_panel;
 
 function more_panel() {
   actionize_more_panel_link();
