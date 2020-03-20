@@ -1,3 +1,5 @@
+// TODO remove this - should live in source
+
 import pretty_scroll_area, {scrollToElement} from './pretty_scroll_area';
 
 export default more_panel;
