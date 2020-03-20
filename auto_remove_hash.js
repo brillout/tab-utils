@@ -35,7 +35,7 @@ function isEmptyHash() {
     return true;
   }
   // Because the above doesn't seem to be reliable
-  if( window.href.endsWith('#') ){
+  if( window.location.href.endsWith('#') ){
     return true;
   }
   return false;
