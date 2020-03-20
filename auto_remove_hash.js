@@ -2,7 +2,7 @@ import remove_hash from './private/remove_hash';
 
 export default auto_remove_hash;
 
-function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}) {
+function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}={}) {
   check();
   [100, 300, 600, 900].forEach(timeout => setTimeout(check, timeout));
   window.addEventListener("hashchange", check, {passive: true, capture: false});
@@ -15,6 +15,9 @@ function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}) {
       return;
     }
 
+    if( !IGNORE_LIST && !INCLUDE_LIST ){
+      return;
+    }
     if( IGNORE_LIST && IGNORE_LIST.includes(hash) ){
       return;
     }
