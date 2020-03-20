@@ -3,37 +3,25 @@ import remove_hash from './private/remove_hash';
 
 export default loadAd;
 
-function loadAd(AD_SLOTS, {useOneTag=false}={}) {
+function loadAd(AD_SLOTS) {
   if( remove_ad() ){
     return;
   }
 
   loadAdsByGoogle();
 
-  loadGoogleTag(AD_SLOTS, {useOneTag});
+  loadGoogleTag(AD_SLOTS);
 
-  if( useOneTag ){
-    loadOneTag();
-  } else {
-    loadApsTag(AD_SLOTS);
-  }
+  loadApsTag();
 
-  if( useOneTag ){
-    refreshBids__oneTag();
-  } else {
-    refreshBids__apsTag(AD_SLOTS);
-  }
+  refreshBids(AD_SLOTS);
 
   AD_SLOTS.forEach(({slotID}) => {
     googletag.cmd.push(function() { googletag.display(slotID); });
   });
 
   setInterval(function () {
-    if( useOneTag ){
-      refreshBids__oneTag();
-    } else {
-      refreshBids__apsTag(AD_SLOTS, {timeout: 2e3});
-    }
+    refreshBids(AD_SLOTS, {timeout: 2e3});
   }, 90000);
 }
 function loadAdsByGoogle() {
@@ -42,7 +30,7 @@ function loadAdsByGoogle() {
 }
 
 
-function loadGoogleTag(AD_SLOTS, {useOneTag}) {
+function loadGoogleTag(AD_SLOTS) {
   load_script("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
 
   window.googletag = window.googletag || {cmd: []};
@@ -54,24 +42,12 @@ function loadGoogleTag(AD_SLOTS, {useOneTag}) {
     });
 
     googletag.pubads().disableInitialLoad();
-    if( useOneTag ){
-      googletag.pubads().enableSingleRequest();
-    }
+ // googletag.pubads().enableSingleRequest();
     googletag.enableServices();
   });
 }
 
-function loadOneTag() {
-  (function(o,n,e,t,a,g){
-    if(o.onetag) return; g = o.onetag = function(){ g.cmd.push(arguments) };
-    a = n.createElement(e); a.async = true; g.cmd = [];
-    a.src = "https://onetag-sys.com/main.js"; n.head.appendChild(a);
-  }(window, document, "script"));
-  onetag("initAds");
-  onetag("autoPlacements", {pubId: "4e106747f8aa2bc"});
-}
-
-function refreshBids__apsTag(AD_SLOTS, args) {
+function refreshBids(AD_SLOTS, args) {
   apstag.fetchBids(
     {
       slots: AD_SLOTS.map(({slotID, slotName, slotSize}) => {
@@ -95,20 +71,6 @@ function refreshBids__apsTag(AD_SLOTS, args) {
     }
   );
 }
-function refreshBids__oneTag(AD_SLOTS, args) {
-  googletag.cmd.push(function() {
-    var refresh, secureTimeout = 3000;
-    var t = setTimeout(refresh = function() {
-      clearTimeout(t);
-      googletag.pubads().refresh();
-    }, secureTimeout);
-    onetag("fastBid", [{
-      pubId: "4e106747f8aa2bc",
-      adserverApi: "googletag",
-      placements: "ALL"
-    }], refresh);
-  });
-}
 
 function loadApsTag() {
   !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
@@ -121,8 +83,8 @@ function loadApsTag() {
 }
 
 
-// Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads
-// If you are short on money then you are more than welcome to do this :-)
+// Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
+// If you are short on money then you are more than welcome to do this :-).
 function remove_ad() {
   if( codeIsInUrl()===true ){
     return true;
