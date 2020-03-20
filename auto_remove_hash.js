@@ -8,18 +8,32 @@ function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}) {
   window.addEventListener("hashchange", check, {passive: true, capture: false});
 
   function check() {
-    const {hash} = location;
-    /* doesn't work because `location.hash===''` even for `localhost:3000/#`
-    if( hash==='#' ) {
+    const {hash} = window.location;
+
+    if( isEmptyHash() ){
       remove_hash();
+      return;
     }
-    */
+
     if( IGNORE_LIST && IGNORE_LIST.includes(hash) ){
       return;
     }
     if( INCLUDE_LIST && !INCLUDE_LIST.includes(hash) ){
       return;
     }
+
     remove_hash();
   }
+}
+
+function isEmptyHash() {
+  // In Chrome `location.hash===''` when URL is `localhost:3000/#`
+  if( window.location.hash==='#' ){
+    return true;
+  }
+  // Because the above doesn't seem to be reliable
+  if( window.href.endsWith('#') ){
+    return true;
+  }
+  return false;
 }
