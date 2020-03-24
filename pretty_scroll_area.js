@@ -3,7 +3,20 @@ import assert from '@brillout/assert';
 
 export default pretty_scroll_area;
 
-export {getScroll, setScroll, scrollToElement, addScrollListener, removeScrollListener};
+export {
+  getScroll,
+  setScroll,
+
+  scrollToElement,
+
+  scrollToHideScrollElement,
+  /*
+  isScrolledToHideScrollElement,
+  */
+
+  addScrollListener,
+  removeScrollListener,
+};
 
 /*
 const DISABLE = true;
@@ -150,9 +163,9 @@ async function slideTo(top) {
   }
 }
 
-function scrollToElement(selector_or_element) {
+function scrollToElement(selector_or_element, {smooth=true}={}) {
   const top = getElementScroll(selector_or_element);
-  return setScroll(top, {smooth: true});
+  return setScroll(top, {smooth});
 }
 
 function getElementScroll(selector_or_element) {
@@ -165,6 +178,19 @@ function getElementScroll(selector_or_element) {
   return top;
 }
 
+function scrollToHideScrollElement({smooth=true}={}) {
+  const s3 = document.querySelectorAll('.pretty_scroll_area__hide_scroll_element');
+  assert.usage(s3.length===1);
+
+  const hide_scroll_element = s3[0];
+
+  scrollToElement(hide_scroll_element, {smooth});
+}
+/*
+function isScrolledToHideScrollElement() {
+  return !!hide_scroll_state.is_on_hide_scroll_element;
+}
+*/
 
 
 function compute_scrollbar_width() {
