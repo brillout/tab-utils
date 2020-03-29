@@ -2,6 +2,8 @@ import remove_hash from './private/remove_hash';
 
 export default auto_remove_hash;
 
+export {remove_hash};
+
 function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}={}) {
   check();
   [100, 300, 600, 900].forEach(timeout => setTimeout(check, timeout));
