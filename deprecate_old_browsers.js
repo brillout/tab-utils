@@ -7,12 +7,22 @@ export default deprecate_old_browsers;
 
 function deprecate_old_browsers(args) {
   // Does browser support CSS variables?
-  if (window.CSS && CSS.supports('color', 'var(--fake-var)')) {
+  if( !is_old_browser() ){
     return;
   }
 
   addStyle();
   addHtml(args);
+}
+
+function is_old_browser() {
+  return (
+    ! browser_supports_css_variables()
+  );
+}
+
+function browser_supports_css_variables() {
+  return window.CSS && CSS.supports('color', 'var(--fake-var)');
 }
 
 function addHtml({email, projectName}) {
