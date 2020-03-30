@@ -8,8 +8,6 @@ function loadAd(AD_SLOTS) {
     return;
   }
 
-  loadAdsByGoogle();
-
   loadGoogleTag(AD_SLOTS);
 
   loadApsTag();
@@ -24,11 +22,6 @@ function loadAd(AD_SLOTS) {
     refreshBids(AD_SLOTS, {timeout: 2e3});
   }, 90000);
 }
-function loadAdsByGoogle() {
-  const scriptEl = load_script('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
-  scriptEl.setAttribute('data-ad-client', "ca-pub-3994464140431603");
-}
-
 
 function loadGoogleTag(AD_SLOTS) {
   load_script("https://securepubads.g.doubleclick.net/tag/js/gpt.js");
