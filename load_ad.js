@@ -35,38 +35,21 @@ function loadGoogleTag(AD_SLOTS) {
 
   window.googletag = window.googletag || {cmd: []};
   googletag.cmd.push(function() {
-    const Desktop_Banner_728 = (
+    const size_map = (
       googletag
       .sizeMapping()
       .addSize([728, 0], [728, 90]) //desktop
-      .addSize([0, 0], []) //other
-      .build()
-    );
-
-    const Mobile_Banner_300 = (
-      googletag
-      .sizeMapping()
-      .addSize([728, 0], []) //desktop
       .addSize([0, 0], [320, 50]) //other
       .build()
     );
 
-    AD_SLOTS.forEach(({slotID, slotName, slotSize}) => {
-      const is_mobile = slotName.toLowerCase().includes('mobile');
-
-      let banner_size_map;
-      if( is_mobile ) {
-        banner_size_map = Mobile_Banner_300;
-      } else {
-        banner_size_map = Desktop_Banner_728;
-      }
-
+    AD_SLOTS.forEach(({slotID, slotName, slotSizes}) => {
       googletag
-      .defineSlot(slotName, slotSize, slotID)
-      .defineSizeMapping(banner_size_map)
+      .defineSlot(slotName, slotSizes, slotID)
+      .defineSizeMapping(size_map)
       .addService(googletag.pubads());
 
-      console.log('[AD] Defined '+(is_mobile?'mobile':'desktop')+' ad with id '+slotID+' name '+slotName+' and size '+slotSize);
+      console.log('[AD] Defined ad with id '+slotID+' name '+slotName+' and sizes '+slotSizes);
     });
 
     googletag.pubads().disableInitialLoad();
@@ -78,11 +61,11 @@ function loadGoogleTag(AD_SLOTS) {
 function refreshBids(AD_SLOTS, args) {
   apstag.fetchBids(
     {
-      slots: AD_SLOTS.map(({slotID, slotName, slotSize}) => {
+      slots: AD_SLOTS.map(({slotID, slotName, slotSizes}) => {
         return {
           slotID,
           slotName,
-          sizes: [slotSize],
+          sizes: slotSizes,
         };
       }),
       ...args
