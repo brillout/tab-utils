@@ -8,6 +8,8 @@ function loadAd(AD_SLOTS) {
     return;
   }
 
+  load_header_bidding();
+
   loadAdsByGoogle();
 
   loadGoogleTag(AD_SLOTS);
@@ -24,6 +26,11 @@ function loadAd(AD_SLOTS) {
     refreshBids(AD_SLOTS, {timeout: 2e3});
   }, 90000);
 }
+
+function load_header_bidding() {
+  load_script('https://go.automatad.com/geo/5fkVze/afihbs.js');
+}
+
 function loadAdsByGoogle() {
   const scriptEl = load_script('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
   scriptEl.setAttribute('data-ad-client', "ca-pub-3994464140431603");
