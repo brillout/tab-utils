@@ -1,21 +1,18 @@
+import {tab_app_mail} from '../../../tab_app_info';
+
 export default activate_email_links;
 
 function activate_email_links() {
-  let mail = 'clocktab';
-  mail+='@';
-  mail+='brillout';
-  mail+='.';
-  mail+='com';
-
   Array.from(document.querySelectorAll('a.contact-address'))
   .forEach(link => {
-    link.innerHTML = link.innerHTML || mail;
-    link.setAttribute('href', getHref(link, mail));
+    link.innerHTML = link.innerHTML || tab_app_mail;
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', getHref(link));
   });
 }
 
-function getHref(link, mail) {
-  let href = 'mailto:'+mail;
+function getHref(link) {
+  let href = 'mailto:'+tab_app_mail;
   const data_subject = link.getAttribute('data-subject');
   const data_body = link.getAttribute('data-body');
 

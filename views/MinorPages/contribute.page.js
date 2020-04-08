@@ -1,5 +1,6 @@
 import React from 'react';
 import {getPageConfig} from '../PageWrapper';
+import {tab_app_name, tab_app_source_code} from '../../../tab_app_info';
 
 export default getPageConfig(
   () => <>
@@ -8,9 +9,9 @@ export default getPageConfig(
     </p>
 
     <p>
-    Or, if you know how to program, you can contribute by participating in Clock Tab's development, see
+    Or, if you know how to program, you can contribute by participating in {tab_app_name}'s development, see
     {" "}
-    <a href="https://github.com/brillout/clocktab" target="_blank">Clock Tab's GitHub</a>.
+    <a href={tab_app_source_code} target="_blank">{tab_app_name}'s GitHub</a>.
     </p>
   </>,
   'Contribute',

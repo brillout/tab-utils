@@ -1,5 +1,6 @@
 import React from 'react';
 import {getPageConfig} from '../PageWrapper';
+import {tab_app_name, tab_app_source_code} from '../../../tab_app_info';
 
 export default getPageConfig(
   () => <>
@@ -16,11 +17,11 @@ export default getPageConfig(
     <p>
     You can also
     {' '}
-    <a href="https://github.com/brillout/clocktab/issues/new" target="_blank">
+    <a href={tab_app_source_code+'issues/new'} target="_blank">
       create a GitHub ticket
     </a>
     {' '}
-    on Clock Tab's repository.
+    on {tab_app_name}'s repository.
     </p>
   </>,
   'Feature Suggestion',

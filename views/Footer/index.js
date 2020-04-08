@@ -1,5 +1,6 @@
 import React from 'react';
 import './footer.css';
+import {tab_app_name, tab_app_source_code} from '../../../tab_app_info';
 
 export default Footer;
 
@@ -22,10 +23,10 @@ function Footer() {
       </Section>
 
       <Section>
-        <Header>Clock Tab</Header>
+        <Header>{tab_app_name}</Header>
 
         <Link href="/roadmap">Roadmap</Link>
-        <Link href="https://github.com/brillout/clocktab" target="_blank">Source Code</Link>
+        <Link href={tab_app_source_code} target="_blank">Source Code</Link>
         <Link href="/contact">Contact</Link>
         <Link href="/about">About</Link>
       </Section>

@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
-import logoUrl from '../Header/logo.svg';
 import './full-view.css';
 import on_page_load from './on_page_load';
+import {tab_app_logo} from '../../../tab_app_info';
 
 export {FullView, MorePanel, config};
 
@@ -50,7 +50,7 @@ function config(conf) {
   return {
     renderToDom: true,
     renderToHtml: true,
-    favicon: logoUrl,
+    favicon: tab_app_logo,
     ...conf,
     on_page_load: () => on_page_load(conf.onPageLoad),
   };

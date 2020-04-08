@@ -1,6 +1,6 @@
 import React from 'react';
-import logoUrl from './logo.svg';
 import './header.css';
+import {tab_app_name, tab_app_logo, tab_app_header_links} from '../../../tab_app_info';
 
 export default Header;
 
@@ -9,11 +9,9 @@ function Header() {
     <div id='header-container' className='glass-background'>
       <div id="header-content">
         <Logo/>
-        <Link href={'/countdown'}>Countdown</Link>
-        <Link href={'/world-clock'}>World Clock</Link>
-        <Link href={'/history'}>History</Link>
-        <Link href={'https://www.timer-tab.com'} target="_blank">Timer Tab</Link>
-        <Link href={'/msg-tab'}>Msg Tab</Link>
+        { tab_app_header_links.map(({link_name, link_url, link_target}, idx) => (
+          <Link href={link_url} target={link_target} key={idx}>{link_name}</Link>
+        )) }
       </div>
     </div>
   );
@@ -25,8 +23,8 @@ function Logo() {
      id="header-logo"
      href='/'
     >
-      <img src={logoUrl} />
-      <b>Clock Tab</b>
+      <img src={tab_app_logo} />
+      <b>{tab_app_name}</b>
     </a>
   );
 }

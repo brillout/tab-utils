@@ -33,7 +33,7 @@ function actionize_more_panel_link() {
 function activate_screen_buttons() {
   const manual_scroll = document.querySelector('#manual-scroll');
   const manual_fullscreen = document.querySelector('#manual-fullscreen');
-  const clock_view = document.querySelector('.pretty_scroll_area__hide_scroll_element');
+  const full_view = document.querySelector('.pretty_scroll_area__hide_scroll_element');
 
   manual_scroll.onclick = do_scroll;
   manual_fullscreen.onclick = do_fullscreen;
@@ -44,7 +44,7 @@ function activate_screen_buttons() {
 
   async function do_scroll() {
     stop_auto_scroll();
-    await scrollToElement(clock_view);
+    await scrollToElement(full_view);
   }
   async function do_fullscreen() {
     try {

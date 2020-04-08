@@ -1,11 +1,12 @@
 import React from 'react';
 import {getPageConfig} from '../PageWrapper';
 import Bowser from "bowser";
+import {tab_app_name, tab_app_page_ids} from '../../../tab_app_info';
 
 export default getPageConfig(
   () => <>
     <p>
-    Your Clock Tab does not work? Click <a id='repair-link' data-subject="Bug Repair" className="contact-address" target="_blank">here</a>.
+    Your {tab_app_name} does not work? Click <a id='repair-link' data-subject="Bug Repair" className="contact-address" target="_blank">here</a>.
     </p>
     <p>
     You will get a response ASAP.
@@ -37,7 +38,7 @@ function onPageLoad() {
   const {settings__string, external_settings} = getSettings();
 
   link.setAttribute('data-body', [
-    "Hi Romuald, my Clock Tab doesn't work.",
+    "Hi Romuald, my "+tab_app_name+" doesn't work.",
     '',
     'My Browser:',
     browser_spec,
@@ -89,7 +90,7 @@ function escapeHtml(str) {
 
 function isTabSetting(key) {
   return (
-    key.startsWith('clock_') ||
-    key.startsWith('countdown_')
-  );
+    tab_app_page_ids
+    .some(page_id => key.startsWith(page_id+'_'))
+  )
 }

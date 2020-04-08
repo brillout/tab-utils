@@ -21,7 +21,7 @@ export class TabSettings {
   on_font_change;
 
   enable_import_export;
-  app_name;
+  page_id;
 
   creator_content;
   options_content;
@@ -52,7 +52,7 @@ export class TabSettings {
     on_font_change,
 
     enable_import_export,
-    app_name,
+    page_id,
     preset_concept_name,
   }) {
     assert(preset_concept_name);
@@ -65,7 +65,7 @@ export class TabSettings {
     this.on_font_change = on_font_change;
 
     this.enable_import_export = enable_import_export;
-    this.app_name = app_name;
+    this.page_id = page_id;
 
     this.creator_content = document.getElementById('creator-content');
     this.options_content = document.getElementById('options-content');
@@ -124,11 +124,11 @@ export class TabSettings {
 
     input_container = this.save_content;
     {
-      const {app_name} = this;
-      assert(app_name);
+      const {page_id} = this;
+      assert(page_id);
       const name_option = new TextOption({
         input_container,
-        option_id: app_name+'_name',
+        option_id: page_id+'_name',
         input_width: '150px',
         option_description: this.preset_concept_name+' name',
         option_default: '',
@@ -330,8 +330,8 @@ export class TabSettings {
       return;
     }
 
-    const {app_name} = preset_data;
-    assert(app_name);
+    const {page_id} = preset_data;
+    assert(page_id);
 
     /* TN2
     const wrong_url_format =
@@ -340,7 +340,7 @@ export class TabSettings {
     }
     */
 
-    const wrong_app = app_name !== this.app_name;
+    const wrong_app = page_id !== this.page_id;
     if( wrong_app ) {
       alert("Wrong app: the URL hash should be loaded in a different app.");
       return;
@@ -809,7 +809,7 @@ class PresetList {
   constructor({preset_spec_list, tab_settings}) {
     this.tab_settings = tab_settings;
 
-    this.#preset_savior = new PresetSavior({app_name: tab_settings.app_name});
+    this.#preset_savior = new PresetSavior({page_id: tab_settings.page_id});
 
     if( !this.tab_settings.no_random_preset ){
       this.randomizer_preset = new RandomizerPreset({preset_list: this});
@@ -937,8 +937,8 @@ class PresetSerializer {
 
     // Validation
     const {preset_id, preset_values} = preset;
-    const {app_name} = preset.tab_settings;
-    const preset_data = new PresetData({preset_id, preset_values, app_name});
+    const {page_id} = preset.tab_settings;
+    const preset_data = new PresetData({preset_id, preset_values, page_id});
 
     const preset_string = JSON.stringify(preset_data);
 
@@ -1054,16 +1054,16 @@ class NativePreset extends Preset {
 
 // TODO - use TypeScript
 class PresetData {
-  app_name: string;
+  page_id: string;
   preset_id: string;
   preset_values: Object;
 
   constructor(args) {
-    const {preset_id, preset_values, app_name, ...rest} = args;
+    const {preset_id, preset_values, page_id, ...rest} = args;
     assert(Object.keys(rest).length===0, args);
-    assert(preset_id && preset_values && app_name, args);
+    assert(preset_id && preset_values && page_id, args);
 
-    this.app_name = app_name;
+    this.page_id = page_id;
     this.preset_id = preset_id;
     this.preset_values = new PresetValues(preset_values);
   }
@@ -1076,11 +1076,11 @@ class PresetValues {
 }
 
 class PresetSavior {
-  #app_name = null;
+  #page_id = null;
 
-  constructor({app_name}) {
-    assert(app_name);
-    this.#app_name = app_name;
+  constructor({page_id}) {
+    assert(page_id);
+    this.#page_id = page_id;
   }
 
   get_saved_presets() {
@@ -1100,9 +1100,9 @@ class PresetSavior {
       return;
     }
 
-    const app_name = this.#app_name;
+    const page_id = this.#page_id;
 
-    const preset_data = new PresetData({preset_id, preset_values, app_name});
+    const preset_data = new PresetData({preset_id, preset_values, page_id});
     presets.push(preset_data);
 
     this._save_presets(presets);
@@ -1137,7 +1137,7 @@ class PresetSavior {
     localStorage[this._storage_key] = PresetSerializer.serialize_list(presets);
   }
   get _storage_key() {
-    return this.#app_name + '_presets';
+    return this.#page_id + '_presets';
   }
 }
 

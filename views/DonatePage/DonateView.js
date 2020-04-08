@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import romuald_alps from "./romuald_alps.png";
+import {tab_app_name} from '../../../tab_app_info';
 
 export default DonateView;
 
@@ -13,17 +14,17 @@ function DonateView() {
     </h1>
 
     <p>
-    I'm Romuald, the creator of Clock Tab.
+    I'm Romuald, the creator of {tab_app_name}
     </p>
 
     <p>
-    For the longest time, I refused to put ads on Clock Tab. I don't like ads.
+    For the longest time, I refused to put ads on {tab_app_name}. I don't like ads.
     </p>
 
     <p>
-    But I want to improve Clock Tab.
+    But I want to improve {tab_app_name}.
     More themes, improved theme customization, faster load speed, and many more ideas!
-    Ads and donations allow me to maintain and improve Clock Tab.
+    Ads and donations allow me to maintain and improve {tab_app_name}.
     </p>
 
     <p>
@@ -47,7 +48,7 @@ function DonateView() {
     </p>
 
     <p>
-    I'm looking forward to a bright Clock Tab future :-).
+    I'm looking forward to a bright {tab_app_name} future :-).
     </p>
 
     <p>
