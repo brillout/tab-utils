@@ -1,4 +1,5 @@
 import assert from '@brillout/assert';
+import {tab_app_google_analytics_id} from '../../../tab_app_info';
 
 export {load_google_analytics};
 export {track_event};
@@ -7,8 +8,6 @@ export {track_error};
 const IS_DEV = typeof window !== "undefined" && window.location.hostname === 'localhost';
 
 const DEBUG = IS_DEV;
-
-const GA_ID = 'UA-5263303-5';
 
 init();
 
@@ -98,7 +97,7 @@ function setup_ga() {
   ga.l = +new Date;
 
   // Creates a default tracker with automatic cookie domain configuration.
-  ga('create', GA_ID, 'auto');
+  ga('create', tab_app_google_analytics_id, 'auto');
 }
 
 // https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions/49560222#49560222
