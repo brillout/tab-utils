@@ -1,5 +1,5 @@
 import assert from '@brillout/assert';
-import pretty_scroll_area, {scrollToElement, addScrollListener} from '../../tab-utils/pretty_scroll_area';
+import pretty_scroll_area, {scrollToElement, addScrollListener} from '../../pretty_scroll_area';
 import load_common from '../common/load_common';
 import { show_toast } from '../common/show_toast';
 
