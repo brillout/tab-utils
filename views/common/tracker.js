@@ -1,7 +1,5 @@
 import assert from '@brillout/assert';
 
-import ml from '../ml';
-
 export {load_google_analytics};
 export {track_event};
 export {track_error};
@@ -18,7 +16,7 @@ let already_loaded = false;
 async function load_google_analytics() {
   if( already_loaded ) return;
   already_loaded = true;
-  ml.loadScript('//www.google-analytics.com/analytics.js');
+  load_script('//www.google-analytics.com/analytics.js');
   DEBUG && console.log('[GA] ga code loaded');
 }
 
@@ -147,4 +145,12 @@ function track_error_events() {
     const err = ev.reason;
     send_error_event({eventCategory, err});
   });
+}
+
+function load_script(url) {
+  const scriptEl = document.createElement('script');
+  scriptEl.src= url;
+  scriptEl.async = true;
+  document.getElementsByTagName('head')[0].appendChild(scriptEl);
+  return scriptEl;
 }

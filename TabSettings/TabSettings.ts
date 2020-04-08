@@ -6,7 +6,7 @@ import './tab-settings.css';
 import {track_event} from '../views/common/tracker';
 import {remove_hash} from '../auto_remove_hash';
 import {PersistantInput, TextInput, BooleanInput, SelectInput, ColorInput, DateInput, Button} from './PersistantInput';
-import {show_toast} from '../../views/common/show_toast';
+import {show_toast} from '../views/common/show_toast';
 import {run_migrations} from './run_migrations';
 
 run_migrations();
