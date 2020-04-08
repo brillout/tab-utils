@@ -49,3 +49,7 @@ h2 {
 h1 {
   color: #555;
 }
+
+button[disabled] {
+  opacity: 0.4;
+}
