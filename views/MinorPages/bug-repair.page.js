@@ -1,7 +1,7 @@
 import React from 'react';
 import {getPageConfig} from '../PageWrapper';
 import Bowser from "bowser";
-import {tab_app_name, tab_app_page_ids} from '../../../tab_app_info';
+import {tab_app_name, tab_subapp_ids} from '../../../tab_app_info';
 
 export default getPageConfig(
   () => <>
@@ -90,7 +90,7 @@ function escapeHtml(str) {
 
 function isTabSetting(key) {
   return (
-    tab_app_page_ids
-    .some(page_id => key.startsWith(page_id+'_'))
+    tab_subapp_ids
+    .some(subapp_id => key.startsWith(subapp_id+'_'))
   )
 }
