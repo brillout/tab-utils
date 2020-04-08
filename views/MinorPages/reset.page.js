@@ -16,7 +16,7 @@ export default getPageConfig(
     </p>
   </>,
   'Factory Reset',
-  {onPageLoad, route: 'reset'},
+  {onPageLoad, route: '/reset'},
 );
 
 function onPageLoad() {
