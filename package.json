@@ -15,7 +15,7 @@
     "parcel": "^1.12.4"
   },
   "dependencies": {
-    "@brillout/assert": "^0.1.1",
+    "@brillout/assert": "^0.1.2",
     "core-js": "3"
   }
 }
