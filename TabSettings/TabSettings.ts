@@ -45,17 +45,28 @@ export class TabSettings {
     option_spec_list,
     preset_spec_list,
 
-    text_container,
-    no_random_preset,
+    text_container=null,
+    no_random_preset=false,
 
     on_any_change,
-    on_font_change,
+    on_font_change=null,
 
     enable_import_export,
     subapp_id,
     preset_concept_name,
   }) {
     assert(preset_concept_name);
+
+    {
+      const hasTextFontInput = !!option_spec_list.find(({option_type}) => option_type==='text-font-input');
+      const hasTextShadowInput = !!option_spec_list.find(({option_type}) => option_type==='text-shadow-input');
+      const hasTextColorInput = !!option_spec_list.find(({option_type}) => option_type==='text-color-input');
+      assert(
+        !text_container && !on_font_change && !hasTextFontInput && !hasTextShadowInput && !hasTextColorInput ||
+        text_container && on_font_change && hasTextFontInput && hasTextShadowInput && hasTextColorInput
+      );
+    }
+
     this.preset_concept_name = preset_concept_name;
 
     this.text_container = text_container;
@@ -250,8 +261,10 @@ export class TabSettings {
   }
   run_side_effects(is_initial_run=false) {
     this.update_background();
-    this.update_font();
-    this.load_font_list();
+    if( this.text_container ) {
+      this.update_font();
+      this.load_font_list();
+    }
     this.update_option_visibility();
     this.update_button_visibility();
     this.on_any_change({is_initial_run});
@@ -260,8 +273,8 @@ export class TabSettings {
     if( is_initial_run ){
       this.load_preset_from_url();
       window.addEventListener("hashchange", () => this.load_preset_from_url(), {passive: true});
+      this.track_user_presets();
     }
-    if( is_initial_run ) this.track_user_presets();
   }
 
   track_user_presets() {
