@@ -608,6 +608,9 @@ class Option {
     return preset_val;
   }
   get active_value() {
+    if( this.tab_settings.preset_selected.is_creator_preset ){
+      return this.input_value;
+    }
     const {preset_value} = this;
     if( this.is_creator_option ){
       return preset_value;
