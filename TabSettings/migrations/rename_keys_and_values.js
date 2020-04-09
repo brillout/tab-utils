@@ -25,11 +25,15 @@ function rename_keys_and_values({key_replacements, value_replacements}) {
     return;
   }
 
-  localStorage.clear();
+  if( has_changes ){
+    localStorage.clear();
 
-  Object
-  .keys(db)
-  .forEach(key => {
-    localStorage[key] = db[key];
-  });
+    Object
+    .keys(db)
+    .forEach(key => {
+      localStorage[key] = db[key];
+    });
+  }
+
+  return has_changes;
 }
