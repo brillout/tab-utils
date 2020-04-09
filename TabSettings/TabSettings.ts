@@ -540,8 +540,9 @@ class Option {
   option_id: string;
   option_description: string;
   input_args: any;
+  is_creator_option: Boolean;
   user_input: PersistantInput;
-  constructor({option_id, option_description, option_default, input_width, tab_settings, input_container, ...props}) {
+  constructor({option_id, option_description, option_default, input_width, tab_settings, input_container, is_creator_option=false, ...props}) {
     assert(option_id);
     assert(option_description);
     assert(tab_settings);
@@ -551,8 +552,10 @@ class Option {
       ...props,
     });
 
+    this.is_creator_option = is_creator_option;
+
     input_container = input_container || (
-      props.is_creator_option ? (
+      is_creator_option ? (
         this.tab_settings.creator_content
       ) : (
         this.tab_settings.options_content
@@ -587,7 +590,13 @@ class Option {
   }
   get active_value() {
     const {preset_value} = this;
-    return preset_value!==null ? preset_value : this.input_value;
+    if( this.is_creator_option ){
+      return preset_value;
+    }
+    if( preset_value!==null ){
+      return preset_value;
+    }
+    return this.input_value;
   }
 
   set_input_value(val) {
