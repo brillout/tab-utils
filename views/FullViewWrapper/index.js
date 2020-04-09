@@ -37,9 +37,6 @@ function MorePanel({children}) {
   return (
     <div id="more_panel">
       <div id="more_panel_background" className='glass-background'></div>
-      <div id="more_panel_jumper_wrapper">
-        <div id="more_panel_jumper" className='glass-background'></div>
-      </div>
       {children}
       <Footer/>
     </div>

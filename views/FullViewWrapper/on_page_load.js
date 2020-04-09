@@ -16,18 +16,6 @@ function load_full_view() {
   pretty_scroll_area();
 
   activate_screen_buttons();
-
-  actionize_more_panel_link();
-}
-
-function actionize_more_panel_link() {
-  const link_source = document.querySelector('#more_panel_jumper');
-  if( !link_source ) return;
-  link_source.onclick = ev => {
-    scrollToElement('#more_panel');
-    ev.preventDefault();
-    return false;
-  };
 }
 
 function activate_screen_buttons() {
