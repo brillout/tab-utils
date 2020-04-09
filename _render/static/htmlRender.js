@@ -17,7 +17,7 @@ async function htmlRender({page, initialProps, CONTAINER_ID}) {
       ...tab_app_head_tags,
     ],
     body: [
-      '<div id="'+CONTAINER_ID+'" class="pretty_scroll_area__content_container">'+html+'</div>',
+      '<div id="'+CONTAINER_ID+'">'+html+'</div>',
     ]
   };
 }

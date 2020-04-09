@@ -8,10 +8,11 @@
   overflow-x: hidden !important;
   transition: width .3s linear !important;
 }
+.pretty_scroll_area__parent > .pretty_scroll_area > * {
+  /* We need to ensure that there is not overflow on the x-axis */
+  /* To create an x-axis scroll: create a new scrolling child element */
+  max-width: 100vw;
+}
 .pretty_scroll_area__parent > .pretty_scroll_area.hide_scroll {
   width: calc(100vw + var(--scroll-bar-width)) !important;
-}
-
-.pretty_scroll_area__content_container > *:not(.pretty_scroll_area__absolute_positioned) {
-  width: 100vw;
 }

@@ -14,21 +14,13 @@ function FullView({children, ...props}) {
     <div
       className="pretty_scroll_area__hide_scroll_element load-area"
       {...props}
-      style={{
-        height: '100vh',
-        /* This div's `width` is already set to `100vw` because it is children of .pretty_scroll_area
-        width: '100vw',
-        */
-        ...props.style
-      }}
     >
       {children}
-    </div>
-
-    <div id="screen-buttons-wrapper" className="pretty_scroll_area__absolute_positioned">
-      <div className="screen-button glass-background" id="manual-fullscreen">Fullscreen</div>
-      <div className="screen-button glass-background" id="manual-scroll">Center</div>
-      <div className="screen-button glass-background" id="auto-scroll">&nbsp;</div>
+      <div id="screen-buttons-wrapper">
+        <div className="screen-button glass-background" id="manual-fullscreen">Fullscreen</div>
+        <div className="screen-button glass-background" id="manual-scroll">Center</div>
+        <div className="screen-button glass-background" id="auto-scroll">&nbsp;</div>
+      </div>
     </div>
   </>;
 }

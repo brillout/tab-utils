@@ -2,6 +2,7 @@
 
 #header-container {
   text-align: center;
+  width: 100vw;
 }
 #header-container > #header-content {
   display: inline-flex;

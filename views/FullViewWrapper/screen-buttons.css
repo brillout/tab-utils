@@ -1,12 +1,12 @@
-.pretty_scroll_area__content_container {
+.pretty_scroll_area__hide_scroll_element {
   position: relative;
 }
-.pretty_scroll_area__content_container > #screen-buttons-wrapper {
+.pretty_scroll_area__hide_scroll_element > #screen-buttons-wrapper {
   position: absolute;
 }
 #screen-buttons-wrapper {
   white-space: nowrap;
-  top: 100px;
+  top: 10px;
   right: 50px;
 }
 .screen-button {
