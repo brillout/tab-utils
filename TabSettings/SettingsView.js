@@ -2,7 +2,7 @@ import React from 'react';
 
 export {SettingsView};
 
-function SettingsView({preset_concept_name, is_countdown_page}) {
+function SettingsView({preset_concept_name}) {
   return <>
     <div className="more_panel_block">
       <div className="more_panel_block_title">
@@ -16,7 +16,7 @@ function SettingsView({preset_concept_name, is_countdown_page}) {
       </div>
       <div id='save-content' />
     </div>
-    <div className="more_panel_block" style={{display: is_countdown_page && 'none'}}>
+    <div id='options-container' className="more_panel_block">
       <div className="more_panel_block_title">
         Options
       </div>

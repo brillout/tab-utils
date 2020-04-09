@@ -25,6 +25,7 @@ export class TabSettings {
 
   creator_content;
   options_content;
+  options_container;
   save_content;
   save_container;
   share_content;
@@ -80,6 +81,7 @@ export class TabSettings {
 
     this.creator_content = document.getElementById('creator-content');
     this.options_content = document.getElementById('options-content');
+    this.options_container = document.getElementById('options-container');
     this.save_content = document.getElementById('save-content');
     this.save_container = document.getElementById('save-container');
     this.share_content = document.getElementById('share-content');
@@ -274,6 +276,23 @@ export class TabSettings {
       this.load_preset_from_url();
       window.addEventListener("hashchange", () => this.load_preset_from_url(), {passive: true});
       this.track_user_presets();
+      this.set_options_container_visibility();
+    }
+  }
+
+  set_options_container_visibility() {
+    const to_hide = (
+      this
+      .option_list
+      .every(opt => {
+        assert(opt.is_creator_option.constructor===Boolean);
+        return (
+          opt.is_creator_option || opt.is_preset_selector
+        );
+      })
+    );
+    if( to_hide ){
+      this.options_container.style.display = 'none';
     }
   }
 
