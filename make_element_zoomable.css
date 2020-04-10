@@ -1,0 +1,9 @@
+.zoom-scale-element {
+  transition: transform 0.6s ease;
+}
+.zoom-container {
+  overflow: hidden !important;
+}
+.zoomable-element {
+  cursor: pointer;
+}
