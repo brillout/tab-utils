@@ -6,16 +6,24 @@ import './make_element_zoomable.css';
 
 export {make_element_zoomable};
 
-/*
-const DEBUG = 1;
+//*
+const DEBUG = true;
 /*/
-const DEBUG = 0;
+const DEBUG = false;
 //*/
 
 function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
   assert(containerEl && scaleEl && zoomEl);
 
   DEBUG && console.log('[zoom] setup', {zoomEl, scaleEl, containerEl});
+  if( DEBUG && window.location.hostname==='localhost' ){
+    // Show cursor position
+    document.onmousemove = function(e){
+      var x = e.pageX;
+      var y = e.pageY;
+      e.target.title = "X is "+x+" and Y is "+y;
+    };
+  }
 
   scaleEl.classList.add('zoom-scale-element');
   containerEl.classList.add('zoom-container');
@@ -30,13 +38,14 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
 
   function set_zoom() {
     if( should_be_zommed===true ) {
-      zoomIn({zoomEl, scaleEl});
+      zoomIn({zoomEl, scaleEl, containerEl});
     } else {
-      zoomOut({scaleEl});
+      zoomOut({scaleEl, containerEl});
     }
   }
 
   function toggle_zoom() {
+    console.log('clickkkkkkkkkkkkk');
     should_be_zommed = !should_be_zommed;
 
     const eventAction = should_be_zommed ? 'zoom_in' : 'zoom_out';
@@ -56,38 +65,37 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
 
 
 
-function zoomIn({zoomEl, scaleEl}) {
+function zoomIn({zoomEl, scaleEl, containerEl}) {
+  containerEl.classList.add('is-zoomed');
 
-  var sizes = getElementSizes(zoomEl);
-  var elWidth   = sizes.width;
-  var elHeight  = sizes.height;
-  var elPos     = getPosition(zoomEl);
+  const {height: zoom_el_height, width: zoom_el_width} = getElementSizes(zoomEl);
+  DEBUG && console.log('[zoom]', {zoom_el_width, zoom_el_height, zoomEl});
 
-  // make elPos relative to scaleEl
-  elPos.x -= getPosition(scaleEl).x
-  elPos.y -= getPosition(scaleEl).y;
+  let zoom_el_pos = getPosition(zoomEl);
+  zoom_el_pos.x -= getPosition(scaleEl).x
+  zoom_el_pos.y -= getPosition(scaleEl).y;
 
-  /*
-  var winWidth   = parseInt(getStyle(zoom_from,'width' ));
-  var winHeight  = parseInt(getStyle(zoom_from,'height'));
-  */
-  var winWidth  = window.innerWidth;
-  var winHeight = window.innerHeight;
-  var viewWidth  = elWidth;
-  var viewHeight = elHeight;
-  DEBUG && console.log('[zoom]', {elWidth, elHeight, zoomEl});
+  const scale_el_width  = getSize(scaleEl,'width' );
+  const scale_el_height = getSize(scaleEl,'height');
 
-  var scale = Math.min(winHeight/viewHeight,winWidth/viewWidth);
-  var offset_to_middle = [winWidth-2*(elPos.x+viewWidth/2),winHeight-2*(elPos.y+viewHeight/2)];
-  var scale_offset = scale/2; //divide by 2 because scale crops top overflow
+  const scale = Math.min(scale_el_height/zoom_el_height,scale_el_width/zoom_el_width);
+  DEBUG && console.log('[zoom]', JSON.stringify({scale}));
 
-  DEBUG && console.log('[zoom]', {scale_offset, offset_to_middle});
-  var translation = scale_offset*offset_to_middle[0]+'px,'+scale_offset*offset_to_middle[1]+'px';
-  DEBUG && console.log('[zoom]', {translation, scale});
-  scaleEl.style.transform = 'translate('+translation+') scale('+scale+')';
+  const scale_el_center = [scale_el_width / 2, scale_el_height / 2];
+  const zoom_el_center = [(zoom_el_width / 2) + zoom_el_pos.x, (zoom_el_height / 2) + zoom_el_pos.y];
+  const translation = [scale_el_center[0] - zoom_el_center[0], scale_el_center[1] - zoom_el_center[1]];
+  DEBUG && console.log('[zoom]', JSON.stringify({scale_el_center, zoom_el_center, translation}));
+
+  /* to debug translation calcuation:
+  scaleEl.style.transform = 'translate('+translation[0]+'px, '+translation[1]+'px) scale(1)';
+  /*/
+  scaleEl.style.transform = 'translate('+translation[0]*scale+'px, '+translation[1]*scale+'px) scale('+scale+')';
+  //*/
 }
 
-function zoomOut({scaleEl}) {
+function zoomOut({scaleEl, containerEl}) {
+  //scaleEl.style.transform = 'translate(0, 0) scale(1)';
+  containerEl.classList.remove('is-zoomed');
   scaleEl.style.transform = '';
 }
 
@@ -159,27 +167,26 @@ function zoomOut({scaleEl}) {
 
 
 
-function getStyle(el,styleProp) {
-  return document.defaultView.getComputedStyle(el,null).getPropertyValue(styleProp);
+function getSize(el, styleProp) {
+  const computed_style = document.defaultView.getComputedStyle(el,null).getPropertyValue(styleProp);
+  return parseInt(computed_style, 10) || 0;
 }
 
 function getElementSizes(el){
   const height = (
-    getSize('height') + getOuterSize(['top','bottom'])
+    getSize(el, 'height') + getOuterSize(['top','bottom'])
   );
   const width = (
-    getSize('width') + getOuterSize(['left','right'])
+    getSize(el, 'width') + getOuterSize(['left','right'])
   );
 
   return {height, width};
 
-  function getSize(prop){return parseInt(getStyle(el,prop),10)||0}
-
   function getOuterSize(d){
     return (
       d.map(function(di){
-        const paddingSize = getSize('padding-'+di);
-        const borderSize = getSize('border-'+di);
+        const paddingSize = getSize(el,'padding-'+di);
+        const borderSize = getSize(el, 'border-'+di);
         return paddingSize + borderSize;
       })
       .reduce(function(i1,i2){return i1+i2})
