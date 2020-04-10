@@ -3,10 +3,11 @@
 import assert from '@brillout/assert';
 import {track_event} from './views/common/tracker';
 import './make_element_zoomable.css';
+import {scrollToHideScrollElement} from './pretty_scroll_area';
 
 export {make_element_zoomable};
 
-//*
+/*
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -25,12 +26,23 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
     };
   }
 
-  scaleEl.classList.add('zoom-scale-element');
-  containerEl.classList.add('zoom-container');
-  zoomEl.classList.add('zoomable-element');
+  scaleEl.classList.add('zooming__scaler');
+  containerEl.classList.add('zooming__overflow-container');
+  zoomEl.classList.add('zooming__zoomable-element');
 
-  zoomEl.addEventListener('click', toggle_zoom, {passive: true});
-  window.addEventListener('resize', rezoom, {passive: true});
+  const on_transition_start = ev => {
+    if( ev.propertyName !== 'transform' ) return;
+    containerEl.classList.add('zoom-transition')
+  };
+  const on_transition_end = (ev) => {
+    if( ev.propertyName !== 'transform' ) return;
+    containerEl.classList.remove('zoom-transition')
+  };
+  scaleEl.addEventListener('transitionstart', on_transition_start, {passive: true});
+  scaleEl.addEventListener('transitionend', on_transition_end, {passive: true});
+
+  zoomEl.addEventListener('click', on_click, {passive: true});
+  window.addEventListener('resize', on_resize, {passive: true});
 
   let should_be_zommed = false;
 
@@ -44,8 +56,9 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
     }
   }
 
-  function toggle_zoom() {
-    console.log('clickkkkkkkkkkkkk');
+  function on_click(ev) {
+    ev.preventDefault();
+
     should_be_zommed = !should_be_zommed;
 
     const eventAction = should_be_zommed ? 'zoom_in' : 'zoom_out';
@@ -54,51 +67,64 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
       eventAction,
     });
 
+    if( should_be_zommed ){
+      scrollToHideScrollElement();
+    }
+
     set_zoom();
   }
 
-  function rezoom() {
+  var last_size;
+  function on_resize() {
+    last_size = last_size || {x:null, y: null};
+    const size = {x: window.innerWidth, y: window.innerHeight};
+    if( last_size.x === size.x && last_size.y === size.y ){
+      return;
+    }
+    last_size = size;
     set_zoom();
   }
-
 };
 
 
-
 function zoomIn({zoomEl, scaleEl, containerEl}) {
-  containerEl.classList.add('is-zoomed');
-
   const {height: zoom_el_height, width: zoom_el_width} = getElementSizes(zoomEl);
   DEBUG && console.log('[zoom]', {zoom_el_width, zoom_el_height, zoomEl});
 
-  let zoom_el_pos = getPosition(zoomEl);
-  zoom_el_pos.x -= getPosition(scaleEl).x
-  zoom_el_pos.y -= getPosition(scaleEl).y;
+  const scale_el_pos__absolute = getPosition(scaleEl);
+  const zoom_el_pos__absolute = getPosition(zoomEl);
+  const zoom_el_pos__relative = {
+    x: zoom_el_pos__absolute.x - scale_el_pos__absolute.x,
+    y: zoom_el_pos__absolute.y - scale_el_pos__absolute.y,
+  };
+  const zoom_el_pos = zoom_el_pos__relative;
+  DEBUG && console.log('[zoom]', JSON.stringify({zoom_el_pos__relative, zoom_el_pos__absolute, scale_el_pos__absolute}));
 
-  const scale_el_width  = getSize(scaleEl,'width' );
-  const scale_el_height = getSize(scaleEl,'height');
+  const screen_width  = window.innerWidth;
+  const screen_height = window.innerHeight;
 
-  const scale = Math.min(scale_el_height/zoom_el_height,scale_el_width/zoom_el_width);
+  const scale = Math.min(screen_height/zoom_el_height,screen_width/zoom_el_width);
   DEBUG && console.log('[zoom]', JSON.stringify({scale}));
 
-  const scale_el_center = [scale_el_width / 2, scale_el_height / 2];
+  const screen_center = [screen_width / 2, screen_height / 2];
   const zoom_el_center = [(zoom_el_width / 2) + zoom_el_pos.x, (zoom_el_height / 2) + zoom_el_pos.y];
-  const translation = [scale_el_center[0] - zoom_el_center[0], scale_el_center[1] - zoom_el_center[1]];
-  DEBUG && console.log('[zoom]', JSON.stringify({scale_el_center, zoom_el_center, translation}));
+  const translation = [screen_center[0] - zoom_el_center[0], screen_center[1] - zoom_el_center[1]];
+  DEBUG && console.log('[zoom]', JSON.stringify({screen_center, zoom_el_center, translation}));
 
-  /* to debug translation calcuation:
-  scaleEl.style.transform = 'translate('+translation[0]+'px, '+translation[1]+'px) scale(1)';
-  /*/
-  scaleEl.style.transform = 'translate('+translation[0]*scale+'px, '+translation[1]*scale+'px) scale('+scale+')';
-  //*/
+//on_transition_start({propertyName: 'transform'});
+  scaleEl.style.setProperty('--scale', scale);
+  scaleEl.style.setProperty('--zoom-center-x', zoom_el_center[0]+'px');
+  scaleEl.style.setProperty('--zoom-center-y', zoom_el_center[1]+'px');
+  scaleEl.style.setProperty('--translate-x', translation[0]+'px');
+  scaleEl.style.setProperty('--translate-y', translation[1]+'px');
+  document.documentElement.classList.add('zoomed-state');
+  /* Playground: http://jsfiddle.net/2sqprjot/ */
 }
 
 function zoomOut({scaleEl, containerEl}) {
-  //scaleEl.style.transform = 'translate(0, 0) scale(1)';
-  containerEl.classList.remove('is-zoomed');
-  scaleEl.style.transform = '';
+//on_transition_start({propertyName: 'transform'});
+  document.documentElement.classList.remove('zoomed-state');
 }
-
 
 // Old code
 //  - Shortcut keybinding

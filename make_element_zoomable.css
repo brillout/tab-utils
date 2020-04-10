@@ -1,11 +1,26 @@
-.zoom-scale-element {
+.zooming__scaler {
+  transform-origin: var(--zoom-center-x) var(--zoom-center-y);
   transition: transform 0.6s ease;
 }
-.zoom-container.is-zoomed {
+.zoomed-state .zooming__scaler {
+  transform:
+    translate(
+      var(--translate-x),
+      var(--translate-y)
+    )
+    scale(var(--scale));
+}
+
+.zoomed-state .zooming__overflow-container,
+.zooming__overflow-container.zoom-transition {
   overflow: hidden !important;
   height: 100vh !important;
   width: 100vw !important;
+  /*
+  background: red;
+  */
 }
-.zoomable-element {
+
+.zooming__zoomable-element {
   cursor: pointer;
 }
