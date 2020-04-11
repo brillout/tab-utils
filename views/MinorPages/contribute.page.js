@@ -9,7 +9,7 @@ export default getPageConfig(
     </p>
 
     <p>
-    Or, if you know how to program, you can contribute by participating in {tab_app_name}'s development, see
+    Alternatively, if you know how to program, you can contribute by participating in {tab_app_name}'s development, see
     {" "}
     <a href={tab_app_source_code} target="_blank">{tab_app_name}'s GitHub</a>.
     </p>
