@@ -64,10 +64,9 @@ function Section({children}) {
 function Header({children}) {
   return (
     <h4
-      className="footer-section-title"
-      style={{
+      className="footer-section-title" style={{
         marginBottom: 7,
-        fontWeight: '300',
+        fontWeight: 'normal',
       }}
     >
       {children}
