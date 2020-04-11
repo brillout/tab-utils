@@ -22,9 +22,8 @@ function DonateView() {
     </p>
 
     <p>
-    But I want to improve {tab_app_name}.
-    More themes, improved theme customization, faster load speed, and many more ideas!
-    Ads and donations allow me to maintain and improve {tab_app_name}.
+    But ads and donations allow me to dedicate myself to {tab_app_name} and
+    I've got many ideas for improvements and entirely new features!
     </p>
 
     <p>
@@ -32,7 +31,7 @@ function DonateView() {
     </p>
 
     <p>
-    In order to donate, make a PayPal wire to my PayPal email:
+    In order to donate, make a PayPal wire to the following PayPal email:
     </p>
     <p style={{paddingLeft: 20}}>
       <b id='paypal-email'></b>
@@ -58,6 +57,10 @@ function DonateView() {
     <p>
     Romuald<br/>
     <a target='_blank' className="contact-address"></a>
+    </p>
+
+    <p>
+    P.S. Thank you for your lovely messages attached to your PayPal wires, I'm glad people enjoy what I'm building.
     </p>
   </>;
 }

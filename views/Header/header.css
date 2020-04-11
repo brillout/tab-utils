@@ -30,17 +30,18 @@ a#header-logo {
   vertical-align: middle;
   display: inline-block;
 }
-#header-logo > b {
+#header-logo > h1 {
   vertical-align: middle;
   padding-left: 10px;
   font-size: 1.55em;
+  margin: 0;
   /*
   position: relative;
   top: 2px;
   */
 }
 
-#header-logo > b {
+#header-logo > h1 {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-weight: 500;
   color: #31343d;

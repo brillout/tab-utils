@@ -24,5 +24,6 @@ export default getPageConfig(
     on {tab_app_name}'s repository.
     </p>
   </>,
-  'Feature Suggestion',
+  'Suggest a Feature',
+  {route: '/feature-suggestion'},
 );

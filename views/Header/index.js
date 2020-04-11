@@ -24,7 +24,7 @@ function Logo() {
      href='/'
     >
       <img src={tab_app_logo} />
-      <b>{tab_app_name}</b>
+      <h1>{tab_app_name}</h1>
     </a>
   );
 }
