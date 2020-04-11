@@ -1,10 +1,14 @@
+import assert from '@brillout/assert';
 import load_script from './private/load_script';
 import remove_hash from './private/remove_hash';
 
 export default loadAd;
 
+export const ads_are_removed = check_if_ads_are_removed();
+
 function loadAd(AD_SLOTS) {
-  if( remove_ad() ){
+  assert([true, false].includes(ads_are_removed));
+  if( ads_are_removed ){
     return;
   }
 
@@ -108,7 +112,10 @@ function loadApsTag() {
 
 // Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
 // If you are short on money then you are more than welcome to do this :-).
-function remove_ad() {
+function check_if_ads_are_removed() {
+  if( typeof window === "undefined" ){
+    return null;
+  }
   if( codeIsInUrl()===true ){
     return true;
   }
