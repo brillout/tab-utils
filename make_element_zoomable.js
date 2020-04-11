@@ -206,17 +206,23 @@ function zoomOut({scaleEl, containerEl}) {
 
 
 function getSize(el, styleProp) {
-  const computed_style = document.defaultView.getComputedStyle(el,null).getPropertyValue(styleProp);
+  const computed_style = get_computed_style(el, styleProp);
   return parseInt(computed_style, 10) || 0;
 }
 
+function get_computed_style(el, styleProp){
+  return document.defaultView.getComputedStyle(el,null).getPropertyValue(styleProp);
+}
+
 function getElementSizes(el){
-  const height = (
-    getSize(el, 'height') + getOuterSize(['top','bottom'])
-  );
-  const width = (
-    getSize(el, 'width') + getOuterSize(['left','right'])
-  );
+  let height = getSize(el, 'height');
+  let width = getSize(el, 'width');
+
+  const box_sizing = get_computed_style(el, 'box-sizing');
+  if( box_sizing!=='border-box' ){
+    height += getOuterSize(['top','bottom'])
+    width  += getOuterSize(['left','right'])
+  }
 
   return {height, width};
 
