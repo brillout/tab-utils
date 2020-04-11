@@ -31,17 +31,8 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl, toggleEl}) {
   containerEl.classList.add('zooming__overflow-container');
   zoomEl.classList.add('zooming__zoomable-element');
 
-  const on_transition_start = ev => {
-    if( ev.propertyName !== 'transform' ) return;
-    containerEl.classList.add('zoom-transition')
-  };
-  const on_transition_end = (ev) => {
-    if( ev.propertyName !== 'transform' ) return;
-    containerEl.classList.remove('zoom-transition')
-    call_zoom_state_listeners();
-  };
-  scaleEl.addEventListener('transitionstart', on_transition_start, {passive: true});
-  scaleEl.addEventListener('transitionend', on_transition_end, {passive: true});
+  scaleEl.addEventListener('transitionstart', ev => {ev.propertyName==='transform' && on_transition_start()}, {passive: true});
+  scaleEl.addEventListener('transitionend', ev => {ev.propertyName==='transform' && on_transition_end()}, {passive: true});
 
   toggleEl.addEventListener('click', on_click, {passive: true});
   window.addEventListener('resize', on_resize, {passive: true});
@@ -61,6 +52,8 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl, toggleEl}) {
 
   function on_click(ev) {
     ev.preventDefault();
+
+    on_transition_start();
 
     is_zoomed = !is_zoomed;
 
@@ -86,6 +79,14 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl, toggleEl}) {
     }
     last_size = size;
     set_zoom();
+  }
+
+  function on_transition_start(){
+    containerEl.classList.add('zoom-transition')
+  };
+  function on_transition_end(){
+    containerEl.classList.remove('zoom-transition')
+    call_zoom_state_listeners();
   }
 };
 
@@ -126,7 +127,6 @@ function zoomIn({zoomEl, scaleEl, containerEl}) {
   const translation = [screen_center[0] - zoom_el_center[0], screen_center[1] - zoom_el_center[1]];
   DEBUG && console.log('[zoom]', JSON.stringify({screen_center, zoom_el_center, translation}));
 
-//on_transition_start({propertyName: 'transform'});
   scaleEl.style.setProperty('--scale', scale);
   scaleEl.style.setProperty('--zoom-center-x', zoom_el_center[0]+'px');
   scaleEl.style.setProperty('--zoom-center-y', zoom_el_center[1]+'px');
@@ -137,7 +137,6 @@ function zoomIn({zoomEl, scaleEl, containerEl}) {
 }
 
 function zoomOut({scaleEl, containerEl}) {
-//on_transition_start({propertyName: 'transform'});
   document.documentElement.classList.remove('zoomed-state');
 }
 
