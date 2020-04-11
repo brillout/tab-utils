@@ -1,11 +1,11 @@
-    //if(opts.posChangeListeners) opts.posChangeListeners.forEach(function(l){if(l===doZoomIn) opts.posChangeListeners.splice(opts.posChangeListeners.indexOf(l),1)});
-
 import assert from '@brillout/assert';
 import {track_event} from './views/common/tracker';
 import './make_element_zoomable.css';
 import {scrollToHideScrollElement} from './pretty_scroll_area';
 
 export {make_element_zoomable};
+export let is_zoomed = null;
+export {on_zoom_end};
 
 /*
 const DEBUG = true;
@@ -13,8 +13,9 @@ const DEBUG = true;
 const DEBUG = false;
 //*/
 
-function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
+function make_element_zoomable({containerEl, scaleEl, zoomEl, toggleEl}) {
   assert(containerEl && scaleEl && zoomEl);
+  toggleEl = toggleEl || zoomEl;
 
   DEBUG && console.log('[zoom] setup', {zoomEl, scaleEl, containerEl});
   if( DEBUG && window.location.hostname==='localhost' ){
@@ -37,19 +38,21 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
   const on_transition_end = (ev) => {
     if( ev.propertyName !== 'transform' ) return;
     containerEl.classList.remove('zoom-transition')
+    call_zoom_state_listeners();
   };
   scaleEl.addEventListener('transitionstart', on_transition_start, {passive: true});
   scaleEl.addEventListener('transitionend', on_transition_end, {passive: true});
 
-  zoomEl.addEventListener('click', on_click, {passive: true});
+  toggleEl.addEventListener('click', on_click, {passive: true});
   window.addEventListener('resize', on_resize, {passive: true});
 
-  let should_be_zommed = false;
+  assert(is_zoomed===null, "multiple zoomable elements are not supported.");
+  is_zoomed = false;
 
   return;
 
   function set_zoom() {
-    if( should_be_zommed===true ) {
+    if( is_zoomed===true ) {
       zoomIn({zoomEl, scaleEl, containerEl});
     } else {
       zoomOut({scaleEl, containerEl});
@@ -59,15 +62,15 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
   function on_click(ev) {
     ev.preventDefault();
 
-    should_be_zommed = !should_be_zommed;
+    is_zoomed = !is_zoomed;
 
-    const eventAction = should_be_zommed ? 'zoom_in' : 'zoom_out';
+    const eventAction = is_zoomed ? 'zoom_in' : 'zoom_out';
     track_event({
       eventCategory: 'global_stats',
       eventAction,
     });
 
-    if( should_be_zommed ){
+    if( is_zoomed ){
       scrollToHideScrollElement();
     }
 
@@ -86,6 +89,18 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl}) {
   }
 };
 
+const on_zoom_end_listeners = [];
+function on_zoom_end(listener) {
+  on_zoom_end_listeners.push(listener);
+}
+let last_state;
+function call_zoom_state_listeners() {
+  if( last_state === is_zoomed ) return;
+  last_state = is_zoomed;
+  if( is_zoomed ){
+    on_zoom_end_listeners.forEach(listener => {listener()});
+  }
+}
 
 function zoomIn({zoomEl, scaleEl, containerEl}) {
   const {height: zoom_el_height, width: zoom_el_width} = getElementSizes(zoomEl);

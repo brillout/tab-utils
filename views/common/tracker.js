@@ -96,8 +96,13 @@ function setup_ga() {
   // Used for timing hits.
   ga.l = +new Date;
 
+  const ga_id = tab_app_google_analytics_id;
+  assert(ga_id && ga_id.startsWith('UA-'));
+
   // Creates a default tracker with automatic cookie domain configuration.
-  ga('create', tab_app_google_analytics_id, 'auto');
+  ga('create', ga_id, 'auto');
+
+  DEBUG && console.log('[GA] Initialized with '+ga_id);
 }
 
 // https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions/49560222#49560222

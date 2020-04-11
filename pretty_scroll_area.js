@@ -60,8 +60,9 @@ function pretty_scroll_area() {
   onStateChange();
 
   addScrollListener(scroll_pos => {
-    const hide_scroll_pos = scroll_pos === getElementScroll(hide_scroll_element);
-    hide_scroll_state.is_on_hide_scroll_element = hide_scroll_pos;
+    const hide_scroll_element_pos = get_element_scroll_pos(hide_scroll_element);
+ // assert.log({hide_scroll_element_pos, scroll_pos});
+    hide_scroll_state.is_on_hide_scroll_element = scroll_pos === hide_scroll_element_pos;
     onStateChange();
   }, {fireInitialScroll: true});
 
@@ -164,11 +165,11 @@ async function slideTo(top) {
 }
 
 function scrollToElement(selector_or_element, {smooth=true}={}) {
-  const top = getElementScroll(selector_or_element);
+  const top = get_element_scroll_pos(selector_or_element);
   return setScroll(top, {smooth});
 }
 
-function getElementScroll(selector_or_element) {
+function get_element_scroll_pos(selector_or_element) {
   const element = (
     selector_or_element.constructor === String ?
       document.querySelector(selector_or_element) :
