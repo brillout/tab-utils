@@ -5,9 +5,11 @@ export {load_google_analytics};
 export {track_event};
 export {track_error};
 
-const IS_DEV = typeof window !== "undefined" && window.location.hostname === 'localhost';
-
-const DEBUG = IS_DEV;
+/*/
+const DEBUG = true;
+/*/
+const DEBUG = false;
+//*/
 
 init();
 
@@ -64,7 +66,7 @@ function send_error_event({eventCategory, err, ...rest}) {
   };
   track_event(track_props);
 
-  IS_DEV && alert(JSON.stringify(track_props, null, 2));
+  DEBUG && alert(JSON.stringify(track_props, null, 2));
 }
 async function track_event(args) {
   /* use TS instead

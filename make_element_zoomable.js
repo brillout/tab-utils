@@ -51,8 +51,6 @@ function make_element_zoomable({containerEl, scaleEl, zoomEl, toggleEl}) {
   }
 
   function on_click(ev) {
-    ev.preventDefault();
-
     on_transition_start();
 
     is_zoomed = !is_zoomed;
