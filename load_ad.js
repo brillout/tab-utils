@@ -1,12 +1,16 @@
+import React from 'react';
 import assert from '@brillout/assert';
 import load_script from './private/load_script';
 import remove_hash from './private/remove_hash';
 
-export default loadAd;
+export {load_ad};
+
+export {Ad_ATF, Ad_BTF};
 
 export const ads_are_removed = check_if_ads_are_removed();
 
-function loadAd(AD_SLOTS) {
+
+function load_ad(AD_SLOTS) {
   assert([true, false].includes(ads_are_removed));
   if( ads_are_removed ){
     return;
@@ -139,4 +143,32 @@ function check_if_ads_are_removed() {
   function codeIsInLocalStorage() {
     return !!window.localStorage.getItem('thanks-for-your-donation');
   }
+}
+
+
+function Ad_ATF({ad_slots}) {
+  const slots = ad_slots.filter(slot => slot.slotName.includes('ATF'));
+  assert(ad_slots.length===2);
+  assert(slots.length===1);
+  return <AdView id="primary-ad" slot={slots[0]} />;
+}
+function Ad_BTF({ad_slots}) {
+  const slots = ad_slots.filter(slot => slot.slotName.includes('BTF'));
+  assert(ad_slots.length===2);
+  assert(slots.length===1);
+  return <AdView id="secondary-ad" slot={slots[0]} />;
+}
+
+function AdView({id, slot: {slotName, slotID}}) {
+  assert(slotName && slotID);
+  return (
+    <div id={id}>
+      <div className='ad-content-wrapper'>{
+        <div id={slotName}>
+          <div id={slotID}/>
+        </div>
+      }</div>
+      <a className='ad_remover' href='donate' target="_blank">Remove ad</a>
+    </div>
+  );
 }
