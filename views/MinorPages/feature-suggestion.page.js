@@ -4,6 +4,11 @@ import {tab_app_name, tab_app_source_code} from '../../../tab_app_info';
 
 export default getPageConfig(
   () => <>
+    <p>
+    If you have any idea or wish then let me know!
+    </p>
+
+    <p>
     To suggest a feature, write an email to
     {' '}
     <a
@@ -13,6 +18,7 @@ export default getPageConfig(
       target="_blank"
     />
     .
+    </p>
 
     <p>
     You can also

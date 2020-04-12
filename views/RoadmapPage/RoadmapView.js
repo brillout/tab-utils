@@ -9,7 +9,7 @@ function RoadmapView() {
       <TabAppRoadmap />
     </ul>
     <p>
-      You have wish? <a href="/feature-suggestion">Suggest a feature</a>!
+      You have a wish? <a href="/feature-suggestion">Suggest a feature</a>!
     </p>
   </>;
 }

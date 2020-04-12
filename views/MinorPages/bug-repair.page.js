@@ -17,19 +17,25 @@ export default getPageConfig(
 
     <br/>
     Your browser:
-    <pre id="browser-spec" style={{margin: 0}}/>
+    <CodeBlock id="browser-spec"/>
 
     <br/>
     Your settings:
-    <pre id="setting-spec" style={{margin: 0, wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}/>
+    <CodeBlock id="setting-spec"/>
 
     <br/>
     Other setting keys:
-    <pre id="settings-other" style={{margin: 0}}/>
+    <CodeBlock id="settings-other"/>
   </>,
   'Bug Repair',
   {onPageLoad},
 );
+
+function CodeBlock(props) {
+  return (
+    <pre style={{margin: 0, wordWrap: 'break-word', whiteSpace: 'pre-wrap'}} {...props}/>
+  );
+}
 
 function onPageLoad() {
   const link = document.querySelector('#repair-link');
