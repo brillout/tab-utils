@@ -14,7 +14,7 @@ function DonateView() {
     </h1>
 
     <p>
-    I'm Romuald, the creator of {tab_app_name}
+    I'm Romuald, the creator of {tab_app_name}.
     </p>
 
     <p>
@@ -22,8 +22,8 @@ function DonateView() {
     </p>
 
     <p>
-    But ads and donations allow me to dedicate myself to {tab_app_name} and
-    I've got many ideas for improvements and entirely new features!
+    But I want to improve {tab_app_name} and I've got many ideas for new features.
+    Ads and donations are what allow me to dedicate more time to {tab_app_name}.
     </p>
 
     <p>
@@ -31,7 +31,7 @@ function DonateView() {
     </p>
 
     <p>
-    In order to donate, make a PayPal wire to the following PayPal email:
+    You can donate by making a PayPal wire to the following PayPal email:
     </p>
     <p style={{paddingLeft: 20}}>
       <b id='paypal-email'></b>
@@ -47,7 +47,7 @@ function DonateView() {
     </p>
 
     <p>
-    I'm looking forward to a bright {tab_app_name} future :-).
+    Thank you, I'm looking forward to a bright {tab_app_name} future :-).
     </p>
 
     <p>
@@ -57,10 +57,6 @@ function DonateView() {
     <p>
     Romuald<br/>
     <a target='_blank' className="contact-address"></a>
-    </p>
-
-    <p>
-    P.S. Thank you for your lovely messages attached to your PayPal wires, I'm glad people enjoy what I'm building.
     </p>
   </>;
 }
