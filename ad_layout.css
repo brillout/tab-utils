@@ -88,3 +88,7 @@ html:not(.show_ad) #secondary-ad {
   text-shadow: none;
   white-space: nowrap;
 }
+/* Override Timer Tab's style */
+.ad_remover {
+  cursor: pointer !important;
+}
