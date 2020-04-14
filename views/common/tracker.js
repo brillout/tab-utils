@@ -66,7 +66,9 @@ function send_error_event({eventCategory, err, ...rest}) {
   };
   track_event(track_props);
 
-  DEBUG && alert(JSON.stringify(track_props, null, 2));
+  if( window.location.hostname === 'localhost' ){
+    alert(JSON.stringify(track_props, null, 2));
+  }
 }
 async function track_event(args) {
   /* use TS instead
