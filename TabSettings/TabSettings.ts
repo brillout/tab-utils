@@ -1277,12 +1277,26 @@ function make_unique(arr) {
 
 
 class LinkSerializer {
+  private static _to_base64(str: string): string {
+    let str__base64 = window.btoa(str);
+    assert(window.btoa('ab?')==="YWI/");
+    str__base64 = str__base64.split('/').join('_');
+    assert(window.btoa('ab>')==="YWI+");
+    str__base64 = str__base64.split('+').join('-');
+    return str__base64;
+  }
+  private static _from_base64(str__base64: string): string {
+    str__base64 = str__base64.split('_').join('/');
+    str__base64 = str__base64.split('-').join('+');
+    const str = window.atob(str__base64);
+    return str;
+  }
   static to_url(preset) {
     assert(preset instanceof Preset);
     assert(preset.is_saved_preset);
 
     const preset_string = PresetSerializer.serialize_single(preset);
-    const preset_base64 = window.btoa(preset_string);
+    const preset_base64 = this._to_base64(preset_string);
 
     const url_base = window.location.href.split('#')[0];
 
@@ -1306,7 +1320,7 @@ class LinkSerializer {
     }
 
     try {
-      pipe_data = window.atob(pipe_data);
+      pipe_data = this._from_base64(pipe_data);
     } catch(err) {
       on_error(err);
       return null;
