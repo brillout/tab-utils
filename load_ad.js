@@ -24,14 +24,14 @@ function load_ad(AD_SLOTS) {
 
   loadApsTag();
 
-  refreshBids(AD_SLOTS);
+  fetch_bids(AD_SLOTS, {is_first_time: true});
 
   AD_SLOTS.forEach(({slotID}) => {
     googletag.cmd.push(function() { googletag.display(slotID); });
   });
 
   setInterval(function () {
-    refreshBids(AD_SLOTS, {timeout: 2e3});
+    fetch_bids(AD_SLOTS);
   }, 90000);
 }
 
@@ -73,30 +73,29 @@ function loadGoogleTag(AD_SLOTS) {
   });
 }
 
-function refreshBids(AD_SLOTS, args) {
-  apstag.fetchBids(
-    {
-      slots: AD_SLOTS.map(({slotID, slotName, slotSizes}) => {
-        return {
-          slotID,
-          slotName,
-          sizes: slotSizes,
-        };
-      }),
-      ...args
-    },
-    function(bids) {
-      // set apstag bids, then trigger the first request to DFP
-
-      // set apstag targeting on googletag then refresh all DFP
-
-      googletag.cmd.push(function() {
-          apstag.setDisplayBids();
-          googletag.pubads().refresh();
-          console.log('[AD] Bid refresh');
-      });
-    }
+function fetch_bids(AD_SLOTS, {is_first_time=false}={}) {
+  const slots = (
+    AD_SLOTS.map(({slotID, slotName, slotSizes}) => {
+      return {
+        slotID,
+        slotName,
+        sizes: slotSizes,
+      };
+    })
   );
+  const bid_args = {slots};
+  if( !is_first_time ){
+    bid_args.timeout = 2e3;
+  }
+  apstag.fetchBids(bid_args, function() {
+    googletag.cmd.push(function() {
+        apstag.setDisplayBids();
+        if( !is_first_time ){
+          googletag.pubads().refresh();
+        }
+        console.log('[AD] bid '+(is_first_time?'init':'refresh'));
+    });
+  });
 }
 
 function loadApsTag() {
