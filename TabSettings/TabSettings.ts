@@ -3,7 +3,7 @@ import load_font from './load_font';
 import load_font_list from './load_font_list';
 import set_background from './set_background';
 import './tab-settings.css';
-import {track_event} from '../views/common/tracker';
+import {track_event, track_error} from '../views/common/tracker';
 import {remove_hash} from '../auto_remove_hash';
 import {PersistantInput, TextInput, BooleanInput, SelectInput, ColorInput, DateInput, Button} from './PersistantInput';
 import {show_toast} from '../views/common/show_toast';
@@ -1308,7 +1308,7 @@ class LinkSerializer {
     try {
       pipe_data = window.atob(pipe_data);
     } catch(err) {
-      console.error(err);
+      on_error(err);
       return null;
     }
 
@@ -1316,10 +1316,17 @@ class LinkSerializer {
     try {
       preset_data = PresetSerializer.deserialize_single(pipe_data);
     } catch(err) {
-      console.error(err);
+      on_error(err);
       return null;
     }
 
     return preset_data;
+
+    function on_error(err: Error) {
+      show_toast('Wrong URL. The URL could not be processed.', {is_error: true});
+      track_error(err);
+      console.log(pipe_data);
+      console.error(err);
+    }
   }
 }

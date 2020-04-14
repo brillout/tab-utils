@@ -20,7 +20,7 @@ async function domRender({page, initialProps, CONTAINER_ID}) {
   */
 
   try {
-    page.on_page_load();
+    await page.on_page_load();
   } catch(err) {
     on_error(err);
   }

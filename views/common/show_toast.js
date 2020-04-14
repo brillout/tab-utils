@@ -5,7 +5,7 @@ import './toast.css';
 
 export {show_toast};
 
-function show_toast(text, {is_error=false, short_duration}={}) {
+function show_toast(text, {is_error=false, short_duration=false}={}) {
   assert(text);
 
   const backgroundColor = (
