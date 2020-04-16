@@ -5,6 +5,7 @@
   max-width: var(--max-content-width);
   padding-left: var(--content-side-padding);
   padding-right: var(--content-side-padding);
+  margin-bottom: 43px;
 }
 #footer_container {
   margin-top: 50px;
