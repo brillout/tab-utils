@@ -23,7 +23,7 @@ function DonateView() {
 
     <p>
     But I want to improve {tab_app_name} and I've got many ideas for new features.
-    Ads and donations are what allow me to dedicate more time to {tab_app_name}.
+    Ads and donations allow me to dedicate more time to {tab_app_name}.
     </p>
 
     <p>
@@ -47,7 +47,7 @@ function DonateView() {
     </p>
 
     <p>
-    Thank you, I'm looking forward to a bright {tab_app_name} future :-).
+    Thank you. I'm looking forward to a bright {tab_app_name} future.
     </p>
 
     <p>
