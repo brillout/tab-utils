@@ -5,7 +5,8 @@
       "lib": [ "DOM", "ES2020","ES2019.Object" ],
       "sourceMap": true,
       "allowJs": true,
-      "checkJs": false
+      "checkJs": false,
+      "jsx": "preserve",
   },
   "exclude": [
       "node_modules"

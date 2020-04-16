@@ -7,7 +7,8 @@ import {tab_app_logo} from '../../../tab_app_info';
 
 export {FullView, MorePanel, config};
 
-function FullView({children, ...props}) {
+function FullView(props) {
+  const {children} = props;
   return <>
     <Header/>
 
@@ -25,7 +26,8 @@ function FullView({children, ...props}) {
   </>;
 }
 
-function MorePanel({children}) {
+function MorePanel(props) {
+  const {children} = props;
   return (
     <div id="more_panel">
       <div id="more_panel_background" className='glass-background'></div>
@@ -39,6 +41,7 @@ function config(conf) {
   return {
     renderToDom: true,
     renderToHtml: true,
+    hydrateReact: conf.renderToDom,
     favicon: tab_app_logo,
     ...conf,
     on_page_load: () => on_page_load(conf.onPageLoad),
