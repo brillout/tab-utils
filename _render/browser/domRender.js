@@ -1,24 +1,12 @@
 import './css/common.css';
 import {load_google_analytics, track_error} from '../../views/common/tracker';
 import {tab_app_name} from '../../../tab_app_info';
-import React from 'react';
-import ReactDOM from 'react-dom';
 
 export default domRender;
 
-async function domRender({page, initialProps, CONTAINER_ID}) {
-  if (page.hydrateReact) {
-    const element = React.createElement(page.view, initialProps);
-    const container = document.getElementById(CONTAINER_ID);
-    if (page.renderToHtml) {
-      ReactDOM.hydrate(element, container);
-    } else {
-      ReactDOM.render(element, container);
-    }
-  }
-
+async function domRender(goldpage_args) {
   try {
-    await page.on_page_load();
+    await goldpage_args.page.on_page_load(goldpage_args);
   } catch(err) {
     on_error(err);
   }

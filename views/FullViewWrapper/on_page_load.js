@@ -5,11 +5,11 @@ import { show_toast } from '../common/show_toast';
 
 export default on_page_load;
 
-function on_page_load(on_load) {
-  on_load(() => {
+function on_page_load(onPageLoad, goldpage_args) {
+  onPageLoad(() => {
     load_full_view();
     load_common();
-  });
+  }, goldpage_args);
 }
 
 function load_full_view() {

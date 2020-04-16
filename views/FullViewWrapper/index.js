@@ -37,13 +37,13 @@ function MorePanel(props) {
   );
 }
 
-function config(conf) {
+function config({onPageLoad, ...conf}) {
   return {
     renderToDom: true,
     renderToHtml: true,
     hydrateReact: conf.renderToDom,
     favicon: tab_app_logo,
     ...conf,
-    on_page_load: () => on_page_load(conf.onPageLoad),
+    on_page_load: goldpage_args => on_page_load(onPageLoad, goldpage_args),
   };
 }
