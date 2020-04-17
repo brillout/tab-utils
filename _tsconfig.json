@@ -1,19 +1,13 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "target": "es2015",
-      "lib": [ "DOM", "ES2020","ES2019.Object" ],
-      "sourceMap": true,
-      "allowJs": true,
-      "checkJs": false,
-      "jsx": "preserve",
+    "module": "commonjs",
+    "target": "es2015",
+    "lib": ["DOM", "ES2020", "ES2019.Object"],
+    "sourceMap": true,
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "preserve"
   },
-  "exclude": [
-      "node_modules"
-  ],
-  "include": [
-      "./node_modules/@types/**/*.d.ts",
-      "./**/*.js",
-      "./**/*.ts"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["./node_modules/@types/**/*.d.ts", "./**/*.js", "./**/*.ts"]
 }
