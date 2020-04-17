@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "module": "commonjs",
     "target": "es2015",
     "lib": ["DOM", "ES2020", "ES2019.Object"],
