@@ -1170,6 +1170,11 @@
     reassert "^1.1.12"
     webpack-ssr "0.5.6"
 
+"@nx-js/observer-util@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.npmjs.org/@nx-js/observer-util/-/observer-util-4.2.2.tgz#faea1bc61936653486d1b5dec7485220991e628d"
+  integrity sha512-9OayX1xkdGjdnsDiO2YdaYJ6aMyCF7/NY4QWVgIgjSAZJ4OX2fD766Ts79hEzBscenQy2DCaSoY8VkguIMB1ZA==
+
 "@rebuild/build@0.5.6":
   version "0.5.6"
   resolved "https://registry.npmjs.org/@rebuild/build/-/build-0.5.6.tgz#43ac11e1de95e588ca7e087dc74d3b0049a99bc2"
@@ -1232,6 +1237,13 @@
     parent-module "^1.0.1"
     reassert "^1.1.12"
     ws "^6.2.1"
+
+"@risingstack/react-easy-state@^6.2.3":
+  version "6.2.4"
+  resolved "https://registry.npmjs.org/@risingstack/react-easy-state/-/react-easy-state-6.2.4.tgz#458328f3fca77bc12dfbc44a77ed88e66ef8dfc6"
+  integrity sha512-a0SKhrsVy3+GDch+j7xKidEXPzc6RVpfS1eCs/dWZn6r808H3tCeOYjj3kiDyd8I3b7meVskGhC1XjW05Y3rgw==
+  dependencies:
+    "@nx-js/observer-util" "^4.2.2"
 
 "@universal-adapter/hapi@^0.4.2":
   version "0.4.2"
