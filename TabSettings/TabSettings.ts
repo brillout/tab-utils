@@ -1051,16 +1051,16 @@ class PresetSerializer {
     // share URLs cannot be migrated thus we migrate at runtime
     if (
       preset_data.preset_name &&
-      preset_data.preset_options &&
-      preset_data.app_name &&
       !preset_data.preset_id &&
-      !preset_data.preset_values &&
-      !preset_data.subapp_id
+      preset_data.preset_options &&
+      !preset_data.preset_values
     ) {
       preset_data.preset_id = preset_data.preset_name;
       delete preset_data.preset_name;
       preset_data.preset_values = preset_data.preset_options;
       delete preset_data.preset_options;
+    }
+    if (preset_data.app_name && !preset_data.subapp_id) {
       preset_data.subapp_id = preset_data.app_name;
       delete preset_data.app_name;
     }
