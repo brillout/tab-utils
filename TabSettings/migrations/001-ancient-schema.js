@@ -1,7 +1,7 @@
 import assert from "@brillout/assert";
 import { rename_keys_and_values } from "./rename_keys_and_values";
 
-migrate_ancient_schema.schema_version = new Date('2020-03-01');
+migrate_ancient_schema.schema_version = new Date("2020-03-01");
 
 export { migrate_ancient_schema };
 

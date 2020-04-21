@@ -1,7 +1,7 @@
 import assert from "@brillout/assert";
 import { migrate_user_presets } from "./migrate_user_presets";
 
-migrate_user_preset_ids_and_values.schema_version = new Date('2020-03-02');
+migrate_user_preset_ids_and_values.schema_version = new Date("2020-03-02");
 
 export { migrate_user_preset_ids_and_values };
 
