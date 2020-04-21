@@ -1,7 +1,8 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
 import Bowser from "bowser";
-import { tab_app_name, tab_subapp_ids } from "../../../tab_app_info";
+import { tab_app_name } from "../../../tab_app_info";
+import { store } from "../../store";
 
 export default getPageConfig(
   () => (
@@ -51,7 +52,7 @@ function onPageLoad() {
   const link = document.querySelector("#repair-link");
 
   const browser_spec = getBrowser();
-  const { settings__string, external_settings } = getSettings();
+  const { settings__string, local_storage_keys } = getSettings();
 
   link.setAttribute(
     "data-body",
@@ -64,8 +65,8 @@ function onPageLoad() {
       "My Settings:",
       settings__string,
       "",
-      "Other settings keys:",
-      external_settings,
+      "Setting keys:",
+      local_storage_keys,
       "",
       "Thanks for having a look!",
     ].join("\n")
@@ -76,7 +77,7 @@ function onPageLoad() {
     settings__string
   );
   document.querySelector("#settings-other").innerHTML = escapeHtml(
-    external_settings
+    local_storage_keys
   );
 }
 
@@ -86,18 +87,9 @@ function getBrowser() {
 }
 
 function getSettings() {
-  const settings__obj = {};
-  let external_settings = [];
-  Object.entries(window.localStorage).forEach(([key, val]) => {
-    if (isTabSetting(key)) {
-      settings__obj[key] = val;
-    } else {
-      external_settings.push(key);
-    }
-  });
-  const settings__string = JSON.stringify(settings__obj, null, 2);
-  external_settings = JSON.stringify(external_settings);
-  return { settings__string, external_settings };
+  const settings__string = store.get_storage_data_string();
+  const local_storage_keys = JSON.stringify(Object.keys(window.localStorage));
+  return { settings__string, local_storage_keys };
 }
 
 function escapeHtml(str) {
@@ -107,8 +99,4 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-}
-
-function isTabSetting(key) {
-  return tab_subapp_ids.some((subapp_id) => key.startsWith(subapp_id + "_"));
 }

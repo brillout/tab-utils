@@ -2,16 +2,16 @@ import React from "react";
 import assert from "@brillout/assert";
 import load_script from "./private/load_script";
 import remove_hash from "./private/remove_hash";
+import { store } from "./store";
 
 export { load_ad };
 
 export { Ad_ATF, Ad_BTF };
 
-export const ads_are_removed = check_if_ads_are_removed();
+export { ads_are_removed };
 
 function load_ad(AD_SLOTS) {
-  assert([true, false].includes(ads_are_removed));
-  if (ads_are_removed) {
+  if (ads_are_removed()) {
     return;
   }
 
@@ -148,10 +148,7 @@ function loadApsTag() {
 
 // Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
 // If you are short on money then you are more than welcome to do this :-).
-function check_if_ads_are_removed() {
-  if (typeof window === "undefined") {
-    return null;
-  }
+function ads_are_removed() {
   if (codeIsInUrl() === true) {
     return true;
   }
@@ -165,7 +162,7 @@ function check_if_ads_are_removed() {
 
   function codeIsInUrl() {
     if (window.location.hash === "#thanks-for-your-donation") {
-      window.localStorage.setItem("thanks-for-your-donation", "1");
+      store.set_val("ad_removal", true);
       remove_hash();
       return true;
     }
@@ -173,7 +170,7 @@ function check_if_ads_are_removed() {
   }
 
   function codeIsInLocalStorage() {
-    return !!window.localStorage.getItem("thanks-for-your-donation");
+    return store.has_val("ad_removal");
   }
 }
 

@@ -906,7 +906,7 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@brillout/assert@^0.1.2":
+"@brillout/assert@^0.1.0", "@brillout/assert@^0.1.2":
   version "0.1.2"
   resolved "https://registry.npmjs.org/@brillout/assert/-/assert-0.1.2.tgz#beaf9d75cff11f91ca3baab35e4d8a2013e254da"
   integrity sha512-z3q6CzcJw8XdjYHv44oaV4kcnwJKZAULRQsH3mFvPHO4Lkyd/bnYsy0PE627Y8JhHHTHgnEi+bfvk+/0gfMFfQ==
@@ -961,6 +961,13 @@
   dependencies:
     "@brillout/project-files" "^0.4.0"
     "@brillout/reassert" "^0.1.1"
+
+"@brillout/json-s@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@brillout/json-s/-/json-s-0.1.0.tgz#84d7bb6a96b310a166a58767bb84dcb6c852287a"
+  integrity sha512-DSOGC4liW0rLU+C5ZQGimy/myB3Bmvso5hgJM0gzuiZJs7mAEhTU1W3O1fNJATX1CJMBkFlG2ebLOvByH/3K9A==
+  dependencies:
+    "@brillout/assert" "^0.1.0"
 
 "@brillout/parse-url@^0.2.1":
   version "0.2.1"

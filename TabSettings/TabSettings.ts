@@ -16,6 +16,7 @@ import {
 } from "./PersistantInput";
 import { show_toast } from "../views/common/show_toast";
 import { run_migrations } from "./run_migrations";
+import { store, deserialize, serialize } from "../store";
 
 run_migrations();
 
@@ -1029,7 +1030,7 @@ class PresetList {
 }
 
 class PresetSerializer {
-  static serialize_single(preset) {
+  static serialize_preset(preset) {
     assert(preset instanceof SavedPreset);
 
     // Validation
@@ -1037,40 +1038,19 @@ class PresetSerializer {
     const { subapp_id } = preset.tab_settings;
     const preset_data = new PresetData({ preset_id, preset_values, subapp_id });
 
-    const preset_string = JSON.stringify(preset_data);
+    const preset_string = serialize(preset_data);
 
     return preset_string;
   }
 
-  static deserialize_single(preset_string) {
+  static deserialize_preset(preset_string) {
     assert(preset_string.constructor === String);
 
-    const preset_info = JSON.parse(preset_string);
+    let preset_data = deserialize(preset_string);
 
-    // Validation
-    const preset_data = new PresetData(preset_info);
+    preset_data = new PresetData(preset_data);
 
     return preset_data;
-  }
-  static serialize_list(presets) {
-    // Validation
-    assert(presets.constructor === Array);
-    presets.forEach((preset_data) => {
-      assert(preset_data instanceof PresetData);
-    });
-
-    const presets__string = JSON.stringify(presets);
-    return presets__string;
-  }
-
-  static deserialize_list(presets_string) {
-    let presets = JSON.parse(presets_string || JSON.stringify([]));
-
-    // Validation
-    assert(presets.constructor === Array);
-    presets = presets.map((preset_data) => new PresetData(preset_data));
-
-    return presets;
   }
 }
 
@@ -1230,10 +1210,22 @@ class PresetSavior {
   }
 
   _get_presets() {
-    return PresetSerializer.deserialize_list(localStorage[this._storage_key]);
+    let presets = store.get_val(this._storage_key) || [];
+
+    // Validation
+    assert(presets.constructor === Array);
+    presets = presets.map((preset_data) => new PresetData(preset_data));
+
+    return presets;
   }
   _save_presets(presets) {
-    localStorage[this._storage_key] = PresetSerializer.serialize_list(presets);
+    // Validation
+    assert(presets.constructor === Array);
+    presets.forEach((preset_data) => {
+      assert(preset_data instanceof PresetData);
+    });
+
+    store.set_val(presets, this._storage_key);
   }
   get _storage_key() {
     return this.#subapp_id + "_presets";
@@ -1347,7 +1339,7 @@ class LinkSerializer {
     assert(preset instanceof Preset);
     assert(preset.is_saved_preset);
 
-    const preset_string = PresetSerializer.serialize_single(preset);
+    const preset_string = PresetSerializer.serialize_preset(preset);
     const preset_base64 = this._to_base64(preset_string);
 
     const url_base = window.location.href.split("#")[0];
@@ -1380,7 +1372,7 @@ class LinkSerializer {
 
     let preset_data: PresetData;
     try {
-      preset_data = PresetSerializer.deserialize_single(pipe_data);
+      preset_data = PresetSerializer.deserialize_preset(pipe_data);
     } catch (err) {
       on_error(err);
       return null;

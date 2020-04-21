@@ -1,6 +1,7 @@
 import assert from "@brillout/assert";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
+import { store } from "../store";
 
 export {
   TextInput,
@@ -12,23 +13,6 @@ export {
   PersistantInput,
 };
 
-class Storage {
-  #storage_key;
-  constructor(storage_key) {
-    assert(storage_key);
-    this.#storage_key = storage_key;
-  }
-  has_val() {
-    return window.localStorage.getItem(this.#storage_key) !== null;
-  }
-  get_val() {
-    return window.localStorage.getItem(this.#storage_key);
-  }
-  set_val(val) {
-    window.localStorage.setItem(this.#storage_key, val);
-  }
-}
-
 interface PersistantInput {
   _init_dom?(): void;
 }
@@ -37,7 +21,7 @@ abstract class PersistantInput {
   protected _input_id: string;
   #on_input_change: any;
   #input_default: any;
-  #storage: Storage;
+  #storage_key: string;
   abstract input_tag: string;
   input_type?: string;
 
@@ -53,15 +37,24 @@ abstract class PersistantInput {
     this.#on_input_change = on_input_change;
     this.#input_default = input_default;
 
-    this.#storage = new Storage(input_id);
+    this.#storage_key = input_id;
   }
 
   // Public functions
   input_get() {
     return this._input_retriever();
   }
+  private has_stored_value() {
+    return store.has_val(this.#storage_key);
+  }
+  private get_stored_value() {
+    return store.get_val(this.#storage_key);
+  }
+  private set_stored_value(val) {
+    store.set_val(this.#storage_key, val);
+  }
   input_set(val) {
-    this.#storage.set_val(val);
+    this.set_stored_value(val);
     this._input_modifier(val);
     this.#on_input_change();
   }
@@ -82,8 +75,8 @@ abstract class PersistantInput {
       this._init_dom();
     }
 
-    const init_val = this.#storage.has_val()
-      ? this.#storage.get_val()
+    const init_val = this.has_stored_value()
+      ? this.get_stored_value()
       : this.#input_default;
     if (init_val !== undefined) {
       this._input_modifier(init_val);
@@ -92,7 +85,8 @@ abstract class PersistantInput {
     this._input_el.addEventListener(
       this._change_event,
       () => {
-        this.#storage.set_val(this._input_retriever());
+        const val = this._input_retriever();
+        this.set_stored_value(val);
         this.#on_input_change();
       },
       false
