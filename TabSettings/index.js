@@ -1,2 +1,2 @@
-import {TabSettings} from './TabSettings';
-export {TabSettings};
+import { TabSettings } from "./TabSettings";
+export { TabSettings };

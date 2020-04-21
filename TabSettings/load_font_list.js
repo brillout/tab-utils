@@ -1,25 +1,25 @@
-import {load_asap} from './load_asap';
+import { load_asap } from "./load_asap";
 
 export default load_font_list;
 
 let promise;
 
 function load_font_list() {
-  if( promise ) {
+  if (promise) {
     return promise;
   }
 
   let resolve_promise;
-  promise = new Promise(r => resolve_promise = r);
+  promise = new Promise((r) => (resolve_promise = r));
 
-  window['onfontsload'] = function(resp){
-    if( resp.error ) {
+  window["onfontsload"] = function (resp) {
+    if (resp.error) {
       console.error(resp.error.message);
       resolve_promise([]);
       return;
     }
 
-    let font_list = resp['items'].map(f => f.family).sort();
+    let font_list = resp["items"].map((f) => f.family).sort();
 
     /*
     if(ml.browser().usesGecko) {
@@ -32,7 +32,9 @@ function load_font_list() {
     resolve_promise(font_list);
   };
 
-  load_asap('https://www.googleapis.com/webfonts/v1/webfonts?callback=onfontsload&sort=popularity&key=AIzaSyAOMrdvfJJPa1btlQNCkXT9gcA-lCADPeE');
+  load_asap(
+    "https://www.googleapis.com/webfonts/v1/webfonts?callback=onfontsload&sort=popularity&key=AIzaSyAOMrdvfJJPa1btlQNCkXT9gcA-lCADPeE"
+  );
 
   return promise;
 }

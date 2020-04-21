@@ -1,6 +1,6 @@
 :root {
-  --panel_bg_1: rgba(255,255,255,.55);
-  --panel_bg_2: rgba(0,0,0,.065);
+  --panel_bg_1: rgba(255, 255, 255, 0.55);
+  --panel_bg_2: rgba(0, 0, 0, 0.065);
   --panel-bg-blur: 5px;
   --panel-color: #373a4a;
 }
@@ -24,9 +24,6 @@
   width: 100vw;
 }
 
-
-
-
 .glass-background {
   position: relative;
 }
@@ -35,8 +32,8 @@
 }
 .glass-background:after {
   pointer-events: none;
-  background-color:  var(--panel_bg_2);
-  content: '';
+  background-color: var(--panel_bg_2);
+  content: "";
   display: block;
   top: 0;
   left: 0;
@@ -56,10 +53,6 @@
 #more_panel {
   color: var(--panel-color);
 }
-
-
-
-
 
 .more_panel_block {
   padding-top: 24px;

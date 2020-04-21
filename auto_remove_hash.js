@@ -1,29 +1,32 @@
-import remove_hash from './private/remove_hash';
+import remove_hash from "./private/remove_hash";
 
 export default auto_remove_hash;
 
-export {remove_hash};
+export { remove_hash };
 
-function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}={}) {
+function auto_remove_hash({ IGNORE_LIST, INCLUDE_LIST } = {}) {
   check();
-  [100, 300, 600, 900].forEach(timeout => setTimeout(check, timeout));
-  window.addEventListener("hashchange", check, {passive: true, capture: false});
+  [100, 300, 600, 900].forEach((timeout) => setTimeout(check, timeout));
+  window.addEventListener("hashchange", check, {
+    passive: true,
+    capture: false,
+  });
 
   function check() {
-    const {hash} = window.location;
+    const { hash } = window.location;
 
-    if( isEmptyHash() ){
+    if (isEmptyHash()) {
       remove_hash();
       return;
     }
 
-    if( !IGNORE_LIST && !INCLUDE_LIST ){
+    if (!IGNORE_LIST && !INCLUDE_LIST) {
       return;
     }
-    if( IGNORE_LIST && IGNORE_LIST.includes(hash) ){
+    if (IGNORE_LIST && IGNORE_LIST.includes(hash)) {
       return;
     }
-    if( INCLUDE_LIST && !INCLUDE_LIST.includes(hash) ){
+    if (INCLUDE_LIST && !INCLUDE_LIST.includes(hash)) {
       return;
     }
 
@@ -33,11 +36,11 @@ function auto_remove_hash({IGNORE_LIST, INCLUDE_LIST}={}) {
 
 function isEmptyHash() {
   // In Chrome `location.hash===''` when URL is `localhost:3000/#`
-  if( window.location.hash==='#' ){
+  if (window.location.hash === "#") {
     return true;
   }
   // Because the above doesn't seem to be reliable
-  if( window.location.href.endsWith('#') ){
+  if (window.location.href.endsWith("#")) {
     return true;
   }
   return false;

@@ -9,15 +9,14 @@ export default set_background;
 //http://www.gowallpaper.net/wp-content/uploads/2011/04/Windows-7-3d-wide-wallpaper-1280x800.jpg
 //http://vistawallpapers.files.wordpress.com/2007/03/vista-wallpapers-69.jpg
 
-
 /*
 const LOAD_IMG_URL = 'http://i.imgur.com/cvyOo.gif';
 /*/
-const LOAD_IMG_URL = 'https://i.imgur.com/zqG5F.gif';
+const LOAD_IMG_URL = "https://i.imgur.com/zqG5F.gif";
 //*/
 //ml.assert(!arguments.callee.neverCalled);arguments.callee.neverCalled=true;
 
-const LOAD_IMG = 'url('+LOAD_IMG_URL+')';
+const LOAD_IMG = "url(" + LOAD_IMG_URL + ")";
 
 /*/
 const DEBUG = true;
@@ -29,21 +28,24 @@ const DEBUG = false;
 //window.screen.width;
 //window.screen.height;
 
-function apply_changes({color='white', img='none'}={}) {
-  DEBUG && console.log('set-background', {color, img});
-  BG_EL.style.backgroundColor=color; //style.background='' => Opera discareds fixed and cover style
-  BG_EL.style.backgroundImage=img;
-  BG_EL.style['backgroundSize'] = img===LOAD_IMG?'auto':'cover';
+function apply_changes({ color = "white", img = "none" } = {}) {
+  DEBUG && console.log("set-background", { color, img });
+  BG_EL.style.backgroundColor = color; //style.background='' => Opera discareds fixed and cover style
+  BG_EL.style.backgroundImage = img;
+  BG_EL.style["backgroundSize"] = img === LOAD_IMG ? "auto" : "cover";
 }
 
 let change_number_counter = 0;
 function set_background(val) {
   ++change_number_counter;
-  DEBUG && console.log('set-background', {val});
+  DEBUG && console.log("set-background", { val });
   init();
-  if( !val ) { apply_changes(); return; }
-  if( setImage(val) ) return;
-  if( setGradient(val) ) return;
+  if (!val) {
+    apply_changes();
+    return;
+  }
+  if (setImage(val)) return;
+  if (setGradient(val)) return;
   setColor(val);
 }
 
@@ -53,8 +55,8 @@ function setColor(val) {
   });
 }
 
-function setGradient(val){
-  if( val.indexOf('gradient')===-1 ) {
+function setGradient(val) {
+  if (val.indexOf("gradient") === -1) {
     return false;
   }
 
@@ -67,18 +69,18 @@ function setGradient(val){
 
 let BG_EL;
 function init() {
-  if( BG_EL ) return;
-  BG_EL=document.body;
+  if (BG_EL) return;
+  BG_EL = document.body;
 
   //following 2 styles used for auto sized background for loading gif
-  BG_EL.style['backgroundRepeat'] = 'no-repeat';
-  BG_EL.style['backgroundPosition'] = 'center';
+  BG_EL.style["backgroundRepeat"] = "no-repeat";
+  BG_EL.style["backgroundPosition"] = "center";
   //fixed because no way found to set BG_EL's size to scroll size of window
   //-http://stackoverflow.com/questions/7540418/css-setting-an-elements-size-to-the-scroll-size-of-the-page
-  BG_EL.style['backgroundAttachment'] = 'fixed';
+  BG_EL.style["backgroundAttachment"] = "fixed";
   //make sure size is at least size of window
-  BG_EL.style['min-height']='100%';
-  BG_EL.style['min-width']='100%';
+  BG_EL.style["min-height"] = "100%";
+  BG_EL.style["min-width"] = "100%";
 
   //// not needed when backgroundAttachment == fixed
   //BG_EL.style['minHeight']            = '100%';
@@ -87,45 +89,55 @@ function init() {
 
 function setImage(val) {
   const change_number = change_number_counter;
-  const isURI = val.indexOf('.')!==-1 || /^data:image/.test(val);
-  DEBUG && console.log('set-background', {isURI});
-  if( !isURI ){
+  const isURI = val.indexOf(".") !== -1 || /^data:image/.test(val);
+  DEBUG && console.log("set-background", { isURI });
+  if (!isURI) {
     return false;
   }
 
-  var imgEl=document.createElement('img');
+  var imgEl = document.createElement("img");
   var loaded;
-  imgEl.onload=function() {
-    loaded=true;
-    const w=this.width;
-    const h=this.height;
-    if(w*h>8000000) {
-      alert('The provided image has a size of '+w+'*'+h+' pixels. Large images are likely to slow down your machine. Thus only images of up to 8 000 000 pixels are allowed. (For example, any image bellow 5000*1600 is fine.)');
-      if( change_number === change_number_counter ){
+  imgEl.onload = function () {
+    loaded = true;
+    const w = this.width;
+    const h = this.height;
+    if (w * h > 8000000) {
+      alert(
+        "The provided image has a size of " +
+          w +
+          "*" +
+          h +
+          " pixels. Large images are likely to slow down your machine. Thus only images of up to 8 000 000 pixels are allowed. (For example, any image bellow 5000*1600 is fine.)"
+      );
+      if (change_number === change_number_counter) {
         apply_changes();
       }
       return;
     }
-    if( change_number === change_number_counter ){
-      apply_changes({img: 'url("'+val+'")'});
+    if (change_number === change_number_counter) {
+      apply_changes({ img: 'url("' + val + '")' });
     }
   };
-  imgEl.onerror=function(err) {
-    alert('Image '+val+' could not be loaded. Do you have an internet connection? Is the image online? Does the URL point to an image? (Note that the URL should point to the image itself and not to a page containing the image.)');
-    if( change_number === change_number_counter ){
+  imgEl.onerror = function (err) {
+    alert(
+      "Image " +
+        val +
+        " could not be loaded. Do you have an internet connection? Is the image online? Does the URL point to an image? (Note that the URL should point to the image itself and not to a page containing the image.)"
+    );
+    if (change_number === change_number_counter) {
       apply_changes();
     }
   };
 
-  window.setTimeout(function() {
-    if( !loaded ){
-      if( change_number === change_number_counter ){
-        apply_changes({img: LOAD_IMG});
+  window.setTimeout(function () {
+    if (!loaded) {
+      if (change_number === change_number_counter) {
+        apply_changes({ img: LOAD_IMG });
       }
     }
   }, 50);
 
-  imgEl.src=val;
+  imgEl.src = val;
 
   return true;
 }

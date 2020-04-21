@@ -1,6 +1,6 @@
-import React from 'react';
-import './footer.css';
-import {tab_app_name, tab_app_source_code} from '../../../tab_app_info';
+import React from "react";
+import "./footer.css";
+import { tab_app_name, tab_app_source_code } from "../../../tab_app_info";
 
 export default Footer;
 
@@ -26,7 +26,9 @@ function Footer() {
         <Header>{tab_app_name}</Header>
 
         <Link href="/roadmap">Roadmap</Link>
-        <Link href={tab_app_source_code} target="_blank">Source Code</Link>
+        <Link href={tab_app_source_code} target="_blank">
+          Source Code
+        </Link>
         <Link href="/contact">Contact</Link>
         <Link href="/about">About</Link>
       </Section>
@@ -49,24 +51,21 @@ function Footer() {
         <Link href="/author">Author</Link>
 */
 
-function Container({children}) {
-  return (
-    <div id="footer_container">
-      {children}
-    </div>
-  );
+function Container({ children }) {
+  return <div id="footer_container">{children}</div>;
 }
 
-function Section({children}) {
-  return <div className="footer_section">{children}</div>
+function Section({ children }) {
+  return <div className="footer_section">{children}</div>;
 }
 
-function Header({children}) {
+function Header({ children }) {
   return (
     <h4
-      className="footer-section-title" style={{
+      className="footer-section-title"
+      style={{
         marginBottom: 7,
-        fontWeight: 'normal',
+        fontWeight: "normal",
       }}
     >
       {children}
@@ -74,16 +73,15 @@ function Header({children}) {
   );
 }
 
-function Link({...props}) {
+function Link({ ...props }) {
   return (
     <a
       style={{
-        display: 'block',
-        textDecoration: 'none',
-        color: 'inherit',
+        display: "block",
+        textDecoration: "none",
+        color: "inherit",
       }}
       {...props}
     />
   );
-};
-
+}

@@ -1,13 +1,13 @@
 // CSS variables
 //  - Supported by all modern browsers.
 //  - Not supported by IE11
-import add_css from './private/add_css';
+import add_css from "./private/add_css";
 
 export default deprecate_old_browsers;
 
 function deprecate_old_browsers(args) {
   // Does browser support CSS variables?
-  if( !is_old_browser() ){
+  if (!is_old_browser()) {
     return;
   }
 
@@ -16,19 +16,15 @@ function deprecate_old_browsers(args) {
 }
 
 function is_old_browser() {
-  return (
-    ! browser_supports_css_variables()
-  );
+  return !browser_supports_css_variables();
 }
 
 function browser_supports_css_variables() {
-  return window.CSS && CSS.supports('color', 'var(--fake-var)');
+  return window.CSS && CSS.supports("color", "var(--fake-var)");
 }
 
-function addHtml({email, projectName}) {
-
-  const htmlContent = (
-`
+function addHtml({ email, projectName }) {
+  const htmlContent = `
 <div>
   <p>
     ${projectName} works only with modern browsers.
@@ -45,30 +41,28 @@ function addHtml({email, projectName}) {
   Romuald<br/>
   <a href="${email}">${email}</a>
 </div>
-`
-  );
+`;
 
-  const overlay = createOverlay('deprecate_old_browsers');
+  const overlay = createOverlay("deprecate_old_browsers");
   overlay.innerHTML = htmlContent;
 }
 
 function createOverlay(id) {
-  const overlay = document.createElement('div');
+  const overlay = document.createElement("div");
   overlay.id = id;
-  overlay.style.position = 'fixed';
-  overlay.style.width = '100vw';
-  overlay.style.height = '100vh';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.zIndex = '999999';
-  overlay.style.overflow = 'hidden';
+  overlay.style.position = "fixed";
+  overlay.style.width = "100vw";
+  overlay.style.height = "100vh";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.zIndex = "999999";
+  overlay.style.overflow = "hidden";
   document.body.appendChild(overlay);
   return overlay;
 }
 
 function addStyle() {
-  const css_content = (
-`
+  const css_content = `
 #deprecate_old_browsers {
   display: flex;
   align-items: center;
@@ -80,8 +74,7 @@ function addStyle() {
 #deprecate_old_browsers a {
   text-decoration: underline!important;
 }
-`
-  );
+`;
 
   add_css(css_content);
 }

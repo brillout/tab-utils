@@ -1,2 +1,2 @@
-export {default} from './PageWrapper';
-export {getPageConfig} from './getPageConfig';
+export { default } from "./PageWrapper";
+export { getPageConfig } from "./getPageConfig";

@@ -24,7 +24,6 @@
   cursor: pointer;
 }
 
-
 #screen-buttons-wrapper {
   pointer-events: none;
 }
@@ -39,7 +38,6 @@
   opacity: 0;
   transition: opacity 0.7s ease-in;
 }
-
 
 /* Icons */
 .screen-button {
@@ -71,7 +69,6 @@
 #auto-scroll:before {
   background-image: url(./center.svg);
 }
-
 
 #auto-scroll:before {
   animation: blinker 1.3s linear infinite;

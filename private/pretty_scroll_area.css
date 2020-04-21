@@ -6,7 +6,7 @@
   height: 100vh !important;
   overflow-y: scroll !important;
   overflow-x: hidden !important;
-  transition: width .3s linear !important;
+  transition: width 0.3s linear !important;
 }
 .pretty_scroll_area__parent > .pretty_scroll_area > * {
   /* We need to ensure that there is not overflow on the x-axis */

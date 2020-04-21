@@ -1,9 +1,9 @@
-import assert from '@brillout/assert';
-import {tab_app_google_analytics_id} from '../../../tab_app_info';
+import assert from "@brillout/assert";
+import { tab_app_google_analytics_id } from "../../../tab_app_info";
 
-export {load_google_analytics};
-export {track_event};
-export {track_error};
+export { load_google_analytics };
+export { track_event };
+export { track_error };
 
 /*/
 const DEBUG = true;
@@ -15,49 +15,48 @@ init();
 
 let already_loaded = false;
 async function load_google_analytics() {
-  if( already_loaded ) return;
+  if (already_loaded) return;
   already_loaded = true;
-  load_script('//www.google-analytics.com/analytics.js');
-  DEBUG && console.log('[GA] ga code loaded');
+  load_script("//www.google-analytics.com/analytics.js");
+  DEBUG && console.log("[GA] ga code loaded");
 }
 
 function track_user_clicks() {
-  window.addEventListener('click', ev => {
-    const {target} = ev;
-    let eventAction = target.id || target.getAttribute('class') || 'null';
-    let eventLabel = target.href || target.value || target.textContent.slice(0, 100);
-    track_event({
-      eventCategory: 'user_click',
-      eventAction,
-      eventLabel,
-    });
-  }, {passive: false});
+  window.addEventListener(
+    "click",
+    (ev) => {
+      const { target } = ev;
+      let eventAction = target.id || target.getAttribute("class") || "null";
+      let eventLabel =
+        target.href || target.value || target.textContent.slice(0, 100);
+      track_event({
+        eventCategory: "user_click",
+        eventAction,
+        eventLabel,
+      });
+    },
+    { passive: false }
+  );
 }
 
 function track_page_view() {
-  ga('send', 'pageview');
-  DEBUG && console.log('[GA] page view');
+  ga("send", "pageview");
+  DEBUG && console.log("[GA] page view");
 }
 
 async function track_error(err) {
-  send_error_event({err, eventCategory: '[error] manual_catch'});
+  send_error_event({ err, eventCategory: "[error] manual_catch" });
 }
-function send_error_event({eventCategory, err, ...rest}) {
+function send_error_event({ eventCategory, err, ...rest }) {
   assert(eventCategory);
   assert(err);
-  assert(Object.keys(rest).length===0);
+  assert(Object.keys(rest).length === 0);
 
-  const eventAction = (err||{}).message || 'no_error_message';
-  const eventLabel = (
-    err && err.stack && (
-      err.stack
-    ) ||
-    err && (
-      JSON.stringify(err, Object.getOwnPropertyNames(err))
-    ) || (
-      'no_error_object'
-    )
-  );
+  const eventAction = (err || {}).message || "no_error_message";
+  const eventLabel =
+    (err && err.stack && err.stack) ||
+    (err && JSON.stringify(err, Object.getOwnPropertyNames(err))) ||
+    "no_error_object";
 
   const track_props = {
     eventCategory,
@@ -66,7 +65,7 @@ function send_error_event({eventCategory, err, ...rest}) {
   };
   track_event(track_props);
 
-  if( window.location.hostname === 'localhost' ){
+  if (window.location.hostname === "localhost") {
     alert(JSON.stringify(track_props, null, 2));
   }
 }
@@ -76,12 +75,12 @@ async function track_event(args) {
   assert(keys.length===3);
   assert(keys.includes('eventCategory').length===3);
   */
-  ga('send', {hitType: 'event', ...args});
-  DEBUG && console.log('[GA] event', args);
+  ga("send", { hitType: "event", ...args });
+  DEBUG && console.log("[GA] event", args);
 }
 
 function init() {
-  if( typeof window === "undefined" ) return;
+  if (typeof window === "undefined") return;
   setup_ga();
   track_page_view();
   track_user_clicks();
@@ -92,73 +91,82 @@ function setup_ga() {
   // Source:
   //  - https://developers.google.com/analytics/devguides/collection/analyticsjs/tracking-snippet-reference#async-unminified
 
-  window.ga = window.ga || function() {
-    (ga.q = ga.q || []).push(arguments)
-  };
+  window.ga =
+    window.ga ||
+    function () {
+      (ga.q = ga.q || []).push(arguments);
+    };
 
   // Sets the time (as an integer) this tag was executed.
   // Used for timing hits.
-  ga.l = +new Date;
+  ga.l = +new Date();
 
   const ga_id = tab_app_google_analytics_id;
-  assert(ga_id && ga_id.startsWith('UA-'));
+  assert(ga_id && ga_id.startsWith("UA-"));
 
   // Creates a default tracker with automatic cookie domain configuration.
-  ga('create', ga_id, 'auto');
+  ga("create", ga_id, "auto");
 
-  DEBUG && console.log('[GA] Initialized with '+ga_id);
+  DEBUG && console.log("[GA] Initialized with " + ga_id);
 }
 
 // https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions/49560222#49560222
 function track_error_events() {
   window.onerror = function (...args_list) {
-
     try {
       load_google_analytics();
 
       const [message, filename, lineno, colno, error] = args_list;
-      const eventCategory = '[error] window.onerror';
+      const eventCategory = "[error] window.onerror";
       let err = error || {};
       err.message = err.message || message;
-      if( !err.stack ){
-        Object.assign(err, {filename, lineno, colno, noErrorObj: true});
+      if (!err.stack) {
+        Object.assign(err, { filename, lineno, colno, noErrorObj: true });
       }
-      send_error_event({eventCategory, err})
+      send_error_event({ eventCategory, err });
 
-    // Avoid infinite loop
-    } catch(_) {console && console.error && console.error(_)}
+      // Avoid infinite loop
+    } catch (_) {
+      console && console.error && console.error(_);
+    }
 
     return false;
   };
-  window.addEventListener("error", function (ev) {
-    try {
-      load_google_analytics();
+  window.addEventListener(
+    "error",
+    function (ev) {
+      try {
+        load_google_analytics();
 
-      const eventCategory = '[error] ErrorEvent';
-      const err = ev.error || {};
-      err.message = err.message || ev.message;
-      if( !err.stack ) {
-        const {filename, lineno, colno} = ev;
-        Object.assign(err, {filename, lineno, colno, noErrorObj: true});
+        const eventCategory = "[error] ErrorEvent";
+        const err = ev.error || {};
+        err.message = err.message || ev.message;
+        if (!err.stack) {
+          const { filename, lineno, colno } = ev;
+          Object.assign(err, { filename, lineno, colno, noErrorObj: true });
+        }
+        send_error_event({ eventCategory, err });
+
+        // Avoid infinite loop
+      } catch (_) {
+        console && console.error && console.error(_);
       }
-      send_error_event({eventCategory, err});
 
-    // Avoid infinite loop
-    } catch(_) {console && console.error && console.error(_)}
-
-    return false;
-  }, {useCapture: true, passive: false});
-  window.addEventListener('unhandledrejection', function (ev) {
-    const eventCategory = '[error] unhandledrejection';
+      return false;
+    },
+    { useCapture: true, passive: false }
+  );
+  window.addEventListener("unhandledrejection", function (ev) {
+    const eventCategory = "[error] unhandledrejection";
     const err = ev.reason;
-    send_error_event({eventCategory, err});
+    send_error_event({ eventCategory, err });
   });
 }
 
 function load_script(url) {
-  const scriptEl = document.createElement('script');
-  scriptEl.src= url;
+  const scriptEl = document.createElement("script");
+  scriptEl.src = url;
   scriptEl.async = true;
-  document.getElementsByTagName('head')[0].appendChild(scriptEl);
+  document.getElementsByTagName("head")[0].appendChild(scriptEl);
   return scriptEl;
 }

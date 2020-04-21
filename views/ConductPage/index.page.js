@@ -1,4 +1,6 @@
-import {getPageConfig} from '../PageWrapper';
-import ConductView from './ConductView';
+import { getPageConfig } from "../PageWrapper";
+import ConductView from "./ConductView";
 
-export default getPageConfig(ConductView, 'Code of Conduct', {route: '/conduct'});
+export default getPageConfig(ConductView, "Code of Conduct", {
+  route: "/conduct",
+});

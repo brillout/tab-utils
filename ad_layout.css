@@ -1,11 +1,11 @@
 /* layout */
-@media (max-width:727px) {
+@media (max-width: 727px) {
   :root {
     --ad-width: 320px;
     --ad-height: 50px;
   }
 }
-@media (min-width:728px){
+@media (min-width: 728px) {
   :root {
     --ad-width: 728px;
     --ad-height: 90px;
@@ -26,7 +26,9 @@
 #secondary-ad {
   margin: auto;
   transition: height 0.7s ease-out;
-  height: calc( var(--ad-height) + var(--ad-border-width) + var(--ad-remover-height) );
+  height: calc(
+    var(--ad-height) + var(--ad-border-width) + var(--ad-remover-height)
+  );
   overflow: hidden;
 }
 
@@ -51,18 +53,16 @@
   left: 0;
 }
 
-
 /* function */
 
 html:not(.show_ad) #secondary-ad {
   height: 0;
 }
 
-
 /* style */
 
 :root {
-  --ad-border-color: rgba(200,200,200,0.7);
+  --ad-border-color: rgba(200, 200, 200, 0.7);
 }
 
 /* ad gray border */

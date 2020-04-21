@@ -1,4 +1,4 @@
-import {getPageConfig} from '../PageWrapper';
-import RoadmapView from './RoadmapView';
+import { getPageConfig } from "../PageWrapper";
+import RoadmapView from "./RoadmapView";
 
-export default getPageConfig(RoadmapView, 'Roadmap');
+export default getPageConfig(RoadmapView, "Roadmap");
