@@ -1048,6 +1048,23 @@ class PresetSerializer {
 
     let preset_data = deserialize(preset_string);
 
+    // share URLs cannot be migrated thus we migrate at runtime
+    if (
+      preset_data.preset_name &&
+      preset_data.preset_options &&
+      preset_data.app_name &&
+      !preset_data.preset_id &&
+      !preset_data.preset_values &&
+      !preset_data.subapp_id
+    ) {
+      preset_data.preset_id = preset_data.preset_name;
+      delete preset_data.preset_name;
+      preset_data.preset_values = preset_data.preset_options;
+      delete preset_data.preset_options;
+      preset_data.subapp_id = preset_data.app_name;
+      delete preset_data.app_name;
+    }
+
     preset_data = new PresetData(preset_data);
 
     return preset_data;
@@ -1218,14 +1235,14 @@ class PresetSavior {
 
     return presets;
   }
-  _save_presets(presets) {
+  _save_presets(presets: PresetData[]) {
     // Validation
     assert(presets.constructor === Array);
     presets.forEach((preset_data) => {
       assert(preset_data instanceof PresetData);
     });
 
-    store.set_val(presets, this._storage_key);
+    store.set_val(this._storage_key, presets);
   }
   get _storage_key() {
     return this.#subapp_id + "_presets";
