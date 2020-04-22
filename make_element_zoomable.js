@@ -67,11 +67,7 @@ function make_element_zoomable({ containerEl, scaleEl, zoomEl, toggleEl }) {
 
     is_zoomed = !is_zoomed;
 
-    const eventAction = is_zoomed ? "zoom_in" : "zoom_out";
-    track_event({
-      eventCategory: "global_stats",
-      eventAction,
-    });
+    track_event({ name: is_zoomed ? "zoom_in" : "zoom_out" });
 
     if (is_zoomed) {
       scrollToHideScrollElement();

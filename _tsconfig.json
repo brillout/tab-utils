@@ -6,8 +6,10 @@
     "lib": ["DOM", "ES2020", "ES2019.Object"],
     "sourceMap": true,
     "allowJs": true,
+    "noEmit": true,
     "checkJs": false,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules"],
   "include": ["./node_modules/@types/**/*.d.ts", "./**/*.js", "./**/*.ts"]

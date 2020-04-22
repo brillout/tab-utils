@@ -338,9 +338,8 @@ export class TabSettings {
 
   track_user_presets() {
     track_event({
-      eventCategory: "global_stats",
-      eventAction: "preset_used",
-      eventLabel:
+      name: "preset_used",
+      value:
         this.preset_selected.preset_id +
         " " +
         this.preset_concept_name.toLowerCase(),
@@ -447,9 +446,9 @@ export class TabSettings {
     remove_hash();
 
     track_event({
-      eventCategory: "preset_imported",
-      eventAction: this.preset_concept_name + " " + new_preset.preset_name,
-      eventLabel: preset_url,
+      name: "preset_imported",
+      value: this.preset_concept_name + " " + new_preset.preset_name,
+      data: { preset_url },
     });
   }
 
