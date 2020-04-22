@@ -1,5 +1,6 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
+import { store } from "../../store";
 
 export default getPageConfig(
   () => (
@@ -33,18 +34,17 @@ function onPageLoad() {
   function replace_db() {
     result.innerHTML = "";
 
-    let db;
+    const data_string = settings_data_input.value;
+
     try {
-      db = JSON.parse(settings_data_input.value);
+      store.backup__restore(data_string);
     } catch (err) {
       result.innerHTML = err;
       return;
     }
 
     window.localStorage.clear();
-    Object.keys(db).forEach((key) => {
-      window.localStorage[key] = db[key];
-    });
+    store.backup__restore(data_string);
 
     result.innerHTML = "Success!";
   }

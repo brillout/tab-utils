@@ -1048,7 +1048,7 @@ class PresetSerializer {
 
     let preset_data = deserialize(preset_string);
 
-    // share URLs cannot be migrated thus we migrate at runtime
+    // share URLs cannot be migrated thus we migrate here at runtime
     if (
       preset_data.preset_name &&
       !preset_data.preset_id &&

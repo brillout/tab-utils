@@ -87,7 +87,7 @@ function getBrowser() {
 }
 
 function getSettings() {
-  const settings__string = store.get_storage_data_string();
+  const settings__string = store.backup__dump({ readable: true });
   const local_storage_keys = JSON.stringify(Object.keys(window.localStorage));
   return { settings__string, local_storage_keys };
 }
