@@ -64,7 +64,6 @@ function track_user_clicks() {
         name: "user_click",
         value,
         data,
-        nonInteraction: false,
       });
     },
     { passive: false }
@@ -169,6 +168,7 @@ function init() {
   track_user_clicks();
   track_error_events();
   track_local_storage();
+  track_bounce_state();
 }
 
 function setup_ga() {
@@ -352,4 +352,11 @@ function track_dom_heart_beat_error(dom_heart_beat) {
     // We don't re-throw the error in order to not block future dom beats
     console.error(err);
   }
+}
+
+function track_bounce_state() {
+  const ONE_MINUTE = 60 * 1000;
+  setTimeout(() => {
+    track_event({ name: "five_minute_stay", nonInteraction: false });
+  }, 5 * ONE_MINUTE);
 }
