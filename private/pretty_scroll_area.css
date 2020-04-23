@@ -1,3 +1,7 @@
+:root {
+  --scroll-bar-width: 0px;
+}
+
 .pretty_scroll_area__parent {
   overflow-x: hidden !important;
 }
