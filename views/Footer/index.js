@@ -10,8 +10,8 @@ function Footer() {
       <Section>
         <Header>Support</Header>
 
-        <Link href="/bug-repair">Bug Repair</Link>
-        <Link href="/feature-suggestion">Suggest a Feature</Link>
+        <Link href="/repair">Bug Repair</Link>
+        <Link href="/suggest">Suggest a Feature</Link>
         <Link href="/support">Get help & support</Link>
       </Section>
 

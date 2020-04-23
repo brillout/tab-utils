@@ -28,5 +28,5 @@ export default getPageConfig(
     </>
   ),
   "Suggest a Feature",
-  { route: "/feature-suggestion" }
+  { route: "/suggest" }
 );

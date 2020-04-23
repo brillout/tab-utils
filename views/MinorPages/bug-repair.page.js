@@ -34,20 +34,9 @@ export default getPageConfig(
       </p>
     </>
   ),
-  "Bug Repair",
+  "Repair",
   { onPageLoad }
 );
-
-/*
-function CodeBlock(props) {
-  return (
-    <pre
-      style={{ margin: 0, wordWrap: "break-word", whiteSpace: "pre-wrap" }}
-      {...props}
-    />
-  );
-}
-*/
 
 function onPageLoad() {
   const link = document.querySelector("#repair-link");
