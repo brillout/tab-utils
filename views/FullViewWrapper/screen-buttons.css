@@ -7,7 +7,7 @@
 #screen-buttons-wrapper {
   white-space: nowrap;
   top: 10px;
-  right: calc(var(--scroll-bar-width)+16px);
+  right: calc(var(--scroll-bar-width) + 16px);
 }
 .screen-button {
   margin-top: 10px;

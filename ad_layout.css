@@ -26,9 +26,7 @@
 #secondary-ad {
   margin: auto;
   transition: height 0.7s ease-out;
-  height: calc(
-    var(--ad-height) + var(--ad-border-width) + var(--ad-remover-height)
-  );
+  height: calc(var(--ad-height) + var(--ad-border-width) + var(--ad-remover-height));
   overflow: hidden;
 }
 
