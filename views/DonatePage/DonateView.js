@@ -44,7 +44,7 @@ function DonateView() {
         instantly after your PayPal wire.
       </p>
 
-      <p>Thank you. I'm looking forward to a bright {tab_app_name} future.</p>
+      <p>I'm looking forward to a bright {tab_app_name} future.</p>
 
       <p>Yours sincerely,</p>
 
