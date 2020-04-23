@@ -19,6 +19,12 @@ class KeyValueStore {
     this.ensure_store();
     this.#store_data[key] = val;
     this.save_store();
+    this.#listeners.forEach((listener) => listener(key, val));
+  }
+
+  #listeners: Function[] = [];
+  add_store_change_listener(listener) {
+    this.#listeners.push(listener);
   }
 
   migrate__rename_keys(key_rename_map: { [key: string]: string }) {

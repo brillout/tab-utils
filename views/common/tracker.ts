@@ -1,6 +1,9 @@
 import assert from "@brillout/assert";
 import { tab_app_google_analytics_id } from "../../../tab_app_info";
 import StackTrace from "stacktrace-js";
+import { get_tab_user_id } from "../../utils/TabUserId";
+import { get_browser_info } from "../../utils/get_browser_info";
+import throttle from "lodash.throttle";
 import { store } from "../../store";
 
 export { load_google_analytics };
@@ -72,11 +75,11 @@ function track_page_view() {
   DEBUG && console.log("[GA] page view");
 }
 
-async function track_error(err) {
-  await send_error_event({ err, eventName: "[error] manual_catch" });
+async function track_error({ name, err }: { name: string; err: any }) {
+  await send_error_event({ err, name: "[error][" + name + "]" });
 }
-async function send_error_event({ eventName, err }) {
-  const eventValue = (err || {}).message || "no_error_message";
+async function send_error_event({ name, err }) {
+  const value = (err || {}).message || "no_error_message";
 
   const data: any = {};
   if (!err) {
@@ -92,8 +95,8 @@ async function send_error_event({ eventName, err }) {
   }
 
   track_event({
-    name: eventName,
-    value: eventValue,
+    name,
+    value,
     data,
   });
 
@@ -113,20 +116,49 @@ async function track_event({
   data = {},
   nonInteraction = true,
 }: TrackEvent) {
-  const TAB_USER_ID = "tab_user_uid";
-  const tab_user_id = store.get_val(TAB_USER_ID);
+  const eventLabel = serialize_data(enhance_data(data, name, value));
+  assert(eventLabel.startsWith("name:"));
   const eventCategory = name;
   const eventAction = name + " - " + value;
-  assert(!("name" in data) && !("value" in data) && !("tab_user_id" in data));
-  const eventLabel = Object.entries({ name, value, tab_user_id, ...data })
+
+  const args = { eventCategory, eventAction, nonInteraction };
+
+  window.ga("send", { hitType: "event", eventLabel, ...args });
+
+  if (DEBUG) {
+    DEBUG && assert.log("[GA][event]", args);
+    /*
+    console.log("[GA][event] eventLabel");
+    console.log(eventLabel);
+    //*/
+  }
+}
+
+function enhance_data(data: Object, name, value): Object {
+  const tab_user_id = get_tab_user_id();
+  const url = window.location.href;
+  const browser = get_browser_info();
+  const screen = get_window_screen_sizes();
+  const data_enhanced = {
+    name,
+    value,
+    browser,
+    tab_user_id,
+    url,
+    screen,
+  };
+  Object.entries(data).forEach(([key, val]) => {
+    assert(!(key in data_enhanced));
+    data_enhanced[key] = val;
+  });
+  return data_enhanced;
+}
+function serialize_data(data: Object) {
+  return Object.entries(data)
     .map(([key, val]) => {
       return key + ": " + val;
     })
     .join("\n\n=====\n\n");
-
-  const args = { eventCategory, eventAction, eventLabel };
-  window.ga("send", { hitType: "event", nonInteraction, ...args });
-  DEBUG && console.log("[GA] event", args);
 }
 
 function init() {
@@ -135,6 +167,7 @@ function init() {
   track_page_view();
   track_user_clicks();
   track_error_events();
+  track_local_storage();
 }
 
 function setup_ga() {
@@ -172,7 +205,7 @@ function track_error_events() {
       Object.assign(err, { filename, lineno, colno, noErrorObj: true });
     }
     await send_error_event({
-      eventName: "[error] window.onerror",
+      name: "[error][window.onerror]",
       err,
     });
 
@@ -192,7 +225,7 @@ function track_error_events() {
       }
 
       await send_error_event({
-        eventName: "[error] ErrorEvent",
+        name: "[error][ErrorEvent]",
         err,
       });
 
@@ -210,7 +243,7 @@ function track_error_events() {
       const err = ev.reason;
 
       await send_error_event({
-        eventName: "[error] unhandledrejection",
+        name: "[error][unhandledrejection]",
         err,
       });
     })
@@ -259,4 +292,49 @@ function infinite_loop_cacher(fn) {
       return false;
     }
   };
+}
+
+function get_window_screen_sizes(): string {
+  return (
+    window.innerWidth +
+    "x" +
+    window.innerHeight +
+    " / " +
+    window.screen.availWidth +
+    "x" +
+    window.screen.availHeight +
+    " / " +
+    window.screen.width +
+    "x" +
+    window.screen.height
+  );
+}
+
+function track_local_storage() {
+  const store_listener = throttle((key, val) => {
+    track_event({
+      name: "storage_change",
+      value: "[" + key + "]: " + val,
+      data: {
+        localstorage__keys: Object.keys(window.localStorage),
+        store_dump: store.backup__dump({ readable: true }),
+      },
+    });
+  }, 2 * 1000);
+
+  store.add_store_change_listener(store_listener);
+
+  /*
+  const originalSetItem = localStorage.setItem;
+  localStorage.setItem = function (key, val) {
+    originalSetItem.apply(this, arguments);
+    on_local_storage_mod(key, val);
+  };
+
+  function getSettings() {
+    const settings__string = store.backup__dump({ readable: true });
+    const local_storage_keys = JSON.stringify(Object.keys(window.localStorage));
+    return { settings__string, local_storage_keys };
+  }
+  */
 }

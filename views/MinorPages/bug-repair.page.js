@@ -1,44 +1,44 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
-import Bowser from "bowser";
 import { tab_app_name } from "../../../tab_app_info";
-import { store } from "../../store";
+import { get_browser_info } from "../../utils/get_browser_info";
+import { get_tab_user_id } from "../../utils/TabUserId";
 
 export default getPageConfig(
   () => (
     <>
       <p>
-        Your {tab_app_name} does not work? Click{" "}
+        If {tab_app_name} doesn't work, send this{" "}
         <a
           id="repair-link"
           data-subject="Bug Repair"
           className="contact-address"
           target="_blank"
         >
-          here
+          pre-filled email
         </a>
         .
       </p>
-      <p>You will get a response ASAP.</p>
       <p>
-        Alternatively, you can describe your problem at{" "}
-        <a data-subject="Bug" className="contact-address" target="_blank"></a>.
+        It gives information for Romuald to fix the bug, which he usually does
+        within 24 hours.
       </p>
-      <br />
-      Your browser:
-      <CodeBlock id="browser-spec" />
-      <br />
-      Your settings:
-      <CodeBlock id="setting-spec" />
-      <br />
-      Other setting keys:
-      <CodeBlock id="settings-other" />
+      <p>
+        If the pre-filled email link above doesn't work then write an email to{" "}
+        <a className="contact-address" target="_blank"></a> with your user ID:
+      </p>
+      <p style={{ paddingLeft: 20 }}>
+        <b>
+          My user ID: <span id="tab-user-id" />
+        </b>
+      </p>
     </>
   ),
   "Bug Repair",
   { onPageLoad }
 );
 
+/*
 function CodeBlock(props) {
   return (
     <pre
@@ -47,56 +47,27 @@ function CodeBlock(props) {
     />
   );
 }
+*/
 
 function onPageLoad() {
   const link = document.querySelector("#repair-link");
 
-  const browser_spec = getBrowser();
-  const { settings__string, local_storage_keys } = getSettings();
+  const tab_user_id = get_tab_user_id();
+
+  document.querySelector("#tab-user-id").innerHTML = tab_user_id;
 
   link.setAttribute(
     "data-body",
     [
-      "Hi Romuald, my " + tab_app_name + " doesn't work.",
+      "Hi Romuald, my " + tab_app_name + " does not work.",
+      "",
+      "My user ID:",
+      tab_user_id,
       "",
       "My Browser:",
-      browser_spec,
+      get_browser_info(),
       "",
-      "My Settings:",
-      settings__string,
-      "",
-      "Setting keys:",
-      local_storage_keys,
-      "",
-      "Thanks for having a look!",
+      "Thanks for having a look.",
     ].join("\n")
   );
-
-  document.querySelector("#browser-spec").innerHTML = escapeHtml(browser_spec);
-  document.querySelector("#setting-spec").innerHTML = escapeHtml(
-    settings__string
-  );
-  document.querySelector("#settings-other").innerHTML = escapeHtml(
-    local_storage_keys
-  );
-}
-
-function getBrowser() {
-  const browser = Bowser.getParser(window.navigator.userAgent);
-  return JSON.stringify(browser.getBrowser(), null, 2);
-}
-
-function getSettings() {
-  const settings__string = store.backup__dump({ readable: true });
-  const local_storage_keys = JSON.stringify(Object.keys(window.localStorage));
-  return { settings__string, local_storage_keys };
-}
-
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }

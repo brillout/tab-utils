@@ -1400,7 +1400,7 @@ class LinkSerializer {
       show_toast("Wrong URL. The URL could not be processed.", {
         is_error: true,
       });
-      track_error(err);
+      track_error({ name: "preset_url_parsing", err });
       console.log(pipe_data);
       console.error(err);
     }

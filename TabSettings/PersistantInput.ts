@@ -2,6 +2,7 @@ import assert from "@brillout/assert";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
 import { store } from "../store";
+import { escape_html } from "../utils/escape_html";
 
 export {
   TextInput,
@@ -241,7 +242,7 @@ class SelectInput extends PersistantInput {
       '" value="' +
       val +
       '">' +
-      escapeHtml(val_pretty) +
+      escape_html(val_pretty) +
       "</option>"
     );
   }
@@ -397,15 +398,6 @@ function generate_input({
   input_container.appendChild(dom_el);
 
   return { dom_el, input_el };
-}
-
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }
 
 function hide_show_el(el, to_hide = false) {
