@@ -9,6 +9,7 @@ import { store } from "../../store";
 export { load_google_analytics };
 export { track_event };
 export { track_error };
+export { track_dom_heart_beat_error };
 
 declare global {
   interface Window {
@@ -337,4 +338,18 @@ function track_local_storage() {
     return { settings__string, local_storage_keys };
   }
   */
+}
+
+let dom_heart_beat_error_already_catched = false;
+function track_dom_heart_beat_error(dom_heart_beat) {
+  try {
+    dom_heart_beat();
+  } catch (err) {
+    if (dom_heart_beat_error_already_catched === false) {
+      dom_heart_beat_error_already_catched = true;
+      track_error({ name: "dom_heart_beat", err });
+    }
+    // We don't re-throw the error in order to not block future dom beats
+    console.error(err);
+  }
 }
