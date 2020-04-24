@@ -149,29 +149,25 @@ function loadApsTag() {
 // Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
 // If you are short on money then you are more than welcome to do this :-).
 function ads_are_removed() {
-  if (codeIsInUrl() === true) {
+  const AD_REMOVAL_KEY = "ad_removal";
+
+  const code_in_storage = store.has_val(AD_REMOVAL_KEY);
+
+  if (window.location.hash === "#thanks-for-your-donation") {
+    if( !code_in_storage  ){
+      store.set_val(AD_REMOVAL_KEY, true);
+    }
+    remove_hash();
     return true;
   }
-  if (codeIsInLocalStorage() === true) {
+
+  if( code_in_storage ){
     return true;
   }
 
   document.documentElement.classList.add("show_ad");
 
   return false;
-
-  function codeIsInUrl() {
-    if (window.location.hash === "#thanks-for-your-donation") {
-      store.set_val("ad_removal", true);
-      remove_hash();
-      return true;
-    }
-    return false;
-  }
-
-  function codeIsInLocalStorage() {
-    return store.has_val("ad_removal");
-  }
 }
 
 function Ad_ATF({ ad_slots }) {
