@@ -582,8 +582,18 @@ export class TabSettings {
 
   get preset_selected() {
     const preset_id = this.preset_option.input_value;
-    const preset = this.preset_list.get_preset_by_name(preset_id);
-    return preset;
+    const preset = this.preset_list.get_preset_by_name(preset_id, {
+      can_be_null: true,
+    });
+    if (preset) {
+      return preset;
+    }
+    const default_preset_id = this.preset_option.option_default;
+    assert(default_preset_id, { default_preset_id });
+    const default_preset = this.preset_list.get_preset_by_name(
+      default_preset_id
+    );
+    return default_preset;
   }
   get preset_option() {
     return this.find_option((option) => option.is_preset_selector);
@@ -604,6 +614,7 @@ class Option {
   option_description: string;
   input_args: any;
   is_creator_option: Boolean;
+  option_default: any;
   user_input: PersistantInput;
   constructor({
     option_id,
@@ -625,6 +636,7 @@ class Option {
     });
 
     this.is_creator_option = is_creator_option;
+    this.option_default = option_default;
 
     input_container =
       input_container ||
