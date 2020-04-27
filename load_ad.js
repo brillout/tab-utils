@@ -11,6 +11,7 @@ export { Ad_ATF, Ad_BTF };
 export { ads_are_removed };
 
 function load_ad(AD_SLOTS) {
+  return;
   if (ads_are_removed()) {
     return;
   }
