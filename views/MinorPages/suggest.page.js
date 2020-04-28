@@ -20,7 +20,7 @@ export default getPageConfig(
 
       <p>
         You can also{" "}
-        <a href={tab_app_source_code + "issues/new"} target="_blank">
+        <a href={tab_app_source_code + "/issues/new"} target="_blank">
           create a GitHub ticket
         </a>{" "}
         on {tab_app_name}'s repository.
