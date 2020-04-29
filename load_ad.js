@@ -26,14 +26,16 @@ function AdView({ id, ad_slots, slot_name }) {
   const { slot_id } = slots[0];
   assert(slot_id);
   return (
-    <div className="ad-view">
-      <ins
-        className="adsbygoogle"
-        data-ad-client="ca-pub-6953474219479917"
-        data-full-width-responsive="true"
-        data-ad-slot={slot_id}
-      ></ins>
-      <a className="ad_remover" href="donate" target="_blank">
+    <div className="a-wrap">
+      <div className="border-wrapper">
+        <ins
+          className="adsbygoogle"
+          data-ad-client="ca-pub-6953474219479917"
+          data-full-width-responsive="true"
+          data-ad-slot={slot_id}
+        ></ins>
+      </div>
+      <a className="donate-remover" href="donate" target="_blank">
         Remove ad
       </a>
     </div>

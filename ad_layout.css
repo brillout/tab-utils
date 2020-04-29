@@ -1,11 +1,11 @@
 /* layout */
-@media (max-width: 727px) {
+@media (max-width: 729px) {
   :root {
     --ad-width: 320px;
     --ad-height: 50px;
   }
 }
-@media (min-width: 728px) {
+@media (min-width: 730px) {
   :root {
     --ad-width: 728px;
     --ad-height: 90px;
@@ -16,23 +16,23 @@
   --ad-border-width: 1px;
 }
 
+.border-wrapper,
 .adsbygoogle {
   min-height: 20px;
-  /*
-  max-height: calc(var(--ad-height) + var(--ad-border-width));
-  */
   max-height: var(--ad-height);
   min-width: 20px;
-  /*
-  max-width: calc(var(--ad-width) + 2 * var(--ad-border-width));
-  */
   max-width: var(--ad-width);
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  display: block;
-  margin: auto;
+}
+.adsbygoogle {
   /* important; avoids creeping out of ads when the user downsizes his browser */
   overflow: hidden;
+  display: block;
+}
+.border-wrapper {
+  margin: auto;
+  display: block;
 }
 
 .adsbygoogle {
@@ -44,7 +44,7 @@
 }
 
 /* ad remover layout */
-.ad_remover {
+.donate-remover {
   width: 106px;
   margin: auto;
   box-sizing: border-box;
@@ -53,7 +53,7 @@
 
 /* function */
 
-html:not(.show_ad) .ad-view {
+html:not(.show_ad) .a-wrap {
   display: none;
 }
 
@@ -64,19 +64,19 @@ html:not(.show_ad) .ad-view {
 }
 
 /* ad gray border */
-.adsbygoogle {
+.border-wrapper {
   border: var(--ad-border-width) solid var(--ad-border-color);
   border-top-width: 0;
   box-sizing: border-box !important;
 }
 
 /* remove button */
-.ad_remover {
+.donate-remover {
   border-radius: 0 0 10px 10px;
   background-color: var(--ad-border-color);
   padding: 2px 10px;
 }
-.ad_remover {
+.donate-remover {
   font-family: Lato, "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-weight: 300;
   display: block;
@@ -87,6 +87,6 @@ html:not(.show_ad) .ad-view {
   white-space: nowrap;
 }
 /* Override Timer Tab's style */
-.ad_remover {
+.donate-remover {
   cursor: pointer !important;
 }
