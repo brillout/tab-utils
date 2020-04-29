@@ -30,13 +30,16 @@
 .screen-button {
   pointer-events: all;
   opacity: 100;
+  visibility: visible;
   transition: opacity 0.7s ease-out;
 }
 .hide_scroll .screen-button,
 #auto-scroll.screen-button[data-disable-auto-scroll] {
   pointer-events: none;
+  /* we set `visibility: hidden` in order to skip the animation computation of `center__blinking.svg` */
+  visibility: hidden;
   opacity: 0;
-  transition: opacity 0.7s ease-in;
+  transition: visibility 0s 0.7s, opacity 0.7s ease-in;
 }
 
 /* Icons */
@@ -67,14 +70,6 @@
   background-image: url(./center.svg);
 }
 #auto-scroll:before {
-  background-image: url(./center.svg);
-}
-
-#auto-scroll:before {
-  animation: blinker 1.3s linear infinite;
-}
-@keyframes blinker {
-  50% {
-    opacity: 0.15;
-  }
+  transform: rotateZ(360deg);
+  background-image: url(./center__blinking.svg);
 }
