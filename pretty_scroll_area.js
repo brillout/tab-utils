@@ -117,6 +117,11 @@ function add_global_scroll_listener() {
     },
     { passive: true }
   );
+  window.addEventListener("resize", on_resize, { passive: true });
+}
+
+function on_resize() {
+  scrollToHideScrollElement({ smooth: false });
 }
 
 function getScroll() {
