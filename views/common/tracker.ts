@@ -78,7 +78,14 @@ function track_page_view() {
 async function track_error({ name, err }: { name: string; err: any }) {
   await send_error_event({ err, name: "[error][" + name + "]" });
 }
+const tracked_errors = [];
 async function send_error_event({ name, err }) {
+  if (tracked_errors.includes(err)) {
+    return;
+  }
+  tracked_errors.push(err);
+  console.error(err);
+
   const value = (err || {}).message || "no_error_message";
 
   const data: any = {};
@@ -209,13 +216,13 @@ function track_error_events() {
       name: "[error][window.onerror]",
       err,
     });
-
-    return false;
   });
 
   window.addEventListener(
     "error",
     infinite_loop_cacher(async function (ev) {
+      ev.preventDefault();
+
       load_google_analytics();
 
       const err = ev.error || {};
@@ -229,8 +236,6 @@ function track_error_events() {
         name: "[error][ErrorEvent]",
         err,
       });
-
-      return false;
     }),
     // @ts-ignore
     { useCapture: true, passive: false }
@@ -290,7 +295,7 @@ function infinite_loop_cacher(fn) {
       console && console.error && console.error(err);
 
       // for window.onerror
-      return false;
+      return true;
     }
   };
 }
