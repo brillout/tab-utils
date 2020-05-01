@@ -70,6 +70,8 @@ function loadAdsByGoogle(AD_SLOTS) {
 // Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
 // If you are short on money then you are more than welcome to do this :-).
 function ads_are_removed() {
+  if (window.location.hostname.includes("timer-tab")) return true;
+
   const AD_REMOVAL_KEY = "ad_removal";
 
   const code_in_storage = store.has_val(AD_REMOVAL_KEY);
