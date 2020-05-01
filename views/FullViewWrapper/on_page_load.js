@@ -8,8 +8,8 @@ import { show_toast } from "../common/show_toast";
 
 export default on_page_load;
 
-function on_page_load(onPageLoad, goldpage_args) {
-  onPageLoad(() => {
+async function on_page_load(onPageLoad, goldpage_args) {
+  await onPageLoad(() => {
     load_full_view();
     load_common();
   }, goldpage_args);

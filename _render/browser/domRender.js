@@ -15,8 +15,6 @@ async function domRender(goldpage_args) {
 }
 
 function on_error(err) {
-  console.error(err);
-
   load_google_analytics();
   track_error({ name: "init", err });
 
