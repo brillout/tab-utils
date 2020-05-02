@@ -64,14 +64,14 @@
   content: "\A0\A Center";
 }
 #scroll-button.auto-scroll-is-active .button-text::before {
-  content: "\A0\A Center";
+  content: "\A0\A Center ";
 }
 @media (max-width: 729px) {
   .screen-button {
     line-height: 0;
     padding: 11px;
   }
-  .button-text {
+  .button-text::before {
     display: none;
   }
 }

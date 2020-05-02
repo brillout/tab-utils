@@ -40,13 +40,12 @@ function activate_screen_buttons() {
   }
 }
 
+/*/
+let auto_duration = 106;
+/*/
+let auto_duration = 4;
+//*/
 function activate_auto_scroll({ do_scroll }) {
-  /*/
-  const AUTO_DURATION = 106;
-  /*/
-  const AUTO_DURATION = 9;
-  //*/
-
   const scroll_button = document.querySelector("#scroll-button");
   const scroll_button_text = scroll_button.querySelector(".button-text");
   const active_class = "auto-scroll-is-active";
@@ -64,7 +63,8 @@ function activate_auto_scroll({ do_scroll }) {
   function start_auto_scroll() {
     show();
     if (repeater) return;
-    counter = AUTO_DURATION;
+    counter = auto_duration;
+    auto_duration = 10;
     inOneSec();
     assert.internal(repeater);
   }
@@ -78,7 +78,7 @@ function activate_auto_scroll({ do_scroll }) {
 
   function set(hide = false) {
     scroll_button.classList[hide ? "remove" : "add"](active_class);
-    scroll_button_text.textContent = hide ? "" : " (" + counter + "s)";
+    scroll_button_text.textContent = hide ? "" : (counter | 0) + "s";
   }
   function show() {
     set();
@@ -88,7 +88,6 @@ function activate_auto_scroll({ do_scroll }) {
   }
 
   function inOneSec() {
-    assert.internal(0 < counter && counter <= AUTO_DURATION);
     --counter;
     updateDom();
     if (counter === 0) {
