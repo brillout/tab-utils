@@ -65,7 +65,7 @@ function activate_auto_scroll({ do_scroll }) {
     if (repeater) return;
     counter = auto_duration;
     auto_duration = 10;
-    inOneSec();
+    time_step();
     assert.internal(repeater);
   }
   function stop_auto_scroll() {
@@ -87,16 +87,22 @@ function activate_auto_scroll({ do_scroll }) {
     set(true);
   }
 
-  function inOneSec() {
-    --counter;
-    updateDom();
-    if (counter === 0) {
-      do_scroll();
-      stop_auto_scroll();
-      assert.internal(repeater === null);
-    } else {
-      repeater = window.setTimeout(inOneSec, 1000);
+  function time_step() {
+    assert(counter >= 0);
+
+    if (!document.hidden) {
+      counter--;
+      if ((counter | 0) === counter) {
+        updateDom();
+        if (counter === 0) {
+          do_scroll();
+          stop_auto_scroll();
+          assert.internal(repeater === null);
+          return;
+        }
+      }
     }
+    repeater = window.setTimeout(time_step, 1000);
   }
 
   function updateDom() {
