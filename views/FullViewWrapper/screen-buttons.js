@@ -41,7 +41,7 @@ function activate_screen_buttons() {
 }
 
 /*/
-let auto_duration = 106;
+let auto_duration = 1000;
 /*/
 let auto_duration = 4;
 //*/
@@ -78,7 +78,7 @@ function activate_auto_scroll({ do_scroll }) {
 
   function set(hide = false) {
     scroll_button.classList[hide ? "remove" : "add"](active_class);
-    scroll_button_text.textContent = hide ? "" : (counter | 0) + "s";
+    scroll_button_text.textContent = hide ? "" : " " + (counter | 0) + "s";
   }
   function show() {
     set();

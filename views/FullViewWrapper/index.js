@@ -19,15 +19,15 @@ function FullView(props) {
       >
         {children}
         <div id="screen-buttons-wrapper">
-          <div className="screen-button glass-background" id="scroll-button">
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <br />
           <div
             className="screen-button glass-background"
             id="fullscreen-button"
           >
+            <span className="button-icon"></span>
+            <span className="button-text"></span>
+          </div>
+          <br />
+          <div className="screen-button glass-background" id="scroll-button">
             <span className="button-icon"></span>
             <span className="button-text"></span>
           </div>

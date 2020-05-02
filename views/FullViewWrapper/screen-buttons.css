@@ -17,11 +17,20 @@
 }
 .screen-button {
   margin-top: 10px;
-  padding: 10px 15px;
+  padding: 11px 15px;
   white-space: nowrap;
 }
-.screen-button > * {
+
+/* Inner Layout */
+.screen-button {
+  line-height: 0;
+}
+.screen-button .button-icon {
   vertical-align: middle;
+}
+.screen-button .button-text {
+  position: relative;
+  top: 2px;
 }
 
 /* Aesthetics */
@@ -41,6 +50,7 @@
   display: inline-block;
   height: 15px;
   width: 15px;
+
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -64,11 +74,10 @@
   content: "\A0\A Center";
 }
 #scroll-button.auto-scroll-is-active .button-text::before {
-  content: "\A0\A Center ";
+  content: "\A0\A Center";
 }
 @media (max-width: 729px) {
   .screen-button {
-    line-height: 0;
     padding: 11px;
   }
   .button-text::before {
