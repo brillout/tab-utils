@@ -43,7 +43,7 @@
 #center-button.auto-scroll-is-active .button-text::before {
   content: "\A0\A Center";
 }
-@media (max-width: 729px) {
+@media (max-width: 849px) {
   .screen-button {
     padding: 11px;
   }
