@@ -1,3 +1,4 @@
+/* Layout */
 .pretty_scroll_area__hide_scroll_element {
   position: relative;
 }
@@ -5,71 +6,92 @@
   position: absolute;
 }
 #screen-buttons-wrapper {
-  white-space: nowrap;
   top: 10px;
   right: 16px;
 }
+#screen-buttons-wrapper {
+  text-align: right;
+}
+#screen-buttons-wrapper > .screen-button {
+  display: inline-block;
+}
 .screen-button {
   margin-top: 10px;
-  padding: 10px;
+  padding: 10px 15px;
+  white-space: nowrap;
 }
+.screen-button > * {
+  vertical-align: middle;
+}
+
+/* Aesthetics */
 .screen-button,
 /* make sure that glass-background get rounded as well */
 .screen-button:before,
 .screen-button:after {
   border-radius: 10px;
 }
-#manual-fullscreen,
-#manual-scroll {
+#fullscreen-button,
+#scroll-button {
   cursor: pointer;
 }
 
+/* Icons */
+.screen-button .button-icon {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#fullscreen-button .button-icon {
+  background-image: url(./fullscreen.svg);
+}
+#scroll-button .button-icon {
+  background-image: url(./center.svg);
+}
+#scroll-button.auto-scroll-is-active .button-icon {
+  transform: rotateZ(360deg);
+  background-image: url(./center__blinking.svg);
+}
+
+/* Text */
+#fullscreen-button .button-text::before {
+  content: "\A0\A0 Fullscreen";
+}
+#scroll-button .button-text::before {
+  content: "\A0\A Center";
+}
+#scroll-button.auto-scroll-is-active .button-text::before {
+  content: "\A0\A Center";
+}
+@media (max-width: 729px) {
+  .screen-button {
+    line-height: 0;
+    padding: 11px;
+  }
+  .button-text {
+    display: none;
+  }
+}
+
+/* Function */
 #screen-buttons-wrapper {
   pointer-events: none;
 }
 .screen-button {
   pointer-events: all;
+}
+.screen-button {
   opacity: 100;
   visibility: visible;
   transition: opacity 0.7s ease-out;
 }
-.hide_scroll .screen-button,
-#auto-scroll.screen-button[data-disable-auto-scroll] {
+.hide_scroll .screen-button {
   pointer-events: none;
   /* we set `visibility: hidden` in order to skip the animation computation of `center__blinking.svg` */
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 0.7s, opacity 0.7s ease-in;
-}
-
-/* Icons */
-.screen-button {
-  position: relative;
-  padding-left: 36px;
-}
-.screen-button:before {
-  --left: 9px;
-  position: absolute;
-  height: 100%;
-  top: 0;
-  left: var(--left);
-  width: 20px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 15px;
-  content: "";
-  display: block;
-}
-#manual-fullscreen:before {
-  left: calc(var(--left) + 1px);
-}
-#manual-fullscreen:before {
-  background-image: url(./fullscreen.svg);
-}
-#manual-scroll:before {
-  background-image: url(./center.svg);
-}
-#auto-scroll:before {
-  transform: rotateZ(360deg);
-  background-image: url(./center__blinking.svg);
 }

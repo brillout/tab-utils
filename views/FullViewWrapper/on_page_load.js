@@ -22,14 +22,14 @@ function load_full_view() {
 }
 
 function activate_screen_buttons() {
-  const manual_scroll = document.querySelector("#manual-scroll");
-  const manual_fullscreen = document.querySelector("#manual-fullscreen");
+  const scroll_button = document.querySelector("#scroll-button");
+  const fullscreen_button = document.querySelector("#fullscreen-button");
   const full_view = document.querySelector(
     ".pretty_scroll_area__hide_scroll_element"
   );
 
-  manual_scroll.onclick = do_scroll;
-  manual_fullscreen.onclick = do_fullscreen;
+  scroll_button.onclick = do_scroll;
+  fullscreen_button.onclick = do_fullscreen;
 
   const stop_auto_scroll = activate_auto_scroll({ do_scroll });
 
@@ -59,13 +59,14 @@ function activate_screen_buttons() {
 
 function activate_auto_scroll({ do_scroll }) {
   /*/
-  const AUTO_DURATION = 6;
+  const AUTO_DURATION = 106;
   /*/
   const AUTO_DURATION = 9;
   //*/
 
-  const auto_scroll = document.querySelector("#auto-scroll");
-  const disable_prop = "data-disable-auto-scroll";
+  const scroll_button = document.querySelector("#scroll-button");
+  const scroll_button_text = scroll_button.querySelector(".button-text");
+  const active_class = "auto-scroll-is-active";
 
   addScrollListener(scrollListener, {
     onlyUserScroll: true,
@@ -92,11 +93,15 @@ function activate_auto_scroll({ do_scroll }) {
     }
   }
 
+  function set(hide = false) {
+    scroll_button.classList[hide ? "remove" : "add"](active_class);
+    scroll_button_text.textContent = hide ? "" : " (" + counter + "s)";
+  }
   function show() {
-    auto_scroll.removeAttribute(disable_prop);
+    set();
   }
   function hide() {
-    auto_scroll.setAttribute(disable_prop, "true");
+    set(true);
   }
 
   function inOneSec() {
@@ -118,7 +123,6 @@ function activate_auto_scroll({ do_scroll }) {
     } else {
       show();
     }
-    auto_scroll.textContent = "Auto-center " + counter + "s";
   }
 
   function scrollListener(scrollPos) {

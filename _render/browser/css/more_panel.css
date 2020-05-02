@@ -43,8 +43,6 @@
 .glass-background {
   background-color: var(--panel_bg_1);
   backdrop-filter: blur(var(--panel-bg-blur));
-  /*
-  */
 }
 .glass-background {
   color: var(--panel-color);
