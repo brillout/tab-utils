@@ -56,6 +56,8 @@ function activate_auto_scroll({ do_scroll }) {
   });
   start_auto_scroll();
 
+  add_hover_listener();
+
   return stop_auto_scroll;
 
   var counter;
@@ -123,5 +125,23 @@ function activate_auto_scroll({ do_scroll }) {
     } else {
       stop_auto_scroll();
     }
+  }
+
+  function add_hover_listener() {
+    const wrapper = document.querySelector("#screen-buttons-wrapper");
+    wrapper.addEventListener(
+      "mouseover",
+      () => {
+        wrapper.classList.add("js-hover");
+      },
+      { passive: true }
+    );
+    wrapper.addEventListener(
+      "mouseout",
+      () => {
+        wrapper.classList.remove("js-hover");
+      },
+      { passive: true }
+    );
   }
 }
