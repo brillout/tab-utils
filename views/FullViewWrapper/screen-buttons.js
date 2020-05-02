@@ -5,7 +5,7 @@ import { show_toast } from "../common/show_toast";
 export { activate_screen_buttons };
 
 function activate_screen_buttons() {
-  const scroll_button = document.querySelector("#scroll-button");
+  const scroll_button = document.querySelector("#center-button");
   const fullscreen_button = document.querySelector("#fullscreen-button");
   const full_view = document.querySelector(
     ".pretty_scroll_area__hide_scroll_element"
@@ -46,7 +46,7 @@ let auto_duration = 1000;
 let auto_duration = 4;
 //*/
 function activate_auto_scroll({ do_scroll }) {
-  const scroll_button = document.querySelector("#scroll-button");
+  const scroll_button = document.querySelector("#center-button");
   const scroll_button_text = scroll_button.querySelector(".button-text");
   const active_class = "auto-scroll-is-active";
 
