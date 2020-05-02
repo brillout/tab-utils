@@ -78,30 +78,19 @@
 
 /* Function */
 #screen-buttons-wrapper {
-  /*
   pointer-events: none;
-  */
 }
 .screen-button {
   pointer-events: all;
-}
-#screen-buttons-wrapper {
-  padding-left: 50px;
-  padding-bottom: 50px;
-  outline: 1px solid red;
-}
-#screen-buttons-wrapper.js-hover {
-  outline: 1px solid blue;
 }
 .screen-button {
   opacity: 100;
   visibility: visible;
   transition: opacity 0.7s ease-out;
 }
-.hide_scroll #screen-buttons-wrapper:not(.js-hover) .screen-button,
-.hide_scroll #scroll-button.screen-button {
+.hide_scroll .screen-button {
   pointer-events: none;
-  /* Setting visibility: hidden` ensures the skipping of CPU-intensive animating `center__blinking.svg` */
+  /* we set `visibility: hidden` in order to skip the animation computation of `center__blinking.svg` */
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 0.7s, opacity 0.7s ease-in;
