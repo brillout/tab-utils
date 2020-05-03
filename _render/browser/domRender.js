@@ -14,16 +14,20 @@ async function domRender(goldpage_args) {
   }
 }
 
+const IS_DEV =
+  typeof window !== "undefined" && window.location.hostname === "localhost";
 function on_error(err) {
   load_google_analytics();
   track_error({ name: "init", err });
 
   // Timeout to ensure event tracking happened.
   setTimeout(() => {
-    alert(
-      "Something went wrong. Your " +
-        tab_app_name +
-        ' seems to be broken; click on "Bug Repair" in the footer below to fix the problem.'
-    );
+    if (!IS_DEV) {
+      alert(
+        "Something went wrong. Your " +
+          tab_app_name +
+          ' seems to be broken; click on "Bug Repair" in the footer below to fix the problem.'
+      );
+    }
   }, 2000);
 }

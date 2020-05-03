@@ -9,14 +9,17 @@ class KeyValueStore {
     this.ensure_store();
     return key in this.#store_data;
   }
-  get_val(key: string) {
+  get_val(key: string): any {
     assert_key(key);
     this.ensure_store();
-    return this.#store_data[key];
+    let val = this.#store_data[key];
+    val = make_copy(val);
+    return val;
   }
   set_val(key: string, val: any) {
     assert_key(key);
     this.ensure_store();
+    val = make_copy(val);
     this.#store_data[key] = val;
     this.save_store();
     this.#listeners.forEach((listener) => listener(key, val));
@@ -87,10 +90,12 @@ class KeyValueStore {
   }
   private load_store() {
     const store__data_string = this.get_storage_data_string();
+
     if (store__data_string === null) {
       this.#store_data = {};
       return;
     }
+
     let store__data: Object;
     try {
       store__data = deserialize(store__data_string);
@@ -98,8 +103,8 @@ class KeyValueStore {
       assert(false, "Couldn't parse store data string", err);
       throw err;
     }
-    assert(store__data.constructor === Object);
 
+    assert(store__data.constructor === Object);
     this.#store_data = store__data;
   }
   private ensure_store() {
@@ -130,6 +135,33 @@ function serialize(obj, { readable = false } = {}) {
 }
 function deserialize(str) {
   return JSON_S.parse(str);
+}
+
+// We use `make_copy` to ensure that no outside code gets an object reference.
+// That way we ensure that no code outside of this module manipulates the store.
+function make_copy<T>(val: T): T {
+  const is_ref_val = is_referenced_value(val);
+  if (is_ref_val) {
+    return deserialize(serialize(val));
+  } else {
+    return val;
+  }
+}
+
+function is_referenced_value(val: any): boolean {
+  if (val === null || val === undefined) {
+    return false;
+  } else if ([String, Date, Number, Boolean].includes(val.constructor)) {
+    return false;
+  } else if (val instanceof Object) {
+    return true;
+  }
+  assert_todo(false);
+  return true;
+}
+
+function assert_todo(...args: any[]) {
+  assert(...args);
 }
 
 export const store = new KeyValueStore();
