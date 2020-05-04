@@ -913,10 +913,10 @@
   dependencies:
     "@brillout/format-text" "^0.1.3"
 
-"@brillout/assert@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.npmjs.org/@brillout/assert/-/assert-0.1.4.tgz#b86d85b92e5a5233af3a9df243c8531b14f88c67"
-  integrity sha512-BKpkOePFbRGSPbHULn85k2PL0I1f1OqvV8ZWcohZuROcBEZjqcNS8YHkfvjnOJCwNKnHsC1q6BiBry5/sa/eqA==
+"@brillout/assert@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.npmjs.org/@brillout/assert/-/assert-0.1.6.tgz#48ded567846f0eee4f8e9bbab93c3a342f48de8a"
+  integrity sha512-9tzbqKwM/GTAVXH8L8ny2ClS63VCEM2MTtQgeaEYCa3NQb51CtOjVw0TIfZYM0VpDlwJ6+aarU8KPVvsxcUTPw==
   dependencies:
     "@brillout/format-text" "^0.1.3"
 

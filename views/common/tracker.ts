@@ -91,13 +91,13 @@ async function send_error_event({ name, err }) {
   const data: any = {};
   if (!err) {
     data.no_error_object = true;
-  } else if (!(err.stack || err.stack__original)) {
+  } else if ((!err.stack && !err.stack__processed)) {
     data.no_error_stack = true;
     data.err_obj = JSON.stringify(err, Object.getOwnPropertyNames(err));
   } else {
     data.source_mapped_stack = await get_source_mapped_stack(
       err,
-      err.stack__original || err.stack
+      err.stack__processed || err.stack
     );
   }
 
