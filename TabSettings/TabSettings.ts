@@ -986,7 +986,7 @@ class PresetList {
         return preset;
       }
     }
-    assert(can_be_null, { preset_id });
+    assert(can_be_null, "Could not find preset", { preset_id });
   }
   get_all_preset_fonts() {
     const { saved_ones, native_ones } = this.presets_ordered;
@@ -1159,9 +1159,19 @@ class PresetData {
   preset_values: Object;
 
   constructor(args) {
+    // I don't know why but even after all migrations applied a user
+    // had a `preset_options` prop in its local storage.
+    if (args.preset_options && !args.preset_values) {
+      args.preset_values = args.preset_options;
+      delete args.preset_options;
+    }
+
     const { preset_id, preset_values, subapp_id, ...rest } = args;
-    assert(Object.keys(rest).length === 0, args);
-    assert(preset_id && preset_values && subapp_id, args);
+    assert(
+      Object.keys(rest).length === 0 && preset_id && preset_values && subapp_id,
+      "malformatted preset data",
+      args
+    );
 
     this.subapp_id = subapp_id;
     this.preset_id = preset_id;
