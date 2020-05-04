@@ -1,5 +1,9 @@
 import "./set_background.css";
 
+type ImageUri = string & { _brand?: "ImageUri" };
+type BgImgVal = string & { _brand?: "BgImgVal" };
+type ColorVal = string & { _brand?: "ColorVal" };
+
 export { set_background };
 
 //tricky bg images to test:
@@ -11,119 +15,126 @@ export { set_background };
 //http://www.gowallpaper.net/wp-content/uploads/2011/04/Windows-7-3d-wide-wallpaper-1280x800.jpg
 //http://vistawallpapers.files.wordpress.com/2007/03/vista-wallpapers-69.jpg
 
-let BG_EL: HTMLElement;
-
 //to test: resize image to screen.width and screen.height using canvas and webworkers
 //window.screen.width;
 //window.screen.height;
 
-async function set_background(color_code?: string, image_uri?: string) {
+async function set_background(color_code: ColorVal, image_uri: ImageUri) {
   const is_outdated = get_is_outdated();
 
   init();
 
-  await set_image(image_uri, is_outdated);
+  const bg_img_val: BgImgVal = await load_image(image_uri, is_outdated);
 
   if (is_outdated()) {
     return;
   }
 
   apply_color(color_code);
+  apply_image(bg_img_val);
 }
 
-function apply_color(color_code: string) {
+function apply_color(color_code: ColorVal) {
   color_code = color_code || "transparent";
   BG_EL.style.backgroundColor = color_code;
 }
 
-function apply_image(image_val: string) {
+function apply_image(bg_img_val: BgImgVal) {
   BG_EL.classList.remove("loader-bg");
-  image_val = image_val || "none";
-  BG_EL.style.backgroundImage = image_val;
-  BG_EL.style["backgroundSize"] = "cover";
+  bg_img_val = bg_img_val || "none";
+  BG_EL.style.backgroundImage = bg_img_val;
+  BG_EL.style.backgroundSize = "cover";
 }
 
-async function set_image(image_uri: string, is_outdated: () => {}) {
-  const is_data_uri =
-    image_uri.indexOf(".") !== -1 || /^data:image/.test(image_uri);
-  if (is_data_uri) {
-    apply_image(image_uri);
-    return false;
+async function load_image(
+  image_uri: ImageUri,
+  is_outdated: () => boolean
+): Promise<BgImgVal> {
+  if (!image_uri) {
+    return null;
+  }
+
+  {
+    const is_data_uri = /^data:image/.test(image_uri);
+    if (is_data_uri) {
+      const bg_img_val: BgImgVal = image_uri + "";
+      return bg_img_val;
+    }
   }
 
   const imgEl = document.createElement("img");
 
+  let resolve: (_: BgImgVal) => void;
+  const promise = new Promise<BgImgVal>((r) => {
+    resolve = r;
+  });
+
   let loaded = false;
 
-  let resolve: () => void;
-  const promise = new Promise(
-    (r) =>
-      (resolve = () => {
-        r();
-      })
-  );
-
   imgEl.onload = function () {
-    resolve();
-
     loaded = true;
-
-    // @ts-ignore
-    const w = this.width;
-    // @ts-ignore
-    const h = this.height;
-
-    if (is_outdated()) {
-      return;
-    }
-
-    if (w * h > 8000000) {
-      alert(
-        "The provided image has a size of " +
-          w +
-          "*" +
-          h +
-          " pixels. Large images are likely to slow down your machine. Thus only images of up to 8 000 000 pixels are allowed. (For example, any image bellow 5000*1600 is fine.)"
-      );
-      apply_image(null);
-    } else {
-      apply_image('url("' + image_uri + '")');
-    }
+    const image_val = on_load();
+    resolve(image_val);
   };
 
   imgEl.onerror = function () {
-    resolve();
-
-    if (is_outdated()) {
-      return;
-    }
-
-    alert(
-      "Image " +
-        image_uri +
-        " could not be loaded. Is the image online? Do you have an internet connection? Does the URL point to an image? (Note that the URL should point to the image itself and not to a page containing the image.)"
-    );
-
-    apply_image(null);
+    loaded = true;
+    on_error();
+    resolve(null);
   };
 
-  window.setTimeout(function () {
-    if (is_outdated()) {
-      return;
-    }
-
-    if (loaded) {
-      return;
-    }
-
-    BG_EL.classList.add("loader-bg");
-  }, 50);
+  set_loader_indicator();
 
   imgEl.src = image_uri;
 
   return promise;
+
+  function on_load(): BgImgVal {
+    const w = imgEl.width;
+    const h = imgEl.height;
+
+    if (w * h > 8000000) {
+      if (!is_outdated()) {
+        alert(
+          "The provided image has a size of " +
+            w +
+            "*" +
+            h +
+            " pixels. Large images are likely to slow down your machine. Thus only images of up to 8 000 000 pixels are allowed. (For example, any image bellow 5000*1600 is fine.)"
+        );
+      }
+      return null;
+    } else {
+      return 'url("' + image_uri + '")';
+    }
+  }
+
+  function on_error() {
+    if (!is_outdated()) {
+      alert(
+        "Image " +
+          image_uri +
+          " could not be loaded. Is the image online? Do you have an internet connection? Does the URL point to an image? (Note that the URL should point to the image itself and not to a page containing the image.)"
+      );
+    }
+  }
+
+  function set_loader_indicator() {
+    window.setTimeout(function () {
+      if (is_outdated()) {
+        return;
+      }
+
+      if (loaded) {
+        return;
+      }
+
+      BG_EL.classList.add("loader-bg");
+    }, 50);
+  }
 }
 
+let BG_EL: HTMLElement;
 function init() {
   if (BG_EL) return;
   BG_EL = document.body;
@@ -149,5 +160,6 @@ function get_is_outdated() {
 
   const current = call_number;
 
-  return () => current === call_number;
+  const is_outdated = () => current !== call_number;
+  return is_outdated;
 }

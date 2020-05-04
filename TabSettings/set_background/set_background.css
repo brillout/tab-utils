@@ -2,7 +2,7 @@
   position: relative;
 }
 .loader-bg::before {
-  position: absolute;
+  position: fixed;
 }
 .loader-bg::before {
   content: "";
@@ -14,7 +14,9 @@
   height: 100%;
 
   background-repeat: no-repeat;
-  background-size: auto;
+  background-size: 50px;
   background-position: center;
-  background-attachment: fixed;
+
+  pointer-events: none;
+  z-index: -99999;
 }
