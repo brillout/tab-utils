@@ -1397,6 +1397,15 @@ class LinkSerializer {
       return null;
     }
 
+    // Old Clock Tab URL for fullscreen mode
+    if (["/fullscreen", "fullscreen"].includes(pipe_data)) {
+      return null;
+    }
+    // Not sure why some users have a Data URI appended to their URL
+    if (pipe_data.startsWith("data:image")) {
+      return null;
+    }
+
     pipe_data = pipe_data.split("/").filter(Boolean)[1];
     if (!pipe_data) {
       return null;
