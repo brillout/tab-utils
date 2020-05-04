@@ -1,7 +1,7 @@
 import assert from "@brillout/assert";
 import load_font from "./load_font";
 import load_font_list from "./load_font_list";
-import set_background from "./set_background";
+import { set_background } from "./set_background";
 import "./tab-settings.css";
 import { track_event, track_error } from "../views/common/tracker";
 import { remove_hash } from "../auto_remove_hash";
@@ -455,7 +455,7 @@ export class TabSettings {
   update_background() {
     const image = this.current_backgroud_image;
     const color = this.current_backgroud_color;
-    set_background(image || color);
+    set_background(color, image);
   }
   async update_font() {
     const { text_container } = this;
