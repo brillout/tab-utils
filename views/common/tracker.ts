@@ -75,18 +75,26 @@ function track_page_view() {
   DEBUG && console.log("[GA] page view");
 }
 
-async function track_error({ name, err }: { name: string; err: any }) {
-  await send_error_event({ err, name: "[error][" + name + "]" });
+async function track_error({
+  name,
+  err,
+  value,
+}: {
+  name: string;
+  value?: string;
+  err: any;
+}) {
+  await send_error_event({ err, value, name: "[error][" + name + "]" });
 }
 const tracked_errors = [];
-async function send_error_event({ name, err }) {
+async function send_error_event({ name, err, value }) {
   if (tracked_errors.includes(err)) {
     return;
   }
   tracked_errors.push(err);
   console.error(err);
 
-  const value = (err || {}).message || "no_error_message";
+  value = value || (err || {}).message || "no_error_message";
 
   const data: any = {};
   if (!err) {

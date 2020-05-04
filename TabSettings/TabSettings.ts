@@ -1390,7 +1390,9 @@ class LinkSerializer {
     return link;
   }
   static from_url() {
-    let pipe_data = window.location.href.split("#")[1];
+    const preset_url = window.location.href;
+
+    let pipe_data = preset_url.split("#")[1];
     if (!pipe_data) {
       return null;
     }
@@ -1421,7 +1423,7 @@ class LinkSerializer {
       show_toast("Wrong URL. The URL could not be processed.", {
         is_error: true,
       });
-      track_error({ name: "preset_url_parsing", err });
+      track_error({ name: "preset_url_parsing", value: pipe_data, err });
       console.log(pipe_data);
       console.error(err);
     }
