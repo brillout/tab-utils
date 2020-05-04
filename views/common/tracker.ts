@@ -108,7 +108,7 @@ async function send_error_event({ name, err }) {
   });
 
   if (IS_DEV) {
-    alert(data.source_mapped_stack);
+    alert(name + "\n" + data.source_mapped_stack);
   }
 }
 interface TrackEvent {
@@ -135,21 +135,22 @@ async function track_event({
   if (DEBUG) {
     DEBUG && assert.log("[GA][event]", args);
     /*
-    console.log("[GA][event] eventLabel");
-    console.log(eventLabel);
+    console.log("[GA][event] eventLabel: ", eventLabel);
     //*/
   }
 }
 
-function enhance_data(data: Object, name, value): Object {
+function enhance_data(data: Object, name: string, value: string): Object {
   const tab_user_id = get_tab_user_id();
   const url = window.location.href;
   const browser = get_browser_info();
   const screen = get_window_screen_sizes();
+  const time = get_time_string();
   const data_enhanced = {
     name,
     value,
     browser,
+    time,
     tab_user_id,
     url,
     screen,
@@ -364,4 +365,17 @@ function track_bounce_state() {
   setTimeout(() => {
     track_event({ name: "five_minute_stay", nonInteraction: false });
   }, 5 * ONE_MINUTE);
+}
+
+function get_time_string(): string {
+  const d = new Date();
+  const time_string =
+    [d.getFullYear(), d.getMonth() + 1, d.getDate()].map(prettify).join("-") +
+    "_" +
+    [d.getHours(), d.getMinutes(), d.getSeconds()].map(prettify).join(":");
+  return time_string;
+
+  function prettify(n: number): string {
+    return (n < 9 ? "0" : "") + n;
+  }
 }

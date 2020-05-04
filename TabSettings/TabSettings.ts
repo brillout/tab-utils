@@ -1153,7 +1153,6 @@ class NativePreset extends Preset {
   }
 }
 
-// TODO - use TypeScript
 class PresetData {
   subapp_id: string;
   preset_id: string;
