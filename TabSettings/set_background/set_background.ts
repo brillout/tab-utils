@@ -30,20 +30,17 @@ async function set_background(color_code: ColorVal, image_uri: ImageUri) {
     return;
   }
 
+  apply(color_code, bg_img_val, false);
+}
+
+function apply(
+  color_code: ColorVal,
+  bg_img_val: BgImgVal,
+  show_loader: boolean
+) {
   apply_color(color_code);
   apply_image(bg_img_val);
-}
-
-function apply_color(color_code: ColorVal) {
-  color_code = color_code || "transparent";
-  BG_EL.style.backgroundColor = color_code;
-}
-
-function apply_image(bg_img_val: BgImgVal) {
-  BG_EL.classList.remove("loader-bg");
-  bg_img_val = bg_img_val || "none";
-  BG_EL.style.backgroundImage = bg_img_val;
-  BG_EL.style.backgroundSize = "cover";
+  BG_EL.classList[show_loader ? "add" : "remove"]("loader-bg");
 }
 
 async function load_image(
@@ -129,9 +126,20 @@ async function load_image(
         return;
       }
 
-      BG_EL.classList.add("loader-bg");
+      apply(null, null, true);
     }, 50);
   }
+}
+
+function apply_color(color_code: ColorVal) {
+  color_code = color_code || "transparent";
+  BG_EL.style.backgroundColor = color_code;
+}
+
+function apply_image(bg_img_val: BgImgVal) {
+  bg_img_val = bg_img_val || "none";
+  BG_EL.style.backgroundImage = bg_img_val;
+  BG_EL.style.backgroundSize = "cover";
 }
 
 let BG_EL: HTMLElement;
