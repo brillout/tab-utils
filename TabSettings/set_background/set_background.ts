@@ -1,3 +1,5 @@
+import "./set_background.css";
+
 export { set_background };
 
 //tricky bg images to test:
@@ -9,30 +11,24 @@ export { set_background };
 //http://www.gowallpaper.net/wp-content/uploads/2011/04/Windows-7-3d-wide-wallpaper-1280x800.jpg
 //http://vistawallpapers.files.wordpress.com/2007/03/vista-wallpapers-69.jpg
 
-/*
-const LOAD_IMG_URL = "http://i.imgur.com/cvyOo.gif";
-/*/
-const LOAD_IMG_URL = "https://i.imgur.com/zqG5F.gif";
-//*/
-//ml.assert(!arguments.callee.neverCalled);arguments.callee.neverCalled=true;
-
-const LOAD_IMG = "url(" + LOAD_IMG_URL + ")";
-
 let BG_EL: HTMLElement;
 
 //to test: resize image to screen.width and screen.height using canvas and webworkers
 //window.screen.width;
 //window.screen.height;
 
-let change_number_counter = 0;
-function set_background(color_code: string, image_uri: string) {
+async function set_background(color_code?: string, image_uri?: string) {
+  const is_outdated = get_is_outdated();
+
   init();
 
-  ++change_number_counter;
+  await set_image(image_uri, is_outdated);
+
+  if (is_outdated()) {
+    return;
+  }
 
   apply_color(color_code);
-
-  set_image(image_uri);
 }
 
 function apply_color(color_code: string) {
@@ -41,12 +37,13 @@ function apply_color(color_code: string) {
 }
 
 function apply_image(image_val: string) {
+  BG_EL.classList.remove("loader-bg");
   image_val = image_val || "none";
   BG_EL.style.backgroundImage = image_val;
-  BG_EL.style["backgroundSize"] = image_val === LOAD_IMG ? "auto" : "cover";
+  BG_EL.style["backgroundSize"] = "cover";
 }
 
-function set_image(image_uri: string) {
+async function set_image(image_uri: string, is_outdated: () => {}) {
   const is_data_uri =
     image_uri.indexOf(".") !== -1 || /^data:image/.test(image_uri);
   if (is_data_uri) {
@@ -54,13 +51,21 @@ function set_image(image_uri: string) {
     return false;
   }
 
-  const change_number = change_number_counter;
-
   const imgEl = document.createElement("img");
 
   let loaded = false;
 
+  let resolve: () => void;
+  const promise = new Promise(
+    (r) =>
+      (resolve = () => {
+        r();
+      })
+  );
+
   imgEl.onload = function () {
+    resolve();
+
     loaded = true;
 
     // @ts-ignore
@@ -68,7 +73,7 @@ function set_image(image_uri: string) {
     // @ts-ignore
     const h = this.height;
 
-    if (change_number === change_number_counter) {
+    if (is_outdated()) {
       return;
     }
 
@@ -80,14 +85,16 @@ function set_image(image_uri: string) {
           h +
           " pixels. Large images are likely to slow down your machine. Thus only images of up to 8 000 000 pixels are allowed. (For example, any image bellow 5000*1600 is fine.)"
       );
-      apply_image();
+      apply_image(null);
     } else {
       apply_image('url("' + image_uri + '")');
     }
   };
 
   imgEl.onerror = function () {
-    if (change_number !== change_number_counter) {
+    resolve();
+
+    if (is_outdated()) {
       return;
     }
 
@@ -97,11 +104,11 @@ function set_image(image_uri: string) {
         " could not be loaded. Is the image online? Do you have an internet connection? Does the URL point to an image? (Note that the URL should point to the image itself and not to a page containing the image.)"
     );
 
-    apply_image();
+    apply_image(null);
   };
 
   window.setTimeout(function () {
-    if (change_number !== change_number_counter) {
+    if (is_outdated()) {
       return;
     }
 
@@ -109,10 +116,12 @@ function set_image(image_uri: string) {
       return;
     }
 
-    apply_image(LOAD_IMG);
+    BG_EL.classList.add("loader-bg");
   }, 50);
 
   imgEl.src = image_uri;
+
+  return promise;
 }
 
 function init() {
@@ -132,4 +141,13 @@ function init() {
   //// not needed when backgroundAttachment == fixed
   //BG_EL.style['minHeight']            = '100%';
   //BG_EL.style['minWidth ']            = '100%';
+}
+
+let call_number = 0;
+function get_is_outdated() {
+  ++call_number;
+
+  const current = call_number;
+
+  return () => current === call_number;
 }

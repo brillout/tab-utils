@@ -1,0 +1,20 @@
+.loader-bg {
+  position: relative;
+}
+.loader-bg::before {
+  position: absolute;
+}
+.loader-bg::before {
+  content: "";
+  display: block;
+
+  background-image: url(./load_indicator.svg);
+
+  width: 100%;
+  height: 100%;
+
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: center;
+  background-attachment: fixed;
+}
