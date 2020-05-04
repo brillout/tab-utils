@@ -91,7 +91,7 @@ async function send_error_event({ name, err }) {
   const data: any = {};
   if (!err) {
     data.no_error_object = true;
-  } else if ((!err.stack && !err.stack__processed)) {
+  } else if (!err.stack && !err.stack__processed) {
     data.no_error_stack = true;
     data.err_obj = JSON.stringify(err, Object.getOwnPropertyNames(err));
   } else {
@@ -99,6 +99,9 @@ async function send_error_event({ name, err }) {
       err,
       err.stack__processed || err.stack
     );
+    if (err.stack__processed) {
+      data.error_stack = err.stack;
+    }
   }
 
   track_event({
