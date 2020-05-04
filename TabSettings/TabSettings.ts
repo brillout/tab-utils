@@ -1395,7 +1395,7 @@ class LinkSerializer {
       return null;
     }
 
-    pipe_data = pipe_data.split("/")[1];
+    pipe_data = pipe_data.split("/").filter(Boolean)[1];
     if (!pipe_data) {
       return null;
     }
