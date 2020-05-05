@@ -72,6 +72,7 @@ function track_user_clicks() {
 
 function track_page_view() {
   window.ga("send", "pageview");
+  track_event({ name: "page_view" });
   DEBUG && console.log("[GA] page view");
 }
 
@@ -87,7 +88,15 @@ async function track_error({
   await send_error_event({ err, value, name: "[error][" + name + "]" });
 }
 const tracked_errors = [];
-async function send_error_event({ name, err, value }) {
+async function send_error_event({
+  name,
+  err,
+  value,
+}: {
+  name?: string;
+  err: any;
+  value?: string;
+}) {
   if (tracked_errors.includes(err)) {
     return;
   }
@@ -137,7 +146,8 @@ async function track_event({
   const eventLabel = serialize_data(enhance_data(data, name, value));
   assert(eventLabel.startsWith("name:"));
   const eventCategory = name;
-  const eventAction = name + " - " + value;
+  let eventAction = name;
+  if (value) eventAction += " - " + value;
 
   const args = { eventCategory, eventAction, nonInteraction };
 
@@ -159,13 +169,16 @@ function enhance_data(data: Object, name: string, value: string): Object {
   const time = get_time_string();
   const data_enhanced = {
     name,
-    value,
     browser,
     time,
     tab_user_id,
     url,
     screen,
   };
+  if (value) {
+    // @ts-ignore
+    data_enhanced.value = value;
+  }
   Object.entries(data).forEach(([key, val]) => {
     assert(!(key in data_enhanced));
     data_enhanced[key] = val;

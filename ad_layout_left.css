@@ -1,0 +1,43 @@
+.vertical-slot-wrapper {
+  outline: 1px solid var(--ad-border-color);
+  margin: auto;
+  margin-top: 60px;
+}
+.vertical-slot-wrapper,
+.vertical-slot {
+  display: block;
+  width: 160px;
+  height: 600px;
+}
+
+html:not(.show-ads) #fv_left-side {
+  display: none;
+}
+
+a.donate-remover-2 {
+  text-decoration: none !important;
+}
+.donate-remover-2 {
+  cursor: pointer;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 160px;
+}
+.donate-remover-2 {
+  text-align: center;
+}
+.donate-remover-2 > span {
+  display: inline-block;
+  text-align: left;
+}
+
+@media (max-width: 700px) {
+  .vertical-slot {
+    display: none !important;
+  }
+  #fv_left-side {
+    display: none !important;
+  }
+}

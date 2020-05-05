@@ -73,12 +73,6 @@
 }
 
 /* Aesthetics */
-.screen-button,
-/* make sure that glass-background get rounded as well */
-.screen-button:before,
-.screen-button:after {
-  border-radius: 10px;
-}
 #fullscreen-button,
 #center-button {
   cursor: pointer;

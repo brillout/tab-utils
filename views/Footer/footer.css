@@ -17,7 +17,9 @@
     url("./Lato-Light.woff") format("woff");
 }
 #footer_container,
-#header-container {
+#header-container,
+#screen-buttons-wrapper,
+#fv_left-side {
   font-family: Lato, "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
 }
 
