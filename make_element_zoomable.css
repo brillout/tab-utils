@@ -7,15 +7,15 @@
     scale(var(--scale));
 }
 
+/*
 .zoomed-state .zooming__overflow-container,
 .zooming__overflow-container.zoom-transition {
   overflow: hidden !important;
   height: 100vh !important;
   width: 100vw !important;
-  /*
   background: red;
-  */
 }
+*/
 
 .zooming__zoomable-element {
   cursor: pointer;

@@ -2,7 +2,6 @@
 
 #header-container {
   text-align: center;
-  width: 100vw;
 }
 #header-container > #header-content {
   display: inline-flex;
@@ -22,4 +21,21 @@
   padding-left: var(--content-side-padding);
   padding-right: var(--content-side-padding);
   padding-top: 34px;
+}
+
+#fv_left-side {
+  width: 200px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+#fv_right-side {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+#fv_full-view-layout {
+  width: 100vw;
+  display: flex;
+  align-items: stretch;
 }

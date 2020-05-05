@@ -13,6 +13,10 @@ const DEBUG = true;
 const DEBUG = false;
 //*/
 
+// zoomEl: target that is being zoomed into
+// scaleEl: element on which CSS Transform is applied
+// containerEl: container that the zoomed element fully fills
+// toggleEl: click element that toggles zoom state
 function make_element_zoomable({ containerEl, scaleEl, zoomEl, toggleEl }) {
   assert(containerEl && scaleEl && zoomEl);
   toggleEl = toggleEl || zoomEl;
@@ -115,7 +119,23 @@ function zoomIn({ zoomEl, scaleEl, containerEl }) {
   const { height: zoom_el_height, width: zoom_el_width } = getElementSizes(
     zoomEl
   );
-  DEBUG && console.log("[zoom]", { zoom_el_width, zoom_el_height, zoomEl });
+  const { height: container_height, width: container_width } = getElementSizes(
+    containerEl
+  );
+  const log_data = {
+    zoom_el_width,
+    zoom_el_height,
+    zoomEl,
+    container_width,
+    container_height,
+    containerEl,
+  };
+  assert(
+    zoom_el_height && zoom_el_width && container_height && container_width,
+    "[zoom-problem]",
+    log_data
+  );
+  DEBUG && console.log("[zoom]", log_data);
 
   const scale_el_pos__absolute = getPosition(scaleEl);
   const zoom_el_pos__absolute = getPosition(zoomEl);
@@ -134,16 +154,13 @@ function zoomIn({ zoomEl, scaleEl, containerEl }) {
       })
     );
 
-  const screen_width = window.innerWidth;
-  const screen_height = window.innerHeight;
-
   const scale = Math.min(
-    screen_height / zoom_el_height,
-    screen_width / zoom_el_width
+    container_height / zoom_el_height,
+    container_width / zoom_el_width
   );
   DEBUG && console.log("[zoom]", JSON.stringify({ scale }));
 
-  const screen_center = [screen_width / 2, screen_height / 2];
+  const screen_center = [container_width / 2, container_height / 2];
   const zoom_el_center = [
     zoom_el_width / 2 + zoom_el_pos.x,
     zoom_el_height / 2 + zoom_el_pos.y,

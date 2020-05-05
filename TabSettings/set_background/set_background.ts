@@ -1,3 +1,4 @@
+import assert from "@brillout/assert";
 import "./set_background.css";
 
 type ImageUri = string & { _brand?: "ImageUri" };
@@ -19,10 +20,14 @@ export { set_background };
 //window.screen.width;
 //window.screen.height;
 
-async function set_background(color_code: ColorVal, image_uri: ImageUri) {
+async function set_background(
+  color_code: ColorVal,
+  image_uri: ImageUri,
+  bg_container_id: string
+) {
   const is_outdated = get_is_outdated();
 
-  init();
+  init(bg_container_id);
 
   const bg_img_val: BgImgVal = await load_image(image_uri, is_outdated);
 
@@ -40,7 +45,7 @@ function apply(
 ) {
   apply_color(color_code);
   apply_image(bg_img_val);
-  BG_EL.classList[show_loader ? "add" : "remove"]("loader-bg");
+  BG_EL.classList[show_loader ? "add" : "remove"]("show-load-indicator");
 }
 
 async function load_image(
@@ -143,23 +148,26 @@ function apply_image(bg_img_val: BgImgVal) {
 }
 
 let BG_EL: HTMLElement;
-function init() {
-  if (BG_EL) return;
-  BG_EL = document.body;
+function init(bg_container_id: string) {
+  if (BG_EL) {
+    const bg_container_id__previous = BG_EL.parentElement.parentElement.id;
+    assert(bg_container_id__previous === bg_container_id, {
+      bg_container_id,
+      bg_container_id__previous,
+    });
+    return;
+  }
+  const bg_container = document.querySelector("#" + bg_container_id);
+  assert(bg_container, { bg_container_id });
 
-  //following 2 styles used for auto sized background for loading gif
-  BG_EL.style["backgroundRepeat"] = "no-repeat";
-  BG_EL.style["backgroundPosition"] = "center";
-  //fixed because no way found to set BG_EL's size to scroll size of window
-  //-http://stackoverflow.com/questions/7540418/css-setting-an-elements-size-to-the-scroll-size-of-the-page
-  BG_EL.style["backgroundAttachment"] = "fixed";
-  //make sure size is at least size of window
-  BG_EL.style["min-height"] = "100%";
-  BG_EL.style["min-width"] = "100%";
+  const el1 = document.createElement("div");
+  el1.id = "background-area-wrapper";
+  const el2 = document.createElement("div");
+  el2.id = "background-area";
+  el1.prepend(el2);
+  bg_container.prepend(el1);
 
-  //// not needed when backgroundAttachment == fixed
-  //BG_EL.style['minHeight']            = '100%';
-  //BG_EL.style['minWidth ']            = '100%';
+  BG_EL = el2;
 }
 
 let call_number = 0;

@@ -1,3 +1,4 @@
+import assert from "@brillout/assert";
 import React from "react";
 import Header from "../Header";
 import Footer from "../Footer";
@@ -5,7 +6,12 @@ import "./full-view.css";
 import on_page_load from "./on_page_load";
 import { tab_app_logo } from "../../../tab_app_info";
 
-export { FullView, MorePanel, config };
+export { FullView, MorePanel, LeftSide, RightSide, FullViewLayout, config };
+
+function FullViewLayout(props) {
+  assert(!props.id);
+  return <div id="fv_full-view-layout" {...props} />;
+}
 
 function FullView(props) {
   const { children } = props;
@@ -35,6 +41,16 @@ function FullView(props) {
       </div>
     </>
   );
+}
+
+function LeftSide(props) {
+  assert(!props.id);
+  return <div id="fv_left-side" {...props} />;
+}
+
+function RightSide(props) {
+  assert(!props.id);
+  return <div id="fv_right-side" {...props} />;
 }
 
 function MorePanel(props) {
