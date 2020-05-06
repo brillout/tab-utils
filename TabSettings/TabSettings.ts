@@ -843,7 +843,7 @@ class FontOption extends SelectOption {
 
   get input_value() {
     const val = super.input_value;
-    assert(val, { val });
+    assert(val, "empty_font_value", val === undefined, val === "", { val });
     return val;
   }
   add_fonts(args) {

@@ -1,3 +1,4 @@
+import "./common.css";
 import activate_email_links from "./activate_email_links";
 import activate_app from "./activate_app";
 import { load_google_analytics } from "./tracker";

@@ -7,17 +7,19 @@ import { store } from "./store";
 import { LeftSide } from "./views/FullViewWrapper";
 import { track_event } from "./views/common/tracker";
 
-export { load_ad };
-
+export { load_ads };
+export { remove_ads };
 export { Ad_ATF, Ad_BTF };
-
 export { Ad_left };
+
+init();
 
 function Ad_left({ ad_slots }) {
   const slot_id = get_slot_id("LEFT_AD", ad_slots);
   if (slot_id === null) return null;
   return (
     <LeftSide style={{ backgroundColor: "#3e3e3e" }}>
+      <AdHeader />
       <div className="vertical-slot-wrapper">
         <AdSenseAd slot_id={slot_id} className="vertical-slot" />
       </div>
@@ -26,6 +28,25 @@ function Ad_left({ ad_slots }) {
   );
 }
 
+function AdHeader() {
+  return (
+    <div
+      style={{
+        height: 61,
+        fontWeight: 300,
+        width: "100%",
+        color: "#aaa",
+        fontSize: "0.95em",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      className="unselectable"
+    >
+      Advertisement
+    </div>
+  );
+}
 function AdRemovalButton(props) {
   return (
     <a
@@ -91,13 +112,31 @@ function get_slot_id(slot_name, ad_slots) {
   assert(slot_id);
   return slot_id;
 }
-
-function load_ad(AD_SLOTS) {
-  if (ads_are_removed(AD_SLOTS)) {
-    hide_ads();
+function init() {
+  if (is_nodejs()) {
     return;
   }
+
+  if (dont_show_ads()) {
+    hide_ads();
+  }
+}
+
+function load_ads(AD_SLOTS) {
+  assert(AD_SLOTS.length > 0);
+
+  if (dont_show_ads()) {
+    return;
+  }
+
   show_ads();
+  load_and_apply_ads(AD_SLOTS);
+}
+function remove_ads() {
+  hide_ads();
+}
+
+function load_and_apply_ads(AD_SLOTS) {
   loadAdsByGoogle(AD_SLOTS);
 }
 
@@ -112,10 +151,10 @@ function loadAdsByGoogle(AD_SLOTS) {
   load_script(
     "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
     () => {
-      track_event({ name: "ad_loaded" });
+      track_event({ name: "[ad]ad_code_loaded" });
     },
     () => {
-      track_event({ name: "ad_blocked" });
+      track_event({ name: "[ad]ad_code_blocked" });
       hide_ads();
     }
   );
@@ -127,32 +166,80 @@ function loadAdsByGoogle(AD_SLOTS) {
 
 // Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
 // If you are short on money then you are more than welcome to do this :-).
-function ads_are_removed(AD_SLOTS) {
-  if (AD_SLOTS.length === 0) {
-    return true;
+var _user_donated;
+function user_donated() {
+  assert(!is_nodejs());
+
+  if (_user_donated !== undefined) {
+    assert([true, false].includes(_user_donated));
+    return _user_donated;
   }
 
-  return user_donated();
+  _user_donated = check_donation();
+  assert([true, false].includes(_user_donated));
+
+  if (_user_donated) {
+    track_event({ name: "[ad]ad_remove_donation" });
+  }
+
+  return _user_donated;
+
+  function check_donation() {
+    const AD_REMOVAL_KEY = "ad_removal";
+
+    const code_in_storage = store.has_val(AD_REMOVAL_KEY);
+
+    if (window.location.hash === "#thanks-for-your-donation") {
+      if (!code_in_storage) {
+        store.set_val(AD_REMOVAL_KEY, true);
+      }
+      remove_hash();
+      return true;
+    }
+
+    if (code_in_storage) {
+      return true;
+    }
+
+    return false;
+  }
 }
 
-function user_donated() {
-  const AD_REMOVAL_KEY = "ad_removal";
+function dont_show_ads() {
+  const donation = user_donated();
+  const ad_blocker = ad_blocker_exists();
+  return donation || ad_blocker;
+}
 
-  const code_in_storage = store.has_val(AD_REMOVAL_KEY);
+var _ad_blocker_is_installed;
+function ad_blocker_exists() {
+  assert(!is_nodejs());
 
-  if (window.location.hash === "#thanks-for-your-donation") {
-    if (!code_in_storage) {
-      store.set_val(AD_REMOVAL_KEY, true);
-    }
-    remove_hash();
-    return true;
+  if (_ad_blocker_is_installed !== undefined) {
+    return _ad_blocker_is_installed;
   }
 
-  if (code_in_storage) {
-    return true;
+  const ad_blocker_test = document.createElement("div");
+
+  // hide
+  ad_blocker_test.style.position = "absolute";
+  ad_blocker_test.style.visibility = "hidden";
+  ad_blocker_test.style.pointerEvents = "none";
+
+  ad_blocker_test.innerHTML = "some_text";
+
+  // Ad blockers hide elements with that class
+  ad_blocker_test.className = "adsbygoogle";
+
+  document.body.appendChild(ad_blocker_test);
+  _ad_blocker_is_installed = ad_blocker_test.offsetHeight === 0;
+  document.body.removeChild(ad_blocker_test);
+
+  if (_ad_blocker_is_installed) {
+    track_event({ name: "[ad]ad_blocker_detected" });
   }
 
-  return false;
+  return _ad_blocker_is_installed;
 }
 
 function load_script(url, onload, onerror) {
@@ -169,4 +256,8 @@ function show_ads() {
 }
 function hide_ads() {
   document.documentElement.classList.remove("show-ads");
+}
+
+function is_nodejs() {
+  return typeof window === "undefined";
 }

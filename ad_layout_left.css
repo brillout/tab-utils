@@ -1,7 +1,7 @@
 .vertical-slot-wrapper {
   outline: 1px solid var(--ad-border-color);
-  margin: auto;
-  margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .vertical-slot-wrapper,
 .vertical-slot {

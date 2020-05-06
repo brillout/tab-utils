@@ -17,7 +17,9 @@ declare global {
   }
 }
 
-/*/
+const NO_ERROR_MESSAGE = "no_error_message";
+
+//*/
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -71,7 +73,7 @@ function track_user_clicks() {
 }
 
 function track_page_view() {
-  window.ga("send", "pageview");
+  !IS_DEV && window.ga("send", "pageview");
   track_event({ name: "page_view" });
   DEBUG && console.log("[GA] page view");
 }
@@ -103,7 +105,7 @@ async function send_error_event({
   tracked_errors.push(err);
   console.error(err);
 
-  value = value || (err || {}).message || "no_error_message";
+  value = value || (err || {}).message || NO_ERROR_MESSAGE;
 
   const data: any = {};
   if (!err) {
@@ -143,21 +145,24 @@ async function track_event({
   data = {},
   nonInteraction = true,
 }: TrackEvent) {
-  const eventLabel = serialize_data(enhance_data(data, name, value));
+  const eventLabel__obj = enhance_data(data, name, value);
+  const eventLabel = serialize_data(eventLabel__obj);
   assert(eventLabel.startsWith("name:"));
-  const eventCategory = name;
+
   let eventAction = name;
   if (value) eventAction += " - " + value;
 
+  let eventCategory = name;
+  if (value === NO_ERROR_MESSAGE) {
+    eventCategory = "[error][no_stack]";
+  }
+
   const args = { eventCategory, eventAction, nonInteraction };
 
-  window.ga("send", { hitType: "event", eventLabel, ...args });
+  !IS_DEV && window.ga("send", { hitType: "event", eventLabel, ...args });
 
   if (DEBUG) {
-    DEBUG && assert.log("[GA][event]", args);
-    /*
-    console.log("[GA][event] eventLabel: ", eventLabel);
-    //*/
+    console.log("[GA][event]", eventAction, eventLabel__obj);
   }
 }
 
@@ -221,7 +226,7 @@ function setup_ga() {
   assert(ga_id && ga_id.startsWith("UA-"));
 
   // Creates a default tracker with automatic cookie domain configuration.
-  window.ga("create", ga_id, "auto");
+  !IS_DEV && window.ga("create", ga_id, "auto");
 
   DEBUG && console.log("[GA] Initialized with " + ga_id);
 }

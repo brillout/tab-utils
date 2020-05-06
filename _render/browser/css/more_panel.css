@@ -43,11 +43,15 @@
 .glass-background {
   color: var(--panel-color);
 }
+
 .glass-background-button,
 /* make sure that glass-background get rounded as well */
 .glass-background-button:before,
 .glass-background-button:after {
   border-radius: 10px;
+}
+.glass-background-button {
+  user-select: none;
 }
 
 #more_panel {
