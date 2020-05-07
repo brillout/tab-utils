@@ -217,7 +217,7 @@ class SelectInput extends PersistantInput {
   }
 
   _input_modifier(val) {
-    assert(val, { val });
+    assert(val, "empty select", val === "", this._input_el.id, { val });
     if (!this._input_el.querySelector('option[value="' + val + '"]')) {
       this._input_el.innerHTML =
         this._generate_option_html(val) +
