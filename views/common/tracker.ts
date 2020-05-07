@@ -101,7 +101,7 @@ async function track_error({
     console.error(name);
   }
 
-  name = "[error][" + name + "]";
+  name = "[error]" + name;
 
   value = value || (err || {}).message;
 
@@ -269,7 +269,7 @@ function track_error_events() {
       Object.assign(err, { filename, lineno, colno, noErrorObj: true });
     }
     await track_error({
-      name: "window.onerror",
+      name: "[window.onerror]",
       err,
     });
   });
@@ -289,7 +289,7 @@ function track_error_events() {
       }
 
       await track_error({
-        name: "ErrorEvent",
+        name: "[ErrorEvent]",
         err,
       });
     }),
@@ -305,7 +305,7 @@ function track_error_events() {
       const err = ev.reason;
 
       await track_error({
-        name: "unhandledrejection",
+        name: "[unhandledrejection]",
         err,
       });
     })
@@ -408,7 +408,7 @@ function track_dom_heart_beat_error(dom_heart_beat) {
   } catch (err) {
     if (dom_heart_beat_error_already_catched === false) {
       dom_heart_beat_error_already_catched = true;
-      track_error({ name: "dom_heart_beat", err });
+      track_error({ name: "[dom_heart_beat]", err });
     }
     // We don't re-throw the error in order to not block future dom beats
     console.error(err);
