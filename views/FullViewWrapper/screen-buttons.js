@@ -24,7 +24,7 @@ function activate_screen_buttons() {
   }
   async function do_fullscreen() {
     try {
-      document.documentElement.requestFullscreen();
+      await document.documentElement.requestFullscreen();
     } catch (err) {
       show_toast("Your browser doesn't support fullscreen.", {
         is_error: true,
