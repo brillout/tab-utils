@@ -19,7 +19,7 @@ declare global {
 
 const NO_ERROR_MESSAGE = "no_error_message";
 
-//*/
+/*/
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -84,8 +84,8 @@ async function track_error({
   value,
 }: {
   name: string;
-  value?: string;
   err: any;
+  value?: string;
 }) {
   await send_error_event({ err, value, name: "[error][" + name + "]" });
 }
@@ -95,7 +95,7 @@ async function send_error_event({
   err,
   value,
 }: {
-  name?: string;
+  name: string;
   err: any;
   value?: string;
 }) {
@@ -114,13 +114,15 @@ async function send_error_event({
     data.no_error_stack = true;
     data.err_obj = JSON.stringify(err, Object.getOwnPropertyNames(err));
   } else {
-    data.source_mapped_stack = await get_source_mapped_stack(
+    data.stack__source_mapped = await get_source_mapped_stack(
       err,
       err.stack__processed || err.stack
     );
-    if (err.stack__processed) {
-      data.error_stack = err.stack;
+    if (err.stack__original) {
+      data.stack__original = err.stack__original;
     }
+    assert(!data.stack);
+    data.stack = err.stack;
   }
 
   track_event({
