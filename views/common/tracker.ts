@@ -17,8 +17,6 @@ declare global {
   }
 }
 
-const NO_ERROR_MESSAGE = "no_error_message";
-
 /*/
 const DEBUG = true;
 /*/
@@ -78,86 +76,107 @@ function track_page_view() {
   DEBUG && console.log("[GA] page view");
 }
 
+const tracked_errors = [];
 async function track_error({
   name,
   err,
   value,
 }: {
   name: string;
-  err: any;
+  err?: any;
   value?: string;
 }) {
-  await send_error_event({ err, value, name: "[error][" + name + "]" });
-}
-const tracked_errors = [];
-async function send_error_event({
-  name,
-  err,
-  value,
-}: {
-  name: string;
-  err: any;
-  value?: string;
-}) {
-  if (tracked_errors.includes(err)) {
-    return;
-  }
-  tracked_errors.push(err);
-  console.error(err);
-
-  value = value || (err || {}).message || NO_ERROR_MESSAGE;
-
-  const data: any = {};
-  if (!err) {
-    data.no_error_object = true;
-  } else if (!err.stack && !err.stack__processed) {
-    data.no_error_stack = true;
-    data.err_obj = JSON.stringify(err, Object.getOwnPropertyNames(err));
-  } else {
-    data.stack__source_mapped = await get_source_mapped_stack(
-      err,
-      err.stack__processed || err.stack
-    );
-    if (err.stack__original) {
-      data.stack__original = err.stack__original;
+  if (err) {
+    if (tracked_errors.includes(err)) {
+      return;
     }
-    assert(!data.stack);
-    data.stack = err.stack;
+    tracked_errors.push(err);
   }
+
+  if (err) {
+    console.error(err);
+  } else {
+    console.error(name);
+  }
+
+  name = "[error][" + name + "]";
+
+  value = value || (err || {}).message;
+
+  const isCrossOrigin = value === "Script error." && !(err || {}).stack;
+
+  const noErrorInfos = !value || isCrossOrigin;
+
+  let _eventCategory: string;
+  if (noErrorInfos) {
+    _eventCategory = "[error][no_infos]";
+    value = "no_error_message";
+  }
+
+  const stack_info = await get_stack_info(err);
+  const data = stack_info;
 
   track_event({
     name,
     value,
     data,
+    _eventCategory,
   });
 
   if (IS_DEV) {
-    alert(name + "\n" + data.source_mapped_stack);
+    alert(name + "\n" + stack_info.stack__source_mapped);
   }
 }
+
+async function get_stack_info(err?: any) {
+  const stack_info: {
+    no_error_object?: boolean;
+    no_error_stack?: boolean;
+    err_obj?: string;
+    stack__source_mapped?: string;
+    stack__original?: string;
+    stack?: string;
+  } = {};
+  if (!err) {
+    stack_info.no_error_object = true;
+  } else if (!err.stack && !err.stack__processed) {
+    stack_info.no_error_stack = true;
+    stack_info.err_obj = JSON.stringify(err, Object.getOwnPropertyNames(err));
+  } else {
+    stack_info.stack__source_mapped = await get_source_mapped_stack(
+      err,
+      err.stack__processed || err.stack
+    );
+    if (err.stack__original) {
+      stack_info.stack__original = err.stack__original;
+    }
+    stack_info.stack = err.stack;
+  }
+  return stack_info;
+}
+
 interface TrackEvent {
   name: string;
   value?: string;
   data?: Object;
+  _eventCategory?: string;
   nonInteraction?: boolean;
 }
 async function track_event({
   name,
   value,
   data = {},
+  _eventCategory,
   nonInteraction = true,
 }: TrackEvent) {
   const eventLabel__obj = enhance_data(data, name, value);
   const eventLabel = serialize_data(eventLabel__obj);
   assert(eventLabel.startsWith("name:"));
 
+  const eventCategory = _eventCategory || name;
+
   let eventAction = name;
   if (value) eventAction += " - " + value;
-
-  let eventCategory = name;
-  if (value === NO_ERROR_MESSAGE) {
-    eventCategory = "[error][no_stack]";
-  }
 
   const args = { eventCategory, eventAction, nonInteraction };
 
@@ -244,8 +263,8 @@ function track_error_events() {
     if (!err.stack) {
       Object.assign(err, { filename, lineno, colno, noErrorObj: true });
     }
-    await send_error_event({
-      name: "[error][window.onerror]",
+    await track_error({
+      name: "window.onerror",
       err,
     });
   });
@@ -264,8 +283,8 @@ function track_error_events() {
         Object.assign(err, { filename, lineno, colno, noErrorObj: true });
       }
 
-      await send_error_event({
-        name: "[error][ErrorEvent]",
+      await track_error({
+        name: "ErrorEvent",
         err,
       });
     }),
@@ -280,8 +299,8 @@ function track_error_events() {
 
       const err = ev.reason;
 
-      await send_error_event({
-        name: "[error][unhandledrejection]",
+      await track_error({
+        name: "unhandledrejection",
         err,
       });
     })
