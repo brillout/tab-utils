@@ -11,6 +11,8 @@ export { track_event };
 export { track_error };
 export { track_dom_heart_beat_error };
 
+const DEPLOY_ID = "__DEPLOY";
+
 declare global {
   interface Window {
     ga: any;
@@ -173,7 +175,10 @@ async function track_event({
   const eventLabel = serialize_data(eventLabel__obj);
   assert(eventLabel.startsWith("name:"));
 
-  const eventCategory = _eventCategory || name;
+  let eventCategory = _eventCategory || name;
+  eventCategory = "[" + DEPLOY_ID + "]" + eventCategory;
+  // Ensure that the placeholder string gets replaced by a same-sized ID string (to preserve source mapping)
+  assert(DEPLOY_ID.length === 8);
 
   let eventAction = name;
   if (value) eventAction += " - " + value;
