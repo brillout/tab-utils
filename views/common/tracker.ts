@@ -5,13 +5,12 @@ import { get_tab_user_id } from "../../utils/TabUserId";
 import { get_browser_info } from "../../utils/get_browser_info";
 import throttle from "lodash.throttle";
 import { store } from "../../store";
+import { get_deploy_id } from "../../utils/get_deploy_id";
 
 export { load_google_analytics };
 export { track_event };
 export { track_error };
 export { track_dom_heart_beat_error };
-
-const DEPLOY_ID = "__DEPLOY";
 
 declare global {
   interface Window {
@@ -176,9 +175,7 @@ async function track_event({
   assert(eventLabel.startsWith("time:"));
 
   let eventCategory = _eventCategory || name;
-  eventCategory = "[" + DEPLOY_ID + "]" + eventCategory;
-  // Ensure that the placeholder string gets replaced by a same-sized ID string (to preserve source mapping)
-  assert(DEPLOY_ID.length === 8);
+  eventCategory = "[" + get_deploy_id() + "]" + eventCategory;
 
   let eventAction = name;
   if (value) eventAction += " - " + value;
