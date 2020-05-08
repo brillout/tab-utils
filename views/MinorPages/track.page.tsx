@@ -6,24 +6,29 @@ import { get_tab_user_id } from "../../utils/TabUserId";
 export default getPageConfig(
   () => (
     <>
-      <h2>Track Errors</h2>
-      <a id="errors" target="_blank">
-        Today
-      </a>
-      <h2>Track User</h2>
+      <p>
+        <a id="errors" target="_blank">
+          Errors Today
+        </a>
+        <br />
+        <a id="events" target="_blank">
+          Events Today
+        </a>
+      </p>
+      <h3>User</h3>
       <form>
         User ID: <input placeholder="User ID" type="text" />
         <br />
         <button type="submit">Last 7 days</button>
       </form>
-      <h2>Track Data</h2>
+      <h3>Track Data</h3>
       Depoy ID: <b id="deploy-id" />
       <br />
       User ID: <b id="my-id" />
     </>
   ),
   "Track",
-  { onPageLoad, noHeader: true }
+  { onPageLoad }
 );
 
 function onPageLoad() {
@@ -34,6 +39,10 @@ function onPageLoad() {
   document.querySelector("#my-id").textContent = my_id;
 
   (document.querySelector("a#errors") as HTMLAnchorElement).href = link_errors(
+    deploy_id
+  );
+
+  (document.querySelector("a#events") as HTMLAnchorElement).href = link_events(
     deploy_id
   );
 
@@ -49,24 +58,29 @@ function onPageLoad() {
   }
 }
 
+function link_events(deploy_id: string) {
+  return google_analytics_link("eventCategory", 0, deploy_id);
+}
+
 function link_errors(deploy_id: string) {
-  return (
-    "https://analytics.google.com/analytics/web/#/report/content-event-events/a5263303w24659375p23108560/" +
-    `_u.date00=${get_date_string(0)}&` +
-    `_u.date01=${get_date_string(0)}&` +
-    "explorer-segmentExplorer.segmentId=analytics.eventCategory&" +
-    `explorer-table.filter=${deploy_id}%5D%5Berror&` +
-    "explorer-table.plotKeys=%5B%5D&explorer-table.rowStart=0&explorer-table.rowCount=100/"
-  );
+  return google_analytics_link("eventCategory", 0, deploy_id + "%5D%5Berror");
 }
 
 function link_user(user_id: string) {
+  return google_analytics_link("eventLabel", 7, user_id);
+}
+
+function google_analytics_link(
+  segmentId: string,
+  days_ago: number,
+  filter?: string
+) {
   return (
     "https://analytics.google.com/analytics/web/#/report/content-event-events/a5263303w24659375p23108560/" +
-    `_u.date00=${get_date_string(7)}&` +
+    `_u.date00=${get_date_string(days_ago)}&` +
     `_u.date01=${get_date_string(0)}&` +
-    "explorer-segmentExplorer.segmentId=analytics.eventLabel&" +
-    `explorer-table.filter=${user_id}&` +
+    `explorer-segmentExplorer.segmentId=analytics.${segmentId}&` +
+    `explorer-table.filter=${filter}&` +
     "explorer-table.plotKeys=%5B%5D&explorer-table.rowStart=0&explorer-table.rowCount=100/"
   );
 }
