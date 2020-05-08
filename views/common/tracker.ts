@@ -113,6 +113,9 @@ async function track_error({
     if (is_browser_extension_error(err)) {
       _eventCategory = "[browser-extension-error]";
     }
+    if (is_whitelist_error(err)) {
+      _eventCategory = "[whitelist-error]";
+    }
   }
 
   value = value || (err || {}).message;
@@ -180,7 +183,6 @@ function is_cross_origin_error(err: any) {
 
   return false;
 }
-
 function is_browser_extension_error(err: any) {
   if (!err || !err.stack || !err.stack.includes) {
     return false;
@@ -193,6 +195,24 @@ function is_browser_extension_error(err: any) {
 
   // I've seen such browser extension errors for Chrome and Safari but not for other browsers (yet?)
   return err.stack.includes(browser_name.toLowerCase() + "-extension://");
+}
+function is_whitelist_error(err: any) {
+  if (!err) {
+    return false;
+  }
+
+  const browser_name = get_browser_name();
+
+  // https://stackoverflow.com/questions/49384120/resizeobserver-loop-limit-exceeded
+  if (
+    browser_name === "Chrome" &&
+    !err.stack &&
+    err.message === "ResizeObserver loop limit exceeded"
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 interface TrackEvent {
