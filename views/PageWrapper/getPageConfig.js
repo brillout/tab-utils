@@ -8,7 +8,7 @@ export { getPageConfig };
 function getPageConfig(
   View,
   header,
-  { route, onPageLoad, noHeader, ...pageConfig } = {}
+  { route = null, onPageLoad, noHeader = false, ...pageConfig } = {}
 ) {
   route = route || "/" + header.toLowerCase().split(" ").join("-");
   const title = header + " - " + tab_app_name;
