@@ -123,13 +123,16 @@ function init() {
 }
 
 function load_ads(AD_SLOTS) {
-  assert(AD_SLOTS.length > 0);
-
   if (dont_show_ads()) {
     return;
   }
 
   show_ads();
+
+  if (AD_SLOTS.length === 0) {
+    return;
+  }
+
   load_and_apply_ads(AD_SLOTS);
 }
 function remove_ads() {
@@ -137,6 +140,7 @@ function remove_ads() {
 }
 
 function load_and_apply_ads(AD_SLOTS) {
+  assert(AD_SLOTS.length > 0);
   loadAdsByGoogle(AD_SLOTS);
 }
 

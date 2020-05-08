@@ -24,7 +24,6 @@
 }
 
 #fv_left-side {
-  width: 200px;
   flex-grow: 0;
   flex-shrink: 0;
 }

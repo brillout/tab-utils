@@ -10,8 +10,20 @@
   height: 600px;
 }
 
-html:not(.show-ads) #fv_left-side {
-  display: none;
+html {
+  --hide-left-ad: 0;
+}
+html:not(.show-ads) {
+  --hide-left-ad: 1;
+}
+
+#fv_left-side {
+  --width: 200px;
+  width: var(--width);
+
+  --margin-left: calc(var(--hide-left-ad) * -1 * var(--width));
+  margin-left: var(--margin-left);
+  transition: margin-left 0.7s ease-in-out;
 }
 
 a.donate-remover-2 {
@@ -37,7 +49,7 @@ a.donate-remover-2 {
   .vertical-slot {
     display: none !important;
   }
-  #fv_left-side {
-    display: none !important;
+  html {
+    --hide-left-ad: 1;
   }
 }

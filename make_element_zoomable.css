@@ -7,15 +7,13 @@
     scale(var(--scale));
 }
 
-/*
 .zoomed-state .zooming__overflow-container,
 .zooming__overflow-container.zoom-transition {
   overflow: hidden !important;
+  /* I don't know why but 100% doesn't work for TT */
   height: 100vh !important;
-  width: 100vw !important;
-  background: red;
+  width: 100% !important;
 }
-*/
 
 .zooming__zoomable-element {
   cursor: pointer;
