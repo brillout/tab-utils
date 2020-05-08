@@ -1,6 +1,7 @@
 import Bowser from "bowser";
 
 export { get_browser_info };
+export { get_browser_name };
 
 function get_browser_info(): string {
   const spec = get_system_spec();
@@ -11,6 +12,11 @@ function get_browser_info(): string {
     browser_info += " " + os_version;
   }
   return browser_info;
+}
+
+function get_browser_name(): string {
+  const spec = get_system_spec();
+  return spec.browser.name;
 }
 
 function get_system_spec() {

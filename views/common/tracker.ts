@@ -2,7 +2,10 @@ import assert from "@brillout/assert";
 import { tab_app_google_analytics_id } from "../../../tab_app_info";
 import StackTrace from "stacktrace-js";
 import { get_tab_user_id } from "../../utils/TabUserId";
-import { get_browser_info } from "../../utils/get_browser_info";
+import {
+  get_browser_info,
+  get_browser_name,
+} from "../../utils/get_browser_info";
 import throttle from "lodash.throttle";
 import { store } from "../../store";
 import { get_deploy_id } from "../../utils/get_deploy_id";
@@ -110,8 +113,10 @@ async function track_error({
 
   let _eventCategory: string;
   if (noErrorInfos) {
-    _eventCategory = "[error][no_infos]";
-    value = "no_error_message";
+    _eventCategory = "[cross-origin-error]";
+  }
+  if (is_browser_extension_error(err)) {
+    _eventCategory = "[browser-extension-error]";
   }
 
   const stack_info = await get_stack_info(err);
@@ -154,6 +159,20 @@ async function get_stack_info(err?: any) {
     stack_info.stack = err.stack;
   }
   return stack_info;
+}
+
+function is_browser_extension_error(err: any) {
+  if (!err || !err.stack || !err.stack.includes) {
+    return false;
+  }
+
+  const browser_name = get_browser_name();
+  if (!browser_name) {
+    return false;
+  }
+
+  // I've seen such browser extension errors for Chrome and Safari but not for other browsers (yet?)
+  return err.stack.includes(browser_name.toLowerCase() + "-extension://");
 }
 
 interface TrackEvent {
