@@ -173,7 +173,7 @@ async function track_event({
 }: TrackEvent) {
   const eventLabel__obj = enhance_data(data, name, value);
   const eventLabel = serialize_data(eventLabel__obj);
-  assert(eventLabel.startsWith("name:"));
+  assert(eventLabel.startsWith("time:"));
 
   let eventCategory = _eventCategory || name;
   eventCategory = "[" + DEPLOY_ID + "]" + eventCategory;
@@ -199,21 +199,15 @@ function enhance_data(data: Object, name: string, value: string): Object {
   const screen = get_window_screen_sizes();
   const time = get_time_string();
   const data_enhanced = {
-    name,
-    browser,
     time,
+    name,
+    ...(value ? { value } : {}),
+    ...(data || {}),
+    browser,
     tab_user_id,
     url,
     screen,
   };
-  if (value) {
-    // @ts-ignore
-    data_enhanced.value = value;
-  }
-  Object.entries(data).forEach(([key, val]) => {
-    assert(!(key in data_enhanced));
-    data_enhanced[key] = val;
-  });
   return data_enhanced;
 }
 function serialize_data(data: Object) {
