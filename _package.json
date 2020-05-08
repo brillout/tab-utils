@@ -10,7 +10,7 @@
     "prod:build:link": "(cd .build/browser/ && mv tab-utils/ tab-utils-moved/ && ln -s tab-utils-moved/ tab-utils)",
     "prod:build:clean": "rm -rf .build/",
     "prod:build:static": "mkdir -p .build/browser/ && cp -r static/* tab-utils/static/* .build/browser/",
-    "prod:build:deployId": "(cd .build/browser/ && grep __DEPLOY -rl | xargs sed -i \"s/__DEPLOY/$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)/\")",
+    "prod:build:deployId": "(cd .build/browser/ && grep __DEPLOY -rl | xargs sed -i \"s/__DEPLOY/$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)/g\")",
     "prod:deploy": "push-dir --dir=.build/browser/ --branch=gh-pages --cleanup",
     "prod:serve": "serve .build/browser/ --listen 3000"
   },
