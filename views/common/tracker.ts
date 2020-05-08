@@ -248,6 +248,13 @@ function setup_ga() {
   DEBUG && console.log("[GA] Initialized with " + ga_id);
 }
 
+async function track_err_event(eventSource: string, err: any) {
+  if (err.stack__processed) {
+    eventSource = "assert";
+  }
+  await track_error({ name: "[" + eventSource + "]", err });
+}
+
 // https://stackoverflow.com/questions/12571650/catching-all-javascript-unhandled-exceptions/49560222#49560222
 function track_error_events() {
   window.onerror = infinite_loop_cacher(async function (...args_list) {
@@ -259,10 +266,7 @@ function track_error_events() {
     if (!err.stack) {
       Object.assign(err, { filename, lineno, colno, noErrorObj: true });
     }
-    await track_error({
-      name: "[window.onerror]",
-      err,
-    });
+    await track_err_event("window.onerror", err);
   });
 
   window.addEventListener(
@@ -279,10 +283,7 @@ function track_error_events() {
         Object.assign(err, { filename, lineno, colno, noErrorObj: true });
       }
 
-      await track_error({
-        name: "[ErrorEvent]",
-        err,
-      });
+      await track_err_event("ErrorEvent", err);
     }),
     // @ts-ignore
     { useCapture: true, passive: false }
@@ -295,10 +296,7 @@ function track_error_events() {
 
       const err = ev.reason;
 
-      await track_error({
-        name: "[unhandledrejection]",
-        err,
-      });
+      await track_err_event("unhandledrejection", err);
     })
   );
 }
