@@ -105,19 +105,17 @@ async function track_error({
 
   name = "[error]" + name;
 
-  value = value || (err || {}).message;
-
-  const isCrossOrigin = value === "Script error." && !(err || {}).stack;
-
-  const noErrorInfos = !value || isCrossOrigin;
-
   let _eventCategory: string;
-  if (noErrorInfos) {
-    _eventCategory = "[cross-origin-error]";
+  if (!value) {
+    if (is_cross_origin_error(err)) {
+      _eventCategory = "[cross-origin-error]";
+    }
+    if (is_browser_extension_error(err)) {
+      _eventCategory = "[browser-extension-error]";
+    }
   }
-  if (is_browser_extension_error(err)) {
-    _eventCategory = "[browser-extension-error]";
-  }
+
+  value = value || (err || {}).message;
 
   const stack_info = await get_stack_info(err);
   const data = stack_info;
@@ -159,6 +157,28 @@ async function get_stack_info(err?: any) {
     stack_info.stack = err.stack;
   }
   return stack_info;
+}
+
+function is_cross_origin_error(err: any) {
+  if (!err) {
+    return false;
+  }
+  if (!err.stack && err.message === "Script error.") {
+    return true;
+  }
+
+  // I'm not sure if this is really a cross origin error.
+  // Maybe it's a browser extension that erroneously loads HTML with a script tag.
+  if (
+    [
+      "SyntaxError: Unexpected token '<'",
+      "SyntaxError: Unexpected token <",
+    ].includes(err.stack)
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 function is_browser_extension_error(err: any) {
