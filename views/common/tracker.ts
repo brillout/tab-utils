@@ -33,7 +33,7 @@ const IS_DEV =
 init();
 
 let already_loaded = false;
-async function load_google_analytics() {
+function load_google_analytics() {
   if (already_loaded) return;
   already_loaded = true;
   load_script("//www.google-analytics.com/analytics.js");
@@ -70,6 +70,7 @@ function track_user_clicks() {
         data,
       });
     },
+    // Make sure that request to Google Analytics is sent before page navigates to advertisement
     { passive: false }
   );
 }
@@ -222,7 +223,7 @@ interface TrackEvent {
   _eventCategory?: string;
   nonInteraction?: boolean;
 }
-async function track_event({
+function track_event({
   name,
   value,
   data = {},
