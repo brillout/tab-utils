@@ -97,6 +97,6 @@ function get_date_string(days_ago: number): string {
   return date_string;
 
   function prettify(n: number): string {
-    return (n < 9 ? "0" : "") + n;
+    return (n <= 9 ? "0" : "") + n;
   }
 }

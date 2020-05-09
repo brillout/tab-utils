@@ -479,6 +479,6 @@ function get_time_string(): string {
   return time_string;
 
   function prettify(n: number): string {
-    return (n < 9 ? "0" : "") + n;
+    return (n <= 9 ? "0" : "") + n;
   }
 }
