@@ -14,6 +14,7 @@ export { load_google_analytics };
 export { track_event };
 export { track_error };
 export { track_dom_heart_beat_error };
+export { get_user_visits };
 
 declare global {
   interface Window {
@@ -21,7 +22,7 @@ declare global {
   }
 }
 
-//*/
+/*/
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -509,15 +510,21 @@ function track_session_duration(
 }
 
 function track_visits() {
-  const USER_VISITS = "user_visits";
-  const user_visits = store.get_val(USER_VISITS) || [];
+  const user_visits = get_user_visits();
   assert(
     user_visits.constructor === Array &&
       user_visits.every((v: Date) => v && v.constructor === Date),
     { user_visits }
   );
   user_visits.push(new Date());
-  store.set_val(USER_VISITS, user_visits);
+  store.set_val(USER_VISITS(), user_visits);
+}
+function get_user_visits() {
+  const user_visits = store.get_val(USER_VISITS()) || [];
+  return user_visits;
+}
+function USER_VISITS() {
+  return "user_visits";
 }
 
 function get_time_string(): string {
