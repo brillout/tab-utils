@@ -50,22 +50,32 @@ function track_user_clicks() {
       const target_href = target.href;
       const target_value = target.value;
       const target_textContent = target.textContent.slice(0, 100);
+
+      const click_name = get_click_name(target);
+
       const value =
+        click_name ||
         target_id ||
         target_class ||
         target_href ||
         target_value ||
         target_textContent ||
         "null";
+
       const data = {
+        click_name,
         target_id,
         target_class,
         target_href,
         target_value,
         target_textContent,
       };
+
+      let name = "[click]";
+      if (click_name) name += click_name;
+
       track_event({
-        name: "user_click",
+        name,
         value,
         data,
       });
@@ -73,6 +83,17 @@ function track_user_clicks() {
     // Make sure that request to Google Analytics is sent before page navigates to advertisement
     { passive: false }
   );
+
+  function get_click_name(el: Node) {
+    while (true) {
+      if ("getAttribute" in el) {
+        const click_name = (el as HTMLElement).getAttribute("click-name");
+        if (click_name) return click_name;
+      }
+      el = el.parentNode;
+      if (!el) return null;
+    }
+  }
 }
 
 function track_page_view() {

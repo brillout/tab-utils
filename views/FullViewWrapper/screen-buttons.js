@@ -51,7 +51,7 @@ function activate_auto_scroll({ do_scroll }) {
   const active_class = "auto-scroll-is-active";
 
   addScrollListener(scrollListener, {
-    onlyUserScroll: true,
+    onlyUserScroll: false,
     fireInitialScroll: false,
   });
   start_auto_scroll();

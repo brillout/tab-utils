@@ -14,18 +14,25 @@ export { Ad_left };
 
 init();
 
-function Ad_left({ ad_slots }) {
-  const slot_id = get_slot_id("LEFT_AD", ad_slots);
-  if (slot_id === null) return null;
+function Ad_left({ ad_slots, custom_ad }) {
+  const content = get_content();
+  if (!content) return null;
   return (
     <LeftSide style={{ backgroundColor: "#3e3e3e" }}>
       <AdHeader />
-      <div className="vertical-slot-wrapper">
-        <AdSenseAd slot_id={slot_id} className="vertical-slot" />
-      </div>
+      <div className="vertical-slot-wrapper">{content}</div>
       <AdRemovalButton style={{ marginTop: 45 }} />
     </LeftSide>
   );
+
+  function get_content() {
+    if (custom_ad) {
+      return custom_ad;
+    }
+    const slot_id = get_slot_id("LEFT_AD", ad_slots);
+    if (slot_id === null) return null;
+    return <AdSenseAd slot_id={slot_id} className="vertical-slot" />;
+  }
 }
 
 function AdHeader() {
