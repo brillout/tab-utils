@@ -138,13 +138,16 @@ async function load_image(
 
 function apply_color(color_code: ColorVal) {
   color_code = color_code || "transparent";
-  BG_EL.style.backgroundColor = color_code;
+  if (BG_EL.style.backgroundColor !== color_code) {
+    BG_EL.style.backgroundColor = color_code;
+  }
 }
 
 function apply_image(bg_img_val: BgImgVal) {
   bg_img_val = bg_img_val || "none";
-  BG_EL.style.backgroundImage = bg_img_val;
-  BG_EL.style.backgroundSize = "cover";
+  if (BG_EL.style.backgroundImage !== bg_img_val) {
+    BG_EL.style.backgroundImage = bg_img_val;
+  }
 }
 
 let BG_EL: HTMLElement;
@@ -164,6 +167,7 @@ function init(bg_container_id: string) {
   el1.id = "background-area-wrapper";
   const el2 = document.createElement("div");
   el2.id = "background-area";
+  el2.style.backgroundSize = "cover";
   el1.prepend(el2);
   bg_container.prepend(el1);
 
