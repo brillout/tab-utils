@@ -58,6 +58,7 @@ function AdRemovalButton(props) {
   return (
     <a
       className="donate-remover-2 glass-background glass-background-button"
+      click-name="donate-button"
       href="/donate"
       target="_blank"
       {...props}

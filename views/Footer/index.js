@@ -73,7 +73,7 @@ function Header({ children }) {
   );
 }
 
-function Link({ ...props }) {
+function Link(props) {
   return (
     <a
       style={{
@@ -81,6 +81,7 @@ function Link({ ...props }) {
         textDecoration: "none",
         color: "inherit",
       }}
+      click-name={"footer-link-" + props.href}
       {...props}
     />
   );

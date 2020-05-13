@@ -27,6 +27,7 @@ function FullView(props) {
         <div id="screen-buttons-wrapper">
           <div
             id="fullscreen-button"
+            click-name="fullscreen-button"
             className="screen-button glass-background glass-background-button"
           >
             <span className="button-icon"></span>
@@ -35,6 +36,7 @@ function FullView(props) {
           <br />
           <div
             id="center-button"
+            click-name="center-button"
             className="screen-button glass-background glass-background-button"
           >
             <span className="button-icon"></span>
@@ -48,7 +50,7 @@ function FullView(props) {
 
 function LeftSide(props) {
   assert(!props.id);
-  return <div id="fv_left-side" {...props} />;
+  return <div id="fv_left-side" {...props} click-name="fv_left-side" />;
 }
 
 function RightSide(props) {

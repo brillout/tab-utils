@@ -10,7 +10,7 @@ export default Header;
 
 function Header() {
   return (
-    <div id="header-container" className="glass-background">
+    <div id="header-container" className="glass-background" click-name="header">
       <div id="header-content">
         <Logo />
         {tab_app_header_links.map(
@@ -27,7 +27,7 @@ function Header() {
 
 function Logo() {
   return (
-    <a id="header-logo" href="/">
+    <a id="header-logo" href="/" click-name="header-logo">
       <img src={tab_app_logo} />
       <h1>{tab_app_name}</h1>
     </a>
@@ -35,5 +35,11 @@ function Logo() {
 }
 
 function Link(props) {
-  return <a className="header-link" {...props}></a>;
+  return (
+    <a
+      className="header-link"
+      click-name={"header-link-" + props.href}
+      {...props}
+    ></a>
+  );
 }
