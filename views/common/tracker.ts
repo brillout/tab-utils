@@ -45,21 +45,24 @@ function track_user_clicks() {
     "click",
     (ev) => {
       const target: any = ev.target;
+      const target_tagName = target.tagName;
       const target_id = target.id;
       const target_class = target.getAttribute("class");
       const target_href = target.href;
+      const target_src = target.src;
       const target_value = target.value;
       const target_textContent = target.textContent.slice(0, 100);
 
       const click_name = get_click_name(target);
 
       const value =
-        click_name ||
         target_id ||
         target_class ||
         target_href ||
+        target_src ||
         target_value ||
         target_textContent ||
+        target_tagName ||
         "null";
 
       const data = {
@@ -67,8 +70,10 @@ function track_user_clicks() {
         target_id,
         target_class,
         target_href,
+        target_src,
         target_value,
         target_textContent,
+        target_tagName,
       };
 
       let name = "[click]";
