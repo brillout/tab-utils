@@ -133,7 +133,9 @@ function load_ads(AD_SLOTS) {
     return;
   }
 
-  show_ads();
+  setTimeout(() => {
+    show_ads();
+  }, 1000);
 
   if (AD_SLOTS.length === 0) {
     return;
