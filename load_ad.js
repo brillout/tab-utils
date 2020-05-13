@@ -65,8 +65,6 @@ function AdRemovalButton(props) {
     >
       <span>
         Donate &<br />
-        Permanantly
-        <br />
         Remove ads
       </span>
     </a>
