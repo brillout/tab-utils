@@ -22,7 +22,7 @@ declare global {
   }
 }
 
-//*/
+/*/
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -301,7 +301,7 @@ function init() {
   track_page_view();
   track_user_clicks();
   track_error_events();
-  track_local_storage();
+  track_storage();
   track_session_duration();
   track_visits();
   track_number_of_visits();
@@ -443,7 +443,7 @@ function get_window_screen_sizes(): string {
   );
 }
 
-function track_local_storage() {
+function track_storage() {
   const store_listener = throttle((key, val) => {
     track_event({
       name: "storage_change",
@@ -518,7 +518,7 @@ function track_visits() {
     { user_visits }
   );
   user_visits.push(new Date());
-  store.set_val(USER_VISITS(), user_visits);
+  store.set_val(USER_VISITS(), user_visits, { is_passive: true });
 }
 function get_user_visits() {
   const user_visits = store.get_val(USER_VISITS()) || [];

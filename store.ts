@@ -16,13 +16,15 @@ class KeyValueStore {
     val = make_copy(val);
     return val;
   }
-  set_val(key: string, val: any) {
+  set_val(key: string, val: any, { is_passive = false } = {}) {
     assert_key(key);
     this.ensure_store();
     val = make_copy(val);
     this.#store_data[key] = val;
     this.save_store();
-    this.#listeners.forEach((listener) => listener(key, val));
+    if (!is_passive) {
+      this.#listeners.forEach((listener) => listener(key, val));
+    }
   }
 
   #listeners: Function[] = [];
