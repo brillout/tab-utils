@@ -32,14 +32,6 @@ const IS_DEV =
 
 init();
 
-let already_loaded = false;
-function load_google_analytics() {
-  if (already_loaded) return;
-  already_loaded = true;
-  load_script("//www.google-analytics.com/analytics.js");
-  DEBUG && console.log("[GA] ga code loaded");
-}
-
 function track_user_clicks() {
   window.addEventListener(
     "click",
@@ -107,7 +99,7 @@ function track_page_view() {
   DEBUG && console.log("[GA] page view");
 }
 
-const tracked_errors = [];
+var tracked_errors: any[];
 async function track_error({
   name,
   err,
@@ -117,6 +109,7 @@ async function track_error({
   err?: any;
   value?: string;
 }) {
+  tracked_errors = tracked_errors || [];
   if (err) {
     if (tracked_errors.includes(err)) {
       return;
@@ -308,7 +301,7 @@ function init() {
   track_user_clicks();
   track_error_events();
   track_local_storage();
-  track_bounce_state();
+  track_session_duration();
 }
 
 function setup_ga() {
@@ -477,7 +470,7 @@ function track_local_storage() {
 }
 
 let dom_heart_beat_error_already_catched = false;
-function track_dom_heart_beat_error(dom_heart_beat) {
+function track_dom_heart_beat_error(dom_heart_beat: () => {}) {
   try {
     dom_heart_beat();
   } catch (err) {
@@ -490,11 +483,28 @@ function track_dom_heart_beat_error(dom_heart_beat) {
   }
 }
 
-function track_bounce_state() {
+function track_session_duration(
+  minutes_so_far: number = 0,
+  minutes_until_next_track_event: number = 5
+) {
+  assert(
+    [0, 5, 10, 20, 30, 40, 50, 60, 2 * 60, 3 * 160].includes(minutes_so_far) ||
+      (minutes_so_far > 3 * 160 && Number.isInteger(minutes_so_far / 60)),
+    { minutes_so_far }
+  );
   const ONE_MINUTE = 60 * 1000;
   setTimeout(() => {
-    track_event({ name: "five_minute_stay", nonInteraction: false });
-  }, 5 * ONE_MINUTE);
+    minutes_so_far = minutes_so_far + minutes_until_next_track_event;
+    track_event({
+      name: "[session-duration]",
+      value: minutes_so_far.toString(),
+      nonInteraction: false,
+    });
+    track_session_duration(
+      minutes_so_far,
+      (minutes_so_far === 5 && 5) || (minutes_so_far < 60 && 10) || 60
+    );
+  }, minutes_until_next_track_event * ONE_MINUTE);
 }
 
 function get_time_string(): string {
@@ -508,4 +518,12 @@ function get_time_string(): string {
   function prettify(n: number): string {
     return (n <= 9 ? "0" : "") + n;
   }
+}
+
+var already_loaded: boolean;
+function load_google_analytics() {
+  if (already_loaded) return;
+  already_loaded = true;
+  load_script("//www.google-analytics.com/analytics.js");
+  DEBUG && console.log("[GA] ga code loaded");
 }
