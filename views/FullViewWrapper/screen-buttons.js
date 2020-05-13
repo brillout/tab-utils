@@ -113,8 +113,8 @@ function activate_auto_scroll({ do_scroll }) {
     }
   }
 
-  function scrollListener(scrollPos) {
-    if (document.fullscreenElement) {
+  function scrollListener(scrollPos, { is_user_scroll }) {
+    if (is_user_scroll && document.fullscreenElement) {
       document.exitFullscreen();
     }
 

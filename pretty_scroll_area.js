@@ -112,7 +112,7 @@ function add_global_scroll_listener() {
         if (scrollListener.onlyUserScroll && isAutoScrolling) {
           return;
         }
-        scrollListener(scroll_pos);
+        scrollListener(scroll_pos, { is_user_scroll: !isAutoScrolling });
       });
     },
     { passive: true }
