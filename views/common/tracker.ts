@@ -22,7 +22,7 @@ declare global {
   }
 }
 
-/*/
+//*/
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -304,6 +304,7 @@ function init() {
   track_local_storage();
   track_session_duration();
   track_visits();
+  track_number_of_visits();
 }
 
 function setup_ga() {
@@ -525,6 +526,15 @@ function get_user_visits() {
 }
 function USER_VISITS() {
   return "user_visits";
+}
+
+function track_number_of_visits() {
+  const user_visits = get_user_visits();
+  const number_of_visits = user_visits.length;
+  const number_of_visits__pretty =
+    (number_of_visits < 10 && number_of_visits) ||
+    ((number_of_visits / 10) | 0) + "x";
+  track_event({ name: "number_of_visits", value: number_of_visits__pretty });
 }
 
 function get_time_string(): string {
