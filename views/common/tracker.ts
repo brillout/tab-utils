@@ -21,7 +21,7 @@ declare global {
   }
 }
 
-/*/
+//*/
 const DEBUG = true;
 /*/
 const DEBUG = false;
@@ -302,6 +302,7 @@ function init() {
   track_error_events();
   track_local_storage();
   track_session_duration();
+  track_visits();
 }
 
 function setup_ga() {
@@ -505,6 +506,18 @@ function track_session_duration(
       (minutes_so_far === 5 && 5) || (minutes_so_far < 60 && 10) || 60
     );
   }, minutes_until_next_track_event * ONE_MINUTE);
+}
+
+function track_visits() {
+  const USER_VISITS = "user_visits";
+  const user_visits = store.get_val(USER_VISITS) || [];
+  assert(
+    user_visits.constructor === Array &&
+      user_visits.every((v: Date) => v && v.constructor === Date),
+    { user_visits }
+  );
+  user_visits.push(new Date());
+  store.set_val(USER_VISITS, user_visits);
 }
 
 function get_time_string(): string {
