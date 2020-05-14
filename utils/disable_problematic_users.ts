@@ -49,7 +49,7 @@ function disable_if_aggressive_autoreload_user() {
   const in_24_hours_ago = new Date(
     new Date().getTime() - 24 * 60 * 60 * 1000
   ).getTime();
-  const LIMIT = 30;
+  const LIMIT = 15;
   if (
     user_visits.length > LIMIT &&
     user_visits

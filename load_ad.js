@@ -154,7 +154,7 @@ function load_custom_banner(AD_SLOTS) {
   const left_slot = document.querySelector("#left-slot");
   assert(left_slot, "couldn't find left_slot");
 
-  left_slot.className.add("custom-banner");
+  left_slot.classList.add("custom-banner");
 
   const vertical_slot_wrapper = left_slot.querySelector(
     ".vertical-slot-wrapper"
