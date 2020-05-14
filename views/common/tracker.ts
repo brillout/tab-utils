@@ -22,10 +22,10 @@ declare global {
   }
 }
 
+//*/
+const DEBUG = false;
 /*/
 const DEBUG = true;
-/*/
-const DEBUG = false;
 //*/
 
 const IS_DEV =
@@ -305,6 +305,7 @@ function init() {
   track_session_duration();
   track_visits();
   track_number_of_visits();
+  track_geolocation();
 }
 
 function setup_ga() {
@@ -537,6 +538,25 @@ function track_number_of_visits() {
   track_event({ name: "number_of_visits", value: number_of_visits__pretty });
 }
 
+function track_geolocation() {
+  const langs: string[] = unique([
+    window.navigator.language,
+    ...(window.navigator.languages || []),
+  ]);
+  let timeZone: string;
+  try {
+    timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch (err) {
+    timeZone = "timeZone_not_available";
+  }
+  langs.push(timeZone);
+
+  const name = "[lang]" + langs[0];
+  const value = langs.join(", ");
+
+  track_event({ name, value });
+}
+
 function get_time_string(): string {
   const d = new Date();
   const time_string =
@@ -556,4 +576,8 @@ function load_google_analytics() {
   already_loaded = true;
   load_script("//www.google-analytics.com/analytics.js");
   DEBUG && console.log("[GA] ga code loaded");
+}
+
+function unique<T>(arr: T[]): T[] {
+  return Array.from(new Set(arr));
 }

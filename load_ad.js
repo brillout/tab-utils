@@ -6,6 +6,7 @@ import remove_hash from "./private/remove_hash";
 import { store } from "./store";
 import { LeftSide } from "./views/FullViewWrapper";
 import { track_event } from "./views/common/tracker";
+import { get_browser_name } from "./utils/get_browser_info";
 
 export { load_ads };
 export { remove_ads };
@@ -137,19 +138,10 @@ function load_ads(AD_SLOTS) {
     show_ads();
   }, 1000);
 
-  if (AD_SLOTS.length === 0) {
-    return;
-  }
-
-  load_and_apply_ads(AD_SLOTS);
+  load_and_apply_adsense(AD_SLOTS);
 }
 function remove_ads() {
   hide_ads();
-}
-
-function load_and_apply_ads(AD_SLOTS) {
-  assert(AD_SLOTS.length > 0);
-  loadAdsByGoogle(AD_SLOTS);
 }
 
 /*
@@ -159,7 +151,13 @@ declare global {
   }
 }
 */
-function loadAdsByGoogle(AD_SLOTS) {
+function load_and_apply_adsense(AD_SLOTS) {
+  /*
+  if (AD_SLOTS.length === 0) {
+    return;
+  }
+  */
+
   load_script(
     "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
     () => {
@@ -190,10 +188,6 @@ function user_donated() {
   _user_donated = check_donation();
   assert([true, false].includes(_user_donated));
 
-  if (_user_donated) {
-    track_event({ name: "[ad]ad_remove_donation" });
-  }
-
   return _user_donated;
 
   function check_donation() {
@@ -217,10 +211,63 @@ function user_donated() {
   }
 }
 
+var _dont_show_ads;
 function dont_show_ads() {
-  const donation = user_donated();
-  const ad_blocker = ad_blocker_exists();
-  return donation || ad_blocker;
+  if (_dont_show_ads !== undefined) {
+    return _dont_show_ads;
+  }
+
+  const hide_reason =
+    (user_donated() && "user_has_donated") ||
+    (ad_blocker_exists() && "ad_blocker_detected") ||
+    (is_small_screen() && "screen_too_small") ||
+    (is_fringe_browser() && "fringe_browser");
+
+  _dont_show_ads = !!hide_reason;
+
+  if (hide_reason) {
+    let value;
+    if (hide_reason === "fringe_browser") {
+      value = get_browser_name();
+    }
+    if (hide_reason === "screen_too_small") {
+      value = JSON.stringify(get_screen_size());
+    }
+    track_event({ name: "[ad]hidden__" + hide_reason, value });
+  }
+
+  return _dont_show_ads;
+}
+
+function is_small_screen() {
+  const { width } = get_screen_size();
+  // Same as CSS media query
+  return width <= 700;
+}
+
+function get_screen_size() {
+  const { width, height } = window.screen;
+  assert(
+    Number.isInteger(width) &&
+      width > 0 &&
+      Number.isInteger(height) &&
+      height > 0,
+    { width, height }
+  );
+  return { width, height };
+}
+
+function is_fringe_browser() {
+  const browser_name = get_browser_name();
+  return ![
+    "chrome",
+    "chromium",
+    "safari",
+    "firefox",
+    "internet explorer",
+    "opera",
+    "edge",
+  ].includes(browser_name.toLowerCase());
 }
 
 var _ad_blocker_is_installed;
@@ -246,10 +293,6 @@ function ad_blocker_exists() {
   document.body.appendChild(ad_blocker_test);
   _ad_blocker_is_installed = ad_blocker_test.offsetHeight === 0;
   document.body.removeChild(ad_blocker_test);
-
-  if (_ad_blocker_is_installed) {
-    track_event({ name: "[ad]ad_blocker_detected" });
-  }
 
   return _ad_blocker_is_installed;
 }
