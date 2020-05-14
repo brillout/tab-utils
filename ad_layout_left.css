@@ -46,10 +46,21 @@ a.donate-remover-2 {
 }
 
 @media (max-width: 700px) {
-  .vertical-slot {
+  .adsbygoogle.vertical-slot {
     display: none !important;
   }
   html {
     --hide-left-ad: 1;
   }
+}
+
+.custom-banner .vertical-slot-wrapper,
+.custom-banner #custom-banner {
+  height: 497px !important;
+}
+.custom-banner .donate-remover-2 {
+  margin-top: 30px !important;
+}
+.custom-banner #custom-banner {
+  cursor: pointer;
 }

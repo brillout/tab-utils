@@ -4,36 +4,25 @@ import React from "react";
 import assert from "@brillout/assert";
 import remove_hash from "./private/remove_hash";
 import { store } from "./store";
-import { LeftSide } from "./views/FullViewWrapper";
 import { track_event } from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
 
 export { load_ads };
-export { remove_ads };
 export { Ad_ATF, Ad_BTF };
 export { Ad_left };
 
-init();
-
-function Ad_left({ ad_slots, custom_ad }) {
-  const content = get_content();
-  if (!content) return null;
+function Ad_left({ ad_slots }) {
+  const slot_id = get_adsense_slot_id("LEFT_AD", ad_slots);
+  if (slot_id === null) return null;
   return (
-    <LeftSide style={{ backgroundColor: "#3e3e3e" }}>
+    <div id="left-slot">
       <AdHeader />
-      <div className="vertical-slot-wrapper">{content}</div>
+      <div className="vertical-slot-wrapper">
+        <AdSenseAd slot_id={slot_id} className="vertical-slot" />;
+      </div>
       <AdRemovalButton style={{ marginTop: 45 }} />
-    </LeftSide>
+    </div>
   );
-
-  function get_content() {
-    if (custom_ad) {
-      return custom_ad;
-    }
-    const slot_id = get_slot_id("LEFT_AD", ad_slots);
-    if (slot_id === null) return null;
-    return <AdSenseAd slot_id={slot_id} className="vertical-slot" />;
-  }
 }
 
 function AdHeader() {
@@ -81,7 +70,7 @@ function Ad_BTF({ ad_slots }) {
 
 function AdView({ ad_slots, slot_name }) {
   assert(["ATF", "BTF"].includes(slot_name));
-  const slot_id = get_slot_id(slot_name, ad_slots);
+  const slot_id = get_adsense_slot_id(slot_name, ad_slots);
   if (slot_id === null) return null;
   return (
     <div className="a-wrap">
@@ -110,53 +99,92 @@ function AdSenseAd({ slot_id, className, responsive_width = false }) {
   );
 }
 
-function get_slot_id(slot_name, ad_slots) {
-  const slots = ad_slots.filter((slot) => slot.slot_name === slot_name);
-  assert(slots.length <= 1);
-  const slot = slots[0];
+function get_adsense_slot_id(slot_name, ad_slots) {
+  const adsense_slots = get_adsense_slots(ad_slots).filter((slot) => {
+    assert(slot_name);
+    assert(slot.slot_name);
+    return slot.slot_name === slot_name;
+  });
+  assert(adsense_slots.length <= 1);
+  const slot = adsense_slots[0];
   if (!slot) return null;
   const { slot_id } = slot;
   assert(slot_id);
   return slot_id;
 }
-function init() {
-  if (is_nodejs()) {
-    return;
-  }
 
-  if (dont_show_ads()) {
-    hide_ads();
-  }
+function get_adsense_slots(AD_SLOTS) {
+  return filter_slots(AD_SLOTS, (slot) => slot.is_adsense);
+}
+function get_custom_slots(AD_SLOTS) {
+  return filter_slots(AD_SLOTS, (slot) => slot.is_custom);
+}
+function filter_slots(AD_SLOTS, fn) {
+  return AD_SLOTS.filter((slot) => {
+    assert(slot.is_adsense !== slot.is_custom);
+    assert([true, undefined].includes(slot.is_adsense));
+    assert([true, undefined].includes(slot.is_custom));
+    const res = fn(slot);
+    assert([true, undefined].includes(res));
+    return !!res;
+  });
 }
 
 function load_ads(AD_SLOTS) {
-  if (dont_show_ads()) {
+  if (!dont_show_adsense()) {
+    load_and_show_adsense(AD_SLOTS);
     return;
   }
 
-  setTimeout(() => {
-    show_ads();
-  }, 1000);
-
-  load_and_apply_adsense(AD_SLOTS);
-}
-function remove_ads() {
-  hide_ads();
-}
-
-/*
-declare global {
-  interface Window {
-    adsbygoogle: any;
-  }
-}
-*/
-function load_and_apply_adsense(AD_SLOTS) {
-  /*
-  if (AD_SLOTS.length === 0) {
+  if (!dont_show_custom()) {
+    load_custom_banner(AD_SLOTS);
     return;
   }
-  */
+}
+
+function load_custom_banner(AD_SLOTS) {
+  const custom_slots = get_custom_slots(AD_SLOTS);
+
+  if (custom_slots.length === 0) {
+    return;
+  }
+  assert(custom_slots.length === 1);
+
+  const left_slot = document.querySelector("#left-slot");
+  assert(left_slot, "couldn't find left_slot");
+
+  left_slot.className.add("custom-banner");
+
+  const vertical_slot_wrapper = left_slot.querySelector(
+    ".vertical-slot-wrapper"
+  );
+  assert(vertical_slot_wrapper, "couldn't find vertical_slot_wrapper");
+
+  const { img_src, click_name, slot_name, is_custom } = custom_slots[0];
+  assert(img_src);
+  assert(click_name === "monitor_banner");
+  assert(slot_name === "LEFT_AD");
+  assert(is_custom === true);
+
+  vertical_slot_wrapper.innerHTML = `
+    <img
+      click-name="${click_name}"
+      src="${img_src}"
+      id="custom-banner"
+    />
+  `;
+
+  setTimeout(show_ads, 1000);
+}
+
+function load_and_show_adsense(AD_SLOTS) {
+  const adsense_slots = get_adsense_slots(AD_SLOTS);
+
+  if (adsense_slots.length === 0) {
+    return;
+  }
+
+  show_ads();
 
   load_script(
     "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
@@ -168,8 +196,16 @@ function load_and_apply_adsense(AD_SLOTS) {
       hide_ads();
     }
   );
+
+  /*
+declare global {
+  interface Window {
+    adsbygoogle: any;
+  }
+}
+*/
   window.adsbygoogle = window.adsbygoogle || [];
-  AD_SLOTS.forEach(() => {
+  adsense_slots.forEach(() => {
     window.adsbygoogle.push({});
   });
 }
@@ -211,32 +247,33 @@ function user_donated() {
   }
 }
 
-var _dont_show_ads;
-function dont_show_ads() {
-  if (_dont_show_ads !== undefined) {
-    return _dont_show_ads;
-  }
+function dont_show_custom() {
+  return user_donated() || ad_blocker_exists() || is_small_screen();
+}
 
-  const hide_reason =
+function dont_show_adsense() {
+  const disable_reason =
     (user_donated() && "user_has_donated") ||
     (ad_blocker_exists() && "ad_blocker_detected") ||
     (is_small_screen() && "screen_too_small") ||
     (is_fringe_browser() && "fringe_browser");
 
-  _dont_show_ads = !!hide_reason;
+  if (disable_reason) {
+    {
+      let value;
+      if (disable_reason === "fringe_browser") {
+        value = get_browser_name();
+      }
+      if (disable_reason === "screen_too_small") {
+        value = JSON.stringify(get_screen_size());
+      }
+      track_event({ name: "[adsense]disabled__" + disable_reason, value });
+    }
 
-  if (hide_reason) {
-    let value;
-    if (hide_reason === "fringe_browser") {
-      value = get_browser_name();
-    }
-    if (hide_reason === "screen_too_small") {
-      value = JSON.stringify(get_screen_size());
-    }
-    track_event({ name: "[ad]hidden__" + hide_reason, value });
+    return true;
   }
 
-  return _dont_show_ads;
+  return false;
 }
 
 function is_small_screen() {
