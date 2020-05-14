@@ -491,8 +491,8 @@ function track_session_duration(
   minutes_until_next_track_event: number = 5
 ) {
   assert(
-    [0, 5, 10, 20, 30, 40, 50, 60, 2 * 60, 3 * 160].includes(minutes_so_far) ||
-      (minutes_so_far > 3 * 160 && Number.isInteger(minutes_so_far / 60)),
+    [0, 5, 10, 20, 30, 40, 50, 60, 2 * 60, 3 * 60].includes(minutes_so_far) ||
+      (minutes_so_far > 3 * 60 && Number.isInteger(minutes_so_far / 60)),
     { minutes_so_far }
   );
   const ONE_MINUTE = 60 * 1000;
