@@ -6,6 +6,7 @@ import remove_hash from "./private/remove_hash";
 import { store } from "./store";
 import { track_event } from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
+import { load_product_view } from "./ads/Products/ProductsView";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -173,6 +174,8 @@ function load_custom_banner(AD_SLOTS) {
       id="custom-banner"
     />
   `;
+
+  load_product_view();
 
   setTimeout(show_ads, 1000);
 }
