@@ -8,11 +8,11 @@ export default getPageConfig(
     <>
       <p>
         <a id="errors" target="_blank">
-          Errors Today
+          Errors
         </a>
         <br />
         <a id="events" target="_blank">
-          Events Today
+          Events
         </a>
       </p>
       <h3>User</h3>
@@ -59,11 +59,11 @@ function onPageLoad() {
 }
 
 function link_events(deploy_id: string) {
-  return google_analytics_link("eventCategory", 0, deploy_id);
+  return google_analytics_link("eventCategory", 30, deploy_id);
 }
 
 function link_errors(deploy_id: string) {
-  return google_analytics_link("eventCategory", 0, deploy_id + "%5D%5Berror");
+  return google_analytics_link("eventCategory", 30, deploy_id + "%5D%5Berror");
 }
 
 function link_user(user_id: string) {
