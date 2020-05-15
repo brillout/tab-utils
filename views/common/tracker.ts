@@ -276,6 +276,7 @@ function enhance_data(data: Object, name: string, value: string): Object {
   const browser = get_browser_info();
   const screen = get_window_screen_sizes();
   const time = get_time_string();
+  const deploy_id = get_deploy_id();
   const data_enhanced = {
     time,
     name,
@@ -285,6 +286,7 @@ function enhance_data(data: Object, name: string, value: string): Object {
     tab_user_id,
     url,
     screen,
+    deploy_id,
   };
   return data_enhanced;
 }
