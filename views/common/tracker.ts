@@ -9,6 +9,7 @@ import {
 import throttle from "lodash.throttle";
 import { store } from "../../store";
 import { get_deploy_id } from "../../utils/get_deploy_id";
+import { app_is_disabled } from "../../utils/disable_problematic_users";
 
 export { load_google_analytics };
 export { track_event };
@@ -297,6 +298,11 @@ function serialize_data(data: Object) {
 
 function init() {
   if (typeof window === "undefined") return;
+
+  if (app_is_disabled()) {
+    return;
+  }
+
   setup_ga();
   track_page_view();
   track_user_clicks();

@@ -7,7 +7,10 @@ import { store } from "./store";
 import { track_event, get_user_visits } from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
 import { load_product_view } from "./ads/Products/ProductsView";
-import { has_visited_main_page_x_times } from "./utils/disable_problematic_users";
+import {
+  has_visited_main_page_x_times,
+  app_is_disabled,
+} from "./utils/disable_problematic_users";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -278,7 +281,14 @@ function dont_show_adsense() {
 }
 
 function is_too_many_visits() {
-  return has_visited_main_page_x_times(8);
+  if (has_visited_main_page_x_times(8)) {
+    return true;
+  }
+  if (app_is_disabled()) {
+    assert(false);
+    return true;
+  }
+  return false;
 }
 
 function is_small_screen() {

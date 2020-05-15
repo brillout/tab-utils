@@ -5,6 +5,7 @@ import { get_tab_user_id } from "./TabUserId";
 import { sleep } from "../sleep";
 
 export { disable_problematic_users };
+export { app_is_disabled };
 export { has_visited_main_page_x_times };
 
 const APP_IS_DISABLED = "app_is_disabled";
