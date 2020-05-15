@@ -4,13 +4,13 @@ import React from "react";
 import assert from "@brillout/assert";
 import remove_hash from "./private/remove_hash";
 import { store } from "./store";
-import { track_event, get_user_visits } from "./views/common/tracker";
+import {
+  track_event,
+  get_number_of_visits_in_the_last_24_hours,
+} from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
 import { load_product_view } from "./ads/Products/ProductsView";
-import {
-  has_visited_main_page_x_times,
-  app_is_disabled,
-} from "./utils/disable_problematic_users";
+import { app_is_disabled } from "./utils/disable_problematic_users";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -283,7 +283,7 @@ function dont_show_adsense() {
 }
 
 function is_too_many_visits() {
-  if (has_visited_main_page_x_times(8)) {
+  if (get_number_of_visits_in_the_last_24_hours() >= 8) {
     return true;
   }
   if (app_is_disabled()) {

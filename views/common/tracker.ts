@@ -16,7 +16,7 @@ export { load_google_analytics };
 export { track_event };
 export { track_error };
 export { track_dom_heart_beat_error };
-export { get_user_visits };
+export { get_number_of_visits_in_the_last_24_hours };
 
 declare global {
   interface Window {
@@ -378,8 +378,7 @@ function init() {
     assert(pathname.startsWith("/"));
     if (pathname === "/") {
       track_visited_days();
-      track_visits();
-      track_number_of_visits();
+      track_last_24_hours_visits();
     }
   }
 }
@@ -583,13 +582,12 @@ function track_visited_days() {
 
     track_event({
       name: "[visitors][" + today_string + "]",
-      value: "visited days: " + prettify(visited_days.length),
+      value: "visited days: " + prettify_number_of_visits(visited_days.length),
     });
   }
-
-  function prettify(n: number): string {
-    return (n < 10 && n + "") || ((n / 10) | 0) + "x";
-  }
+}
+function prettify_number_of_visits(n: number): string {
+  return (n < 10 && n + "") || ((n / 10) | 0) + "x";
 }
 
 function track_session_duration(
@@ -616,31 +614,43 @@ function track_session_duration(
   }, minutes_until_next_track_event * ONE_MINUTE);
 }
 
-function track_visits() {
-  const user_visits = get_user_visits();
-  assert(
-    user_visits.constructor === Array &&
-      user_visits.every((v: Date) => v && v.constructor === Date),
-    { user_visits }
-  );
-  user_visits.push(new Date());
-  store.set_val(USER_VISITS(), user_visits, { is_passive: true });
-}
-function get_user_visits() {
-  const user_visits = store.get_val(USER_VISITS()) || [];
-  return user_visits;
-}
-function USER_VISITS() {
-  return "user_visits";
-}
+function track_last_24_hours_visits() {
+  const last_24_hours_visits = get_last_24_hours_visits();
 
-function track_number_of_visits() {
-  const user_visits = get_user_visits();
-  const number_of_visits = user_visits.length;
-  const number_of_visits__pretty =
-    (number_of_visits < 10 && number_of_visits) ||
-    ((number_of_visits / 10) | 0) + "x";
-  track_event({ name: "number_of_visits", value: number_of_visits__pretty });
+  last_24_hours_visits.push(new Date());
+  store.set_val(LAST_24_HOURS_VISITS(), last_24_hours_visits, {
+    is_passive: true,
+  });
+
+  track_event({
+    name: "number_of_visits",
+    value: prettify_number_of_visits(last_24_hours_visits.length),
+  });
+}
+function get_number_of_visits_in_the_last_24_hours(): number {
+  const last_24_hours_visits = get_last_24_hours_visits();
+  return last_24_hours_visits.length;
+}
+function get_last_24_hours_visits(): Date[] {
+  let last_24_hours_visits = store.get_val(LAST_24_HOURS_VISITS()) || [];
+  assert(
+    last_24_hours_visits.constructor === Array &&
+      last_24_hours_visits.every((v: Date) => v && v.constructor === Date),
+    { last_24_hours_visits }
+  );
+
+  {
+    const in_24_hours_ago = new Date().getTime() - 24 * 60 * 60 * 1000;
+    last_24_hours_visits = last_24_hours_visits.filter(
+      (visit: Date) => visit.getTime() > in_24_hours_ago
+    );
+  }
+
+  return last_24_hours_visits;
+}
+function LAST_24_HOURS_VISITS() {
+  // `"user_visits"` is a legacy name
+  return "user_visits";
 }
 
 function get_time_string(): string {

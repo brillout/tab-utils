@@ -1,12 +1,14 @@
 import assert from "@brillout/assert";
 import { store } from "../store";
-import { get_user_visits, track_event } from "../views/common/tracker";
+import {
+  get_number_of_visits_in_the_last_24_hours,
+  track_event,
+} from "../views/common/tracker";
 import { get_tab_user_id } from "./TabUserId";
 import { sleep } from "../sleep";
 
 export { disable_problematic_users };
 export { app_is_disabled };
-export { has_visited_main_page_x_times };
 
 const APP_IS_DISABLED = "app_is_disabled";
 
@@ -57,26 +59,9 @@ function is_browser() {
 }
 
 function disable_if_aggressive_autoreload_user() {
-  const LIMIT = 50;
-  if (has_visited_main_page_x_times(LIMIT)) {
+  if (get_number_of_visits_in_the_last_24_hours() >= 50) {
     set_disable_flag();
   }
-}
-
-function has_visited_main_page_x_times(x: number): boolean {
-  const user_visits = get_user_visits();
-  const in_24_hours_ago = new Date(
-    new Date().getTime() - 24 * 60 * 60 * 1000
-  ).getTime();
-  if (
-    user_visits.length > x &&
-    user_visits
-      .slice(-1 * x)
-      .every((visit: Date) => visit.getTime() > in_24_hours_ago)
-  ) {
-    return true;
-  }
-  return false;
 }
 
 function is_dev() {
