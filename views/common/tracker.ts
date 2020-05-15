@@ -350,9 +350,11 @@ function enhance_data(data: Object, name: string, value: string): Object {
 function serialize_data(data: Object) {
   return Object.entries(data)
     .map(([key, val]) => {
+      // GA doesn't show new lines
+      val = val.split("\n").join("\\n");
       return key + ": " + val;
     })
-    .join("\n\n=====\n\n");
+    .join(" ===== ");
 }
 
 function init() {
