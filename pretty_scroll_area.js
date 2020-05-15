@@ -192,7 +192,11 @@ function scrollToHideScrollElement({ smooth = true } = {}) {
   const s3 = document.querySelectorAll(
     ".pretty_scroll_area__hide_scroll_element"
   );
-  assert.usage(s3.length === 1);
+  assert.usage(
+    s3.length === 1,
+    "Number of `.pretty_scroll_area__hide_scroll_element` elements: " +
+      s3.length
+  );
 
   const hide_scroll_element = s3[0];
 
