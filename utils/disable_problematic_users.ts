@@ -1,6 +1,7 @@
 import assert from "@brillout/assert";
 import { store } from "../store";
-import { get_user_visits } from "../views/common/tracker";
+import { get_user_visits, track_event } from "../views/common/tracker";
+import { get_tab_user_id } from "./TabUserId";
 
 export { disable_problematic_users };
 
@@ -12,7 +13,14 @@ function disable_problematic_users() {
 }
 
 function set_disable_flag() {
-  store.set_val(APP_IS_DISABLED, true);
+  if (!store.has_val(APP_IS_DISABLED)) {
+    const tab_user_id = get_tab_user_id();
+    track_event({
+      name: "app_disabled__aggressive_autoreload",
+      value: tab_user_id,
+    });
+    store.set_val(APP_IS_DISABLED, true);
+  }
   kill_app();
 }
 
@@ -49,7 +57,7 @@ function disable_if_aggressive_autoreload_user() {
   const in_24_hours_ago = new Date(
     new Date().getTime() - 24 * 60 * 60 * 1000
   ).getTime();
-  const LIMIT = 15;
+  const LIMIT = 30;
   if (
     user_visits.length > LIMIT &&
     user_visits
