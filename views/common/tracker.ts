@@ -571,7 +571,7 @@ function track_visited_days() {
   function track_visit() {
     const VISITED_DAYS = "visited_days";
 
-    const visited_days = store.get_val(VISITED_DAYS) || [];
+    const visited_days: string[] = store.get_val(VISITED_DAYS) || [];
     const today_string = get_date_string();
     if (!today_string) {
       return;
@@ -579,7 +579,7 @@ function track_visited_days() {
     if (visited_days.includes(today_string)) {
       return;
     }
-    visited_days.push(visited_days);
+    visited_days.push(today_string);
     store.set_val(VISITED_DAYS, visited_days, { is_passive: true });
 
     track_event({
