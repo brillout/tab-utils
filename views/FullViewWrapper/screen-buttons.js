@@ -1,18 +1,31 @@
 import assert from "@brillout/assert";
 import { scrollToElement, addScrollListener } from "../../pretty_scroll_area";
 import { show_toast } from "../common/show_toast";
+import { user_donated } from "../../load_ad";
 
 export { activate_screen_buttons };
 
 function activate_screen_buttons() {
   activate_view_buttons();
   activate_settings_button();
+  activate_donate_button();
 }
 
 function activate_settings_button() {
   const settings_button = document.querySelector("#settings-button");
   settings_button.onclick = () => {
     scrollToElement("#more_panel");
+  };
+}
+
+function activate_donate_button() {
+  const settings_button = document.querySelector("#donate-button");
+  settings_button.onclick = () => {
+    if (user_donated()) {
+      window.open("/thanks");
+    } else {
+      window.open("/donate", "_blank");
+    }
   };
 }
 

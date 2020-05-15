@@ -15,6 +15,18 @@ import { app_is_disabled } from "./utils/disable_problematic_users";
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
 export { Ad_left };
+export { user_donated };
+
+init();
+
+function init() {
+  if (is_nodejs()) {
+    return;
+  }
+  if (user_donated()) {
+    document.documentElement.classList.add("user-donated");
+  }
+}
 
 function Ad_left({ ad_slots }) {
   const slot_id = get_adsense_slot_id("LEFT_AD", ad_slots);
@@ -53,12 +65,13 @@ function AdRemovalButton(props) {
   return (
     <a
       className="donate-remover-2 glass-background glass-background-button"
-      click-name="donate-button"
+      click-name="donate-button-left"
       href="/donate"
       target="_blank"
       {...props}
     >
-      <span>
+      <span id="left-donate-icon"></span>
+      <span id="left-donate-text">
         Donate &<br />
         Remove ads
       </span>

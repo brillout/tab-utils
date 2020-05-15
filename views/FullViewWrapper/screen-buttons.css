@@ -39,6 +39,12 @@
 #settings-button .button-text::before {
   content: "\A0\A0 Settings";
 }
+#donate-button .button-text::before {
+  content: "\A0\A0 Donate";
+}
+html.user-donated #donate-button .button-text::before {
+  content: "\A0\A0 Thanks";
+}
 #center-button .button-text::before {
   content: "\A0\A Center";
 }
@@ -71,6 +77,14 @@
   background-image: url(./settings.svg);
   height: 17px;
   width: 19px;
+}
+#donate-button .button-icon {
+  background-image: url(../../utils/icons/donate.svg);
+}
+html.user-donated #donate-button .button-icon {
+  background-image: url(../../utils/icons/thanks.svg);
+  height: 16px;
+  width: 16px;
 }
 #center-button .button-icon {
   background-image: url(./center.svg);
