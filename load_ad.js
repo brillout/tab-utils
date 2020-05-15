@@ -303,6 +303,7 @@ function is_fringe_browser() {
     "internet explorer",
     "opera",
     "edge",
+    "microsoft edge",
   ].includes(browser_name.toLowerCase());
 }
 
