@@ -354,7 +354,9 @@ function serialize_data(data: Object) {
   return Object.entries(data)
     .map(([key, val]) => {
       // GA doesn't show new lines
-      val = val.split("\n").join("\\n");
+      if (val && val.constructor === String) {
+        val = val.split("\n").join("\\n");
+      }
       return key + ": " + val;
     })
     .join(" ===== ");
