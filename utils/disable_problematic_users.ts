@@ -19,7 +19,7 @@ async function set_disable_flag() {
   if (!store.has_val(APP_IS_DISABLED)) {
     const tab_user_id = get_tab_user_id();
     track_event({
-      name: "app_disabled__aggressive_autoreload",
+      name: "app_is_disabled",
       value: tab_user_id,
     });
     store.set_val(APP_IS_DISABLED, true);
