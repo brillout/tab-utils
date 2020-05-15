@@ -3462,6 +3462,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+luxon@^1.24.1:
+  version "1.24.1"
+  resolved "https://registry.npmjs.org/luxon/-/luxon-1.24.1.tgz#a8383266131ed4eaed4b5f430f96f3695403a52a"
+  integrity sha512-CgnIMKAWT0ghcuWFfCWBnWGOddM0zu6c4wZAWmD0NN7MZTnro0+833DF6tJep+xlxRPg4KtsYEHYLfTMBQKwYg==
+
 make-array@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/make-array/-/make-array-1.0.5.tgz#326a7635c756a9f61ce0b2a6fdd5cc3460419bcb"

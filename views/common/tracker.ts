@@ -1,6 +1,7 @@
 import assert from "@brillout/assert";
 import { tab_app_google_analytics_id } from "../../../tab_app_info";
 import StackTrace from "stacktrace-js";
+import { DateTime } from "luxon";
 import { get_tab_user_id } from "../../utils/TabUserId";
 import {
   get_browser_info,
@@ -31,6 +32,8 @@ const DEBUG = true;
 
 const IS_DEV =
   typeof window !== "undefined" && window.location.hostname === "localhost";
+
+const DATE_FORMAT = "yyyy-LL-dd";
 
 init();
 
@@ -374,6 +377,7 @@ function init() {
     const { pathname } = window.location;
     assert(pathname.startsWith("/"));
     if (pathname === "/") {
+      track_visited_days();
       track_visits();
       track_number_of_visits();
     }
@@ -559,6 +563,35 @@ function track_dom_heart_beat_error(dom_heart_beat: () => {}) {
   }
 }
 
+function track_visited_days() {
+  const FIVE_MINUTES = 5 * 60 * 1000;
+  setTimeout(track_visit, FIVE_MINUTES);
+
+  function track_visit() {
+    const VISITED_DAYS = "visited_days";
+
+    const visited_days = store.get_val(VISITED_DAYS) || [];
+    const today_string = get_date_string();
+    if (!today_string) {
+      return;
+    }
+    if (visited_days.includes(today_string)) {
+      return;
+    }
+    visited_days.push(visited_days);
+    store.set_val(VISITED_DAYS, visited_days, { is_passive: true });
+
+    track_event({
+      name: "[visitors][" + today_string + "]",
+      value: "visited days: " + prettify(visited_days.length),
+    });
+  }
+
+  function prettify(n: number): string {
+    return (n < 10 && n + "") || ((n / 10) | 0) + "x";
+  }
+}
+
 function track_session_duration(
   minutes_so_far: number = 0,
   minutes_until_next_track_event: number = 5
@@ -611,15 +644,23 @@ function track_number_of_visits() {
 }
 
 function get_time_string(): string {
-  const d = new Date();
-  const time_string =
-    [d.getFullYear(), d.getMonth() + 1, d.getDate()].map(prettify).join("-") +
-    "_" +
-    [d.getHours(), d.getMinutes(), d.getSeconds()].map(prettify).join(":");
-  return time_string;
+  try {
+    const d = DateTime.utc();
+    const TIME_FORMAT = "HH:mm:ss";
+    const time_string = d.toFormat(DATE_FORMAT + "_" + TIME_FORMAT);
+    return time_string;
+  } catch (err) {
+    return "BUG_NO_INTL_SUPPORT";
+  }
+}
 
-  function prettify(n: number): string {
-    return (n <= 9 ? "0" : "") + n;
+function get_date_string(): string {
+  try {
+    const d = DateTime.utc();
+    const date_string = d.toFormat(DATE_FORMAT);
+    return date_string;
+  } catch (err) {
+    return null;
   }
 }
 

@@ -2,7 +2,6 @@
   "scripts": {
     "dev": "yarn goldpage:dev",
     "dev:link": "ln -s `pwd`/static/* `pwd`/tab-utils/static/* .build/browser/",
-
     "prod:build": "yarn prod:build:clean && yarn goldpage:build && yarn prod:build:static && yarn prod:build:link && yarn prod:build:deployId",
     "prod:build:link": "(cd .build/browser/ && mv tab-utils/ tab-utils-moved/ && ln -s tab-utils-moved/ tab-utils)",
     "prod:build:clean": "rm -rf .build/",
@@ -10,7 +9,6 @@
     "prod:build:deployId": "(cd .build/browser/ && grep __DEPLOY -rl | xargs sed -i \"s/__DEPLOY/$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)/g\")",
     "prod:serve": "serve .build/browser/ --listen 3000",
     "prod:deploy": "push-dir --dir=.build/browser/ --branch=gh-pages --cleanup",
-
     "goldpage:dev": "goldpage dev",
     "goldpage:build": "goldpage build"
   },
@@ -28,6 +26,7 @@
     "goldpage": "^0.5.6",
     "iframe-resizer": "^4.2.10",
     "lodash.throttle": "^4.1.1",
+    "luxon": "^1.24.1",
     "nanoid": "^3.1.3",
     "push-dir": "^0.4.1",
     "react": "^16.13.0",
