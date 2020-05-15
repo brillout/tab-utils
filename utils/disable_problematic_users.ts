@@ -2,8 +2,10 @@ import assert from "@brillout/assert";
 import { store } from "../store";
 import { get_user_visits, track_event } from "../views/common/tracker";
 import { get_tab_user_id } from "./TabUserId";
+import { sleep } from "../sleep";
 
 export { disable_problematic_users };
+export { has_visited_main_page_x_times };
 
 const APP_IS_DISABLED = "app_is_disabled";
 
@@ -12,7 +14,7 @@ function disable_problematic_users() {
   check_and_kill_if_disabled();
 }
 
-function set_disable_flag() {
+async function set_disable_flag() {
   if (!store.has_val(APP_IS_DISABLED)) {
     const tab_user_id = get_tab_user_id();
     track_event({
@@ -20,6 +22,7 @@ function set_disable_flag() {
       value: tab_user_id,
     });
     store.set_val(APP_IS_DISABLED, true);
+    await sleep({ seconds: 1 }); // Give browser time to send track event HTTP request
   }
   kill_app();
 }
@@ -53,19 +56,26 @@ function is_browser() {
 }
 
 function disable_if_aggressive_autoreload_user() {
+  const LIMIT = 50;
+  if (has_visited_main_page_x_times(LIMIT)) {
+    set_disable_flag();
+  }
+}
+
+function has_visited_main_page_x_times(x: number): boolean {
   const user_visits = get_user_visits();
   const in_24_hours_ago = new Date(
     new Date().getTime() - 24 * 60 * 60 * 1000
   ).getTime();
-  const LIMIT = 30;
   if (
-    user_visits.length > LIMIT &&
+    user_visits.length > x &&
     user_visits
-      .slice(-1 * LIMIT)
+      .slice(-1 * x)
       .every((visit: Date) => visit.getTime() > in_24_hours_ago)
   ) {
-    set_disable_flag();
+    return true;
   }
+  return false;
 }
 
 function is_dev() {

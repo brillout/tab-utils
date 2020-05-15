@@ -303,9 +303,15 @@ function init() {
   track_error_events();
   track_storage();
   track_session_duration();
-  track_visits();
-  track_number_of_visits();
   track_geolocation();
+  {
+    const { pathname } = window.location;
+    assert(pathname.startsWith("/"));
+    if (pathname === "/") {
+      track_visits();
+      track_number_of_visits();
+    }
+  }
 }
 
 function setup_ga() {

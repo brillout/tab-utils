@@ -4,9 +4,10 @@ import React from "react";
 import assert from "@brillout/assert";
 import remove_hash from "./private/remove_hash";
 import { store } from "./store";
-import { track_event } from "./views/common/tracker";
+import { track_event, get_user_visits } from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
 import { load_product_view } from "./ads/Products/ProductsView";
+import { has_visited_main_page_x_times } from "./utils/disable_problematic_users";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -255,7 +256,8 @@ function dont_show_adsense() {
     (user_donated() && "user_has_donated") ||
     (ad_blocker_exists() && "ad_blocker_detected") ||
     (is_small_screen() && "screen_too_small") ||
-    (is_fringe_browser() && "fringe_browser");
+    (is_fringe_browser() && "fringe_browser") ||
+    (is_too_many_visits() && "too_many_visits");
 
   if (disable_reason) {
     {
@@ -273,6 +275,10 @@ function dont_show_adsense() {
   }
 
   return false;
+}
+
+function is_too_many_visits() {
+  return has_visited_main_page_x_times(8);
 }
 
 function is_small_screen() {
