@@ -19,7 +19,10 @@ export default getPageConfig(
       <form>
         User ID: <input placeholder="User ID" type="text" />
         <br />
-        <button type="submit">Last 7 days</button>
+        <button type="submit">Today</button>
+        <button id="user-last-7-days" type="button">
+          Last 7 days
+        </button>
       </form>
       <h3>Track Data</h3>
       Depoy ID: <b id="deploy-id" />
@@ -53,7 +56,13 @@ function onPageLoad() {
 
     document.querySelector("form").onsubmit = (ev) => {
       ev.preventDefault();
-      window.open(link_user(user_id), "_blank");
+      window.open(link_user(user_id, 1), "_blank");
+    };
+
+    (document.querySelector(
+      "button#user-last-7-days"
+    ) as HTMLButtonElement).onclick = (ev) => {
+      window.open(link_user(user_id, 7), "_blank");
     };
   }
 }
@@ -66,8 +75,8 @@ function link_errors(deploy_id: string) {
   return google_analytics_link("eventCategory", 30, deploy_id + "%5D%5Berror");
 }
 
-function link_user(user_id: string) {
-  return google_analytics_link("eventLabel", 7, user_id);
+function link_user(user_id: string, days_ago: number) {
+  return google_analytics_link("eventLabel", days_ago, user_id);
 }
 
 function google_analytics_link(
