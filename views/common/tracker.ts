@@ -129,14 +129,17 @@ async function track_error({
 
   let _eventCategory: string;
   if (!value) {
-    if (is_cross_origin_error(err)) {
-      _eventCategory = "[cross-origin-error]";
-    }
     if (is_browser_extension_error(err)) {
-      _eventCategory = "[browser-extension-error]";
+      _eventCategory = "[third-party-error][browser-extension]";
+    }
+    if (is_from_inline_js(err)) {
+      _eventCategory = "[third-party-error][inline-js]";
+    }
+    if (is_cross_origin_error(err)) {
+      _eventCategory = "[third-party-error][cross-origin]";
     }
     if (is_whitelist_error(err)) {
-      _eventCategory = "[whitelist-error]";
+      _eventCategory = "[third-party-error][whitelist]";
     }
   }
 
@@ -192,6 +195,59 @@ function is_cross_origin_error(err: any) {
     return true;
   }
 
+  return false;
+}
+function is_from_inline_js(err: any) {
+  // The idea here is that errors from JavaScript inlined in HTML can't originate from app code,
+  // since my app code doesn't have any inline JS.
+  // Most likely it's JavaScript code injected by browser extensions.
+
+  if (!err) {
+    return false;
+  }
+
+  const stack_lines = (err.stack ? err.stack.split("\n") : []).filter(Boolean);
+  if (stack_lines.length > 2 || stack_lines.length === 0) {
+    return false;
+  }
+
+  assert(stack_lines.length === 1 || stack_lines.length === 2);
+
+  const stack_line_1 = stack_lines[0];
+  const stack_line_2 = stack_lines[1];
+
+  const { origin, pathname } = window.location;
+  assert(pathname.startsWith("/"));
+  const html_url = origin + pathname;
+
+  // Example:
+  // ~~~
+  // ReferenceError: SetEvent is not defined
+  //   at https://www.clocktab.com/:1:1
+  // ~~~
+  if (stack_line_2 && stack_line_2.trim().startsWith("at " + html_url + ":")) {
+    return true;
+  }
+
+  // Example:
+  // ~~~
+  // TypeError: this.remove is not a function
+  //  at <anonymous>:12:14
+  // ~~~
+  if (stack_line_2 && stack_line_2.trim().startsWith("at <anonymous>:")) {
+    return true;
+  }
+
+  // Weird Firefox Error format, example:
+  // ~~~
+  // assert(err.message === 'can't redefine non-configurable property "userAgent"');
+  // assert(err.stack === '@https://www.clocktab.com/:1:635'):
+  // ~~~
+  if (!stack_line_2 && stack_line_1.startsWith("@" + html_url + ":")) {
+    return true;
+  }
+
+  /* I suspect that the following is already covered by the code block above.
   // I'm not sure if this is really a cross origin error.
   // Maybe it's a browser extension that erroneously loads HTML with a script tag.
   if (
@@ -202,6 +258,7 @@ function is_cross_origin_error(err: any) {
   ) {
     return true;
   }
+  */
 
   return false;
 }
