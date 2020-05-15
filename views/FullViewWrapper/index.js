@@ -26,8 +26,8 @@ function FullView(props) {
         {children}
         <div id="screen-buttons-wrapper">
           <div
-            id="fullscreen-button"
-            click-name="fullscreen-button"
+            id="center-button"
+            click-name="center-button"
             className="screen-button glass-background glass-background-button"
           >
             <span className="button-icon"></span>
@@ -35,8 +35,8 @@ function FullView(props) {
           </div>
           <br />
           <div
-            id="center-button"
-            click-name="center-button"
+            id="fullscreen-button"
+            click-name="fullscreen-button"
             className="screen-button glass-background glass-background-button"
           >
             <span className="button-icon"></span>
