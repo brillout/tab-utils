@@ -16,8 +16,9 @@
   --ad-border-width: 1px;
 }
 
-.border-wrapper,
-.horizontal-slot {
+.horizontal-slot-wrapper,
+.horizontal-slot-wrapper .adsbygoogle {
+  display: block;
   min-height: 20px;
   max-height: var(--ad-height);
   min-width: 20px;
@@ -25,17 +26,16 @@
   width: 100vw;
   height: 100vh;
 }
-.horizontal-slot {
-  /* important; avoids creeping out of ads when the user downsizes his browser */
+.horizontal-slot-wrapper {
+  /* avoids creeping out of ads when the user downsizes his browser */
   overflow: hidden;
-  display: block;
 }
-.border-wrapper {
+.horizontal-slot-wrapper {
   margin: auto;
   display: block;
 }
 
-.horizontal-slot {
+.horizontal-slot-wrapper .adsbygoogle {
   /*
   width: 550px;
   height: 76px;
@@ -64,7 +64,7 @@ html:not(.show-ads) .a-wrap {
 }
 
 /* ad gray border */
-.border-wrapper {
+.horizontal-slot-wrapper {
   border: var(--ad-border-width) solid var(--ad-border-color);
   border-top-width: 0;
   box-sizing: border-box !important;

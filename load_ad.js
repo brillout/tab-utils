@@ -19,7 +19,7 @@ function Ad_left({ ad_slots }) {
     <div id="left-slot">
       <AdHeader />
       <div className="vertical-slot-wrapper">
-        <AdSenseAd slot_id={slot_id} className="vertical-slot" />;
+        <AdSenseAd slot_id={slot_id} />;
       </div>
       <AdRemovalButton style={{ marginTop: 45 }} />
     </div>
@@ -75,12 +75,8 @@ function AdView({ ad_slots, slot_name }) {
   if (slot_id === null) return null;
   return (
     <div className="a-wrap">
-      <div className="border-wrapper">
-        <AdSenseAd
-          slot_id={slot_id}
-          responsive_width={true}
-          className="horizontal-slot"
-        />
+      <div className="horizontal-slot-wrapper">
+        <AdSenseAd slot_id={slot_id} responsive_width={true} />
       </div>
       <a className="donate-remover" href="donate" target="_blank">
         Remove ad
@@ -89,10 +85,10 @@ function AdView({ ad_slots, slot_name }) {
   );
 }
 
-function AdSenseAd({ slot_id, className, responsive_width = false }) {
+function AdSenseAd({ slot_id, responsive_width = false }) {
   return (
     <ins
-      className={"adsbygoogle " + className}
+      className="adsbygoogle"
       data-ad-client="ca-pub-6953474219479917"
       data-full-width-responsive={responsive_width ? "true" : null}
       data-ad-slot={slot_id}

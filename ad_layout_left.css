@@ -4,7 +4,7 @@
   margin-right: auto;
 }
 .vertical-slot-wrapper,
-.vertical-slot {
+.vertical-slot-wrapper .adsbygoogle {
   display: block;
   width: 160px;
   height: 600px;
@@ -46,7 +46,7 @@ a.donate-remover-2 {
 }
 
 @media (max-width: 700px) {
-  .adsbygoogle.vertical-slot {
+  .vertical-slot-wrapper .adsbygoogle {
     display: none !important;
   }
   html {
