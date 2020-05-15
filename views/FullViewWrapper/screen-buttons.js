@@ -5,6 +5,18 @@ import { show_toast } from "../common/show_toast";
 export { activate_screen_buttons };
 
 function activate_screen_buttons() {
+  activate_view_buttons();
+  activate_settings_button();
+}
+
+function activate_settings_button() {
+  const settings_button = document.querySelector("#settings-button");
+  settings_button.onclick = () => {
+    scrollToElement("#more_panel");
+  };
+}
+
+function activate_view_buttons() {
   const scroll_button = document.querySelector("#center-button");
   const fullscreen_button = document.querySelector("#fullscreen-button");
   const full_view = document.querySelector(

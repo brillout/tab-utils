@@ -42,6 +42,15 @@ function FullView(props) {
             <span className="button-icon"></span>
             <span className="button-text"></span>
           </div>
+          <br />
+          <div
+            id="settings-button"
+            click-name="settings-button"
+            className="screen-button glass-background glass-background-button"
+          >
+            <span className="button-icon"></span>
+            <span className="button-text"></span>
+          </div>
         </div>
       </div>
     </>
