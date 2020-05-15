@@ -178,6 +178,8 @@ function load_custom_banner(AD_SLOTS) {
   load_product_view();
 
   setTimeout(show_ads, 1000);
+
+  track_event({ name: "[custom-ad] loaded" });
 }
 
 function load_and_show_adsense(AD_SLOTS) {
@@ -192,10 +194,10 @@ function load_and_show_adsense(AD_SLOTS) {
   load_script(
     "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
     () => {
-      track_event({ name: "[ad]ad_code_loaded" });
+      track_event({ name: "[adsense] adsbygoogle.js loaded" });
     },
     () => {
-      track_event({ name: "[ad]ad_code_blocked" });
+      track_event({ name: "[adsense] adsbygoogle.js blocked" });
       hide_ads();
     }
   );
