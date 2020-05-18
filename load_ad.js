@@ -63,7 +63,7 @@ function AdHeader() {
 function AdRemovalButton(props) {
   return (
     <a
-      className="donate-remover-2 glass-background glass-background-button"
+      className="donate-remover-2 glass-background"
       click-name="donate-button-left"
       href="/donate"
       target="_blank"

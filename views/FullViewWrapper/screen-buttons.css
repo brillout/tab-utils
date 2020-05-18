@@ -26,6 +26,7 @@
 }
 .screen-button .button-icon {
   vertical-align: middle;
+  position: relative;
 }
 .screen-button .button-text {
   position: relative;
@@ -97,6 +98,35 @@ html.user-donated #donate-button .button-icon {
 /* Aesthetics */
 .screen-button {
   cursor: pointer;
+  user-select: none;
+}
+.screen-button {
+  position: relative;
+}
+.screen-button > .screen-button::before {
+  position: absolute;
+}
+.screen-button::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  content: "";
+  z-index: -1;
+  box-shadow: var(--common-shadow);
+}
+.screen-button::before,
+.screen-button > .button-background.glass-background,
+.screen-button > .button-background.glass-background::after {
+  border-radius: 8px;
+}
+.screen-button > .button-background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 /* Function */

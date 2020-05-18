@@ -1,0 +1,23 @@
+.glass-background {
+  position: relative;
+}
+.glass-background:after {
+  position: absolute;
+}
+.glass-background:after {
+  pointer-events: none;
+  background-color: var(--panel_bg_2);
+  content: "";
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.glass-background {
+  background-color: var(--panel_bg_1);
+  backdrop-filter: blur(var(--panel-bg-blur));
+}
+.glass-background {
+  color: var(--panel-color);
+}

@@ -29,6 +29,11 @@ html:not(.show-ads) {
 a.donate-remover-2 {
   text-decoration: none !important;
 }
+.donate-remover-2,
+.donate-remover-2.glass-background,
+.donate-remover-2.glass-background::after {
+  border-radius: 8px;
+}
 .donate-remover-2 {
   cursor: pointer;
   padding: 10px;

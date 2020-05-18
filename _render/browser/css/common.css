@@ -1,5 +1,6 @@
 @import "./hideApp.css";
 @import "./more_panel.css";
+@import "./glass_background.css";
 
 html {
   opacity: 1;
