@@ -421,10 +421,11 @@ function track_error_events() {
     load_google_analytics();
 
     const [message, filename, lineno, colno, error] = args_list;
-    let err = error || {};
-    err.message = err.message || message;
-    if (!err.stack) {
-      Object.assign(err, { filename, lineno, colno, noErrorObj: true });
+    let err: any;
+    if (error) {
+      err = error;
+    } else {
+      err = { message, filename, lineno, colno, noErrorObj: true };
     }
     await track_err_event("window.onerror", err);
   });
