@@ -7,7 +7,7 @@ export default getPageConfig(
       <p>Your donation means a lot to me.</p>
 
       <p>
-        If you have any suggestions, please <a href="/suggest">let me know</a>!
+        If you have any suggestions, <a href="/suggest">let me know</a>!
       </p>
 
       <p>
