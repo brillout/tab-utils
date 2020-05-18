@@ -9,13 +9,14 @@ import {
   get_number_of_visits_in_the_last_24_hours,
 } from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
-import { load_product_view } from "./ads/Products/ProductsView";
+import { enable_products_view } from "./ads/Products/ProductsView";
 import { app_is_disabled } from "./utils/disable_problematic_users";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
 export { Ad_left };
 export { user_donated };
+export { get_product_slots };
 
 init();
 
@@ -130,14 +131,31 @@ function get_adsense_slot_id(slot_name, ad_slots) {
 function get_adsense_slots(AD_SLOTS) {
   return filter_slots(AD_SLOTS, (slot) => slot.is_adsense);
 }
-function get_custom_slots(AD_SLOTS) {
-  return filter_slots(AD_SLOTS, (slot) => slot.is_custom);
+function get_product_slots(AD_SLOTS) {
+  const product_slots = filter_slots(AD_SLOTS, (slot) => slot.is_product);
+  return product_slots;
+}
+function get_custom_slot(AD_SLOTS) {
+  const slots__match = filter_slots(AD_SLOTS, (slot) => slot.is_custom);
+  if (slots__match.length === 0) {
+    return null;
+  }
+  assert(slots__match.length === 1);
+  const custom_slot = slots__match[0];
+  assert(custom_slot.is_custom === true);
+  return custom_slot;
 }
 function filter_slots(AD_SLOTS, fn) {
   return AD_SLOTS.filter((slot) => {
-    assert(slot.is_adsense !== slot.is_custom);
     assert([true, undefined].includes(slot.is_adsense));
     assert([true, undefined].includes(slot.is_custom));
+    assert([true, undefined].includes(slot.is_product));
+    assert(
+      (slot.is_adsense ? 1 : 0) +
+        (slot.is_custom ? 1 : 0) +
+        (slot.is_product ? 1 : 0) ===
+        1
+    );
     const res = fn(slot);
     assert([true, undefined].includes(res));
     return !!res;
@@ -157,12 +175,11 @@ function load_ads(AD_SLOTS) {
 }
 
 function load_custom_banner(AD_SLOTS) {
-  const custom_slots = get_custom_slots(AD_SLOTS);
+  const custom_slot = get_custom_slot(AD_SLOTS);
 
-  if (custom_slots.length === 0) {
+  if (custom_slot === null) {
     return;
   }
-  assert(custom_slots.length === 1);
 
   const left_slot = document.querySelector("#left-slot");
   assert(left_slot, "couldn't find left_slot");
@@ -174,7 +191,7 @@ function load_custom_banner(AD_SLOTS) {
   );
   assert(vertical_slot_wrapper, "couldn't find vertical_slot_wrapper");
 
-  const { img_src, click_name, slot_name, is_custom } = custom_slots[0];
+  const { img_src, click_name, slot_name, is_custom } = custom_slot;
   assert(img_src);
   assert(click_name === "monitor_banner");
   assert(slot_name === "LEFT_AD");
@@ -188,7 +205,7 @@ function load_custom_banner(AD_SLOTS) {
     />
   `;
 
-  load_product_view();
+  enable_products_view(custom_slot);
 
   setTimeout(show_ads, 1000);
 
