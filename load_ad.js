@@ -31,13 +31,11 @@ function init() {
 
 function Ad_left({ ad_slots }) {
   const slot_id = get_adsense_slot_id("LEFT_AD", ad_slots);
-  if (slot_id === null) return null;
+  const adsense_ad = slot_id === null ? null : <AdSenseAd slot_id={slot_id} />;
   return (
     <div id="left-slot">
       <AdHeader />
-      <div className="vertical-slot-wrapper">
-        <AdSenseAd slot_id={slot_id} />;
-      </div>
+      <div className="vertical-slot-wrapper">{adsense_ad}</div>
       <AdRemovalButton style={{ marginTop: 45 }} />
     </div>
   );
@@ -164,8 +162,10 @@ function filter_slots(AD_SLOTS, fn) {
 
 function load_ads(AD_SLOTS) {
   if (!dont_show_adsense()) {
-    load_and_show_adsense(AD_SLOTS);
-    return;
+    const adsense_ad_enabled = load_and_show_adsense(AD_SLOTS);
+    if (adsense_ad_enabled) {
+      return;
+    }
   }
 
   if (!dont_show_custom()) {
@@ -216,7 +216,7 @@ function load_and_show_adsense(AD_SLOTS) {
   const adsense_slots = get_adsense_slots(AD_SLOTS);
 
   if (adsense_slots.length === 0) {
-    return;
+    return false;
   }
 
   show_ads();
@@ -231,6 +231,8 @@ function load_and_show_adsense(AD_SLOTS) {
       hide_ads();
     }
   );
+
+  return true;
 
   /*
 declare global {

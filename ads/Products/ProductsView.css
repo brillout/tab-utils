@@ -20,8 +20,6 @@ a.product-link {
   );
   */
   background-color: white;
-  position: relative;
-  top: -22px;
   display: flex;
   justify-content: center;
   align-items: center;

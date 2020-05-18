@@ -34,11 +34,21 @@ function ProductView({
   return (
     <div click-name={product_name} style={{ width: 250 }}>
       <div>
-        <ul style={{ paddingLeft: 20 }}>
+        <ul style={{ paddingLeft: 20, minHeight: 54 }}>
           <li>{product_text}</li>
         </ul>
       </div>
-      <div dangerouslySetInnerHTML={{ __html: amazon_banner }} />
+      <div
+        style={{
+          display: "flex",
+          height: 254,
+          width: 250,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "white",
+        }}
+        dangerouslySetInnerHTML={{ __html: amazon_banner }}
+      />
       <a className="product-link" href={product_link} target="_blank"></a>
     </div>
   );
