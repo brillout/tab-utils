@@ -81,6 +81,8 @@ html.user-donated #donate-button .button-text::before {
 }
 #donate-button .button-icon {
   background-image: url(../../utils/icons/donate.svg);
+  height: 18px;
+  width: 18px;
 }
 html.user-donated #donate-button .button-icon {
   background-image: url(../../utils/icons/thanks.svg);
@@ -99,6 +101,7 @@ html.user-donated #donate-button .button-icon {
 .screen-button {
   cursor: pointer;
   user-select: none;
+  color: var(--panel-color);
 }
 .screen-button {
   position: relative;
