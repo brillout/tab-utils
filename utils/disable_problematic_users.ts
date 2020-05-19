@@ -6,6 +6,7 @@ import {
 } from "../views/common/tracker";
 import { get_tab_user_id } from "./TabUserId";
 import { sleep } from "../sleep";
+import { user_donated } from "../load_ad";
 
 export { disable_problematic_users };
 export { app_is_disabled };
@@ -14,6 +15,12 @@ const APP_IS_DISABLED = "app_is_disabled";
 
 function disable_problematic_users() {
   assert(is_browser());
+
+  if (user_donated()) {
+    store.del_val(APP_IS_DISABLED);
+    return;
+  }
+
   check_and_kill_if_disabled();
 }
 
@@ -41,7 +48,7 @@ function check_and_kill_if_disabled() {
 function kill_app() {
   const TARGET_PAGE = "/contact";
   if (is_dev()) return;
-  if (window.location.pathname === TARGET_PAGE) return;
+  if ([TARGET_PAGE, "/repair"].includes(window.location.pathname)) return;
   alert(
     "You have been deactivated. Please contact Romuald, he will let you know why, and how to solve the problem."
   );

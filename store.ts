@@ -26,6 +26,16 @@ class KeyValueStore {
       this.#listeners.forEach((listener) => listener(key, val));
     }
   }
+  del_val(key: string, { is_passive = false } = {}) {
+    if (!this.has_val(key)) return;
+    assert_key(key);
+    this.ensure_store();
+    delete this.#store_data[key];
+    this.save_store();
+    if (!is_passive) {
+      this.#listeners.forEach((listener) => listener(key, "[deleted]"));
+    }
+  }
 
   #listeners: Function[] = [];
   add_store_change_listener(listener) {
