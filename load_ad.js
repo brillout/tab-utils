@@ -161,11 +161,9 @@ function filter_slots(AD_SLOTS, fn) {
 }
 
 async function load_ads(AD_SLOTS) {
-  if (!(await dont_show_adsense())) {
+  if (!(await dont_show_adsense(AD_SLOTS))) {
     const success = await load_and_show_adsense(AD_SLOTS);
-    if (success) {
-      return;
-    }
+    assert(success, { success });
   }
 
   if (!(await dont_show_custom())) {
@@ -209,17 +207,12 @@ function load_custom_banner(AD_SLOTS) {
 
   setTimeout(show_ads, 1000);
 
-  track_event({ name: "[custom-ad] loaded" });
+  track_event({ name: "[custom-ad] activated" });
 }
 
 async function load_and_show_adsense(AD_SLOTS) {
   const adsense_slots = get_adsense_slots(AD_SLOTS);
-
-  if (adsense_slots.length === 0) {
-    return false;
-  }
-
-  show_ads();
+  assert(adsense_slots.length > 0);
 
   const success = await load_adsense_code();
   assert(success === true, { success });
@@ -228,6 +221,10 @@ async function load_and_show_adsense(AD_SLOTS) {
   adsense_slots.forEach(() => {
     window.adsbygoogle.push({});
   });
+
+  track_event({ name: "[adsense] activated" });
+
+  show_ads();
 
   return true;
 }
@@ -320,14 +317,15 @@ async function dont_show_custom() {
   );
 }
 
-async function dont_show_adsense() {
+async function dont_show_adsense(AD_SLOTS) {
   const disable_reason =
     (user_donated() && "user_has_donated") ||
     (ad_blocker_detected() && "ad_blocker_detected") ||
     (is_small_screen() && "screen_too_small") ||
     (is_fringe_browser() && "fringe_browser") ||
     (is_too_many_visits() && "too_many_visits") ||
-    ((await ad_blocked()) && "ad_blocked");
+    ((await ad_blocked()) && "ad_blocked") ||
+    (no_adsense_slots(AD_SLOTS) && "no_adsense_slots");
 
   if (disable_reason) {
     {
@@ -338,13 +336,18 @@ async function dont_show_adsense() {
       if (disable_reason === "screen_too_small") {
         value = JSON.stringify(get_screen_size());
       }
-      track_event({ name: "[adsense]disabled__" + disable_reason, value });
+      track_event({ name: "[adsense] disabled: " + disable_reason, value });
     }
 
     return true;
   }
 
   return false;
+}
+
+function no_adsense_slots(AD_SLOTS) {
+  const adsense_slots = get_adsense_slots(AD_SLOTS);
+  return adsense_slots.length === 0;
 }
 
 function is_too_many_visits() {
