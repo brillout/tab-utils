@@ -160,15 +160,15 @@ function filter_slots(AD_SLOTS, fn) {
   });
 }
 
-function load_ads(AD_SLOTS) {
-  if (!dont_show_adsense()) {
-    const adsense_ad_enabled = load_and_show_adsense(AD_SLOTS);
-    if (adsense_ad_enabled) {
+async function load_ads(AD_SLOTS) {
+  if (!(await dont_show_adsense())) {
+    const success = await load_and_show_adsense(AD_SLOTS);
+    if (success) {
       return;
     }
   }
 
-  if (!dont_show_custom()) {
+  if (!(await dont_show_custom())) {
     load_custom_banner(AD_SLOTS);
     return;
   }
@@ -212,7 +212,7 @@ function load_custom_banner(AD_SLOTS) {
   track_event({ name: "[custom-ad] loaded" });
 }
 
-function load_and_show_adsense(AD_SLOTS) {
+async function load_and_show_adsense(AD_SLOTS) {
   const adsense_slots = get_adsense_slots(AD_SLOTS);
 
   if (adsense_slots.length === 0) {
@@ -221,30 +221,56 @@ function load_and_show_adsense(AD_SLOTS) {
 
   show_ads();
 
-  load_script(
-    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
-    () => {
-      track_event({ name: "[adsense] adsbygoogle.js loaded" });
-    },
-    () => {
-      track_event({ name: "[adsense] adsbygoogle.js blocked" });
-      hide_ads();
-    }
-  );
+  const success = await load_adsense_code();
+  assert(success === true, { success });
 
-  return true;
-
-  /*
-declare global {
-  interface Window {
-    adsbygoogle: any;
-  }
-}
-*/
   window.adsbygoogle = window.adsbygoogle || [];
   adsense_slots.forEach(() => {
     window.adsbygoogle.push({});
   });
+
+  return true;
+}
+
+var adsense_code_load_promise;
+function load_adsense_code() {
+  if (adsense_code_load_promise !== undefined) return adsense_code_load_promise;
+  let resolve;
+  let already_resolved = false;
+  adsense_code_load_promise = new Promise((_resolve) => {
+    resovle = (success) => {
+      assert([true, false].includes(success));
+      if (already_resolved) return;
+      already_resolved = true;
+      _resolve(success);
+    };
+  });
+  assert(resolve);
+
+  load_script(
+    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
+    () => {
+      track_event({ name: "[adsense] adsbygoogle.js loaded" + add_addendum() });
+      resolve(true);
+    },
+    () => {
+      track_event({
+        name: "[adsense] adsbygoogle.js blocked" + add_addendum(),
+      });
+      resolve(false);
+    }
+  );
+  setTimeout(() => {
+    track_event({ name: "[adsense] adsbygoogle.js timeout" });
+    resolve(false);
+  }, 5 * 1000);
+
+  return adsense_code_load_promise;
+
+  function add_addendum() {
+    const addendum = already_resolved ? " [after-timeout]" : "";
+    return addendum;
+  }
 }
 
 // Since Clock/Timer Tab's source code is open anyone can read this and bypass doing a donation to remove ads.
@@ -284,17 +310,23 @@ function user_donated() {
   }
 }
 
-function dont_show_custom() {
-  return user_donated() || ad_blocker_exists() || is_small_screen();
+async function dont_show_custom() {
+  return (
+    user_donated() ||
+    is_small_screen() ||
+    ad_blocker_detected() ||
+    (await ad_blocked())
+  );
 }
 
-function dont_show_adsense() {
+async function dont_show_adsense() {
   const disable_reason =
     (user_donated() && "user_has_donated") ||
-    (ad_blocker_exists() && "ad_blocker_detected") ||
+    (ad_blocker_detected() && "ad_blocker_detected") ||
     (is_small_screen() && "screen_too_small") ||
     (is_fringe_browser() && "fringe_browser") ||
-    (is_too_many_visits() && "too_many_visits");
+    (is_too_many_visits() && "too_many_visits") ||
+    ((await ad_blocked()) && "ad_blocked");
 
   if (disable_reason) {
     {
@@ -358,7 +390,7 @@ function is_fringe_browser() {
 }
 
 var _ad_blocker_is_installed;
-function ad_blocker_exists() {
+function ad_blocker_detected() {
   assert(!is_nodejs());
 
   if (_ad_blocker_is_installed !== undefined) {
@@ -382,6 +414,12 @@ function ad_blocker_exists() {
   document.body.removeChild(ad_blocker_test);
 
   return _ad_blocker_is_installed;
+}
+
+async function ad_blocked() {
+  const success = await load_adsense_code();
+  assert([true, false].includes(success));
+  return !success;
 }
 
 function load_script(url, onload, onerror) {
