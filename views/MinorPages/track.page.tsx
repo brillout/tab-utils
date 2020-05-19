@@ -2,6 +2,7 @@ import React from "react";
 import { getPageConfig } from "../PageWrapper";
 import { get_deploy_id } from "../../utils/get_deploy_id";
 import { get_tab_user_id } from "../../utils/TabUserId";
+import { tab_app_google_analytics_id_2 } from "../../../tab_app_info";
 
 export default getPageConfig(
   () => (
@@ -85,7 +86,9 @@ function google_analytics_link(
   filter?: string
 ) {
   return (
-    "https://analytics.google.com/analytics/web/#/report/content-event-events/a5263303w24659375p23108560/" +
+    "https://analytics.google.com/analytics/web/#/report/content-event-events/" +
+    tab_app_google_analytics_id_2 +
+    "/" +
     `_u.date00=${get_date_string(days_ago)}&` +
     `_u.date01=${get_date_string(0)}&` +
     `explorer-segmentExplorer.segmentId=analytics.${segmentId}&` +
