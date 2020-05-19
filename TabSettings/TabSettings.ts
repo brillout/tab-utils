@@ -195,7 +195,8 @@ export class TabSettings {
   }
 
   save_created_preset() {
-    assert(this.preset_selected.is_creator_preset);
+    const { preset_selected } = this;
+    assert(preset_selected.is_creator_preset, preset_selected);
 
     const preset_name = this.name_option.input_value;
     if (!preset_name) {
@@ -270,7 +271,7 @@ export class TabSettings {
 
   modify_preset() {
     const preset = this.active_preset;
-    assert(preset.is_real_preset);
+    assert(preset.is_real_preset, preset);
     const new_preset_id = this.preset_list.generate_unique_preset_id_copy(
       preset
     );
@@ -282,7 +283,7 @@ export class TabSettings {
 
   delete_preset() {
     const preset = this.active_preset;
-    assert(preset.is_saved_preset);
+    assert(preset.is_saved_preset, preset);
 
     this.copy_to_creator();
 
@@ -557,8 +558,8 @@ export class TabSettings {
       active_preset = preset_selected;
     }
 
-    assert(!active_preset.is_randomizer_preset);
-    assert(active_preset.preset_id);
+    assert(!active_preset.is_randomizer_preset, { active_preset });
+    assert(active_preset.preset_id, { active_preset });
 
     return active_preset;
   }
@@ -777,7 +778,7 @@ class PresetOption extends SelectOption {
   constructor({ input_options, ...args }) {
     super(
       {
-        input_width: "93px",
+        input_width: "120px",
         input_container: args.tab_settings.creator_content,
         ...args,
       },
@@ -1121,12 +1122,12 @@ class Preset {
     const preset_font_name = this.get_preset_value(
       this.tab_settings.font_option
     );
-    assert(preset_font_name);
+    assert(preset_font_name, { preset_font_name });
     return preset_font_name;
   }
   get preset_name() {
     const prettified = NameIdConverter.from_id_to_name(this.preset_id);
-    assert(prettified);
+    assert(prettified, { prettified });
     return prettified;
   }
 }

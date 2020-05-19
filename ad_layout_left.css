@@ -18,7 +18,7 @@ html:not(.show-ads) {
 }
 
 #fv_left-side {
-  --width: 200px;
+  --width: 180px;
   width: var(--width);
 
   --margin-left: calc(var(--hide-left-ad) * -1 * var(--width));

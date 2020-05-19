@@ -132,21 +132,18 @@ async function track_error({
 
   let _eventCategory: string;
   if (!value) {
-    if (is_browser_extension_error(err)) {
-      _eventCategory = "[third-party-error][browser-extension]";
-    }
-    if (is_from_inline_js(err)) {
-      _eventCategory = "[third-party-error][inline-js]";
-    }
-    if (is_cross_origin_error(err)) {
-      _eventCategory = "[third-party-error][cross-origin]";
-    }
-    if (is_whitelist_error(err)) {
-      _eventCategory = "[third-party-error][whitelist]";
+    value = (err && err.message) || "";
+    {
+      const third_party_origin = is_third_party_error(err);
+      if (third_party_origin) {
+        _eventCategory = "[third-party-error]";
+        assert(
+          third_party_origin.startsWith("[") && third_party_origin.endsWith("]")
+        );
+        value = third_party_origin + value;
+      }
     }
   }
-
-  value = value || (err || {}).message;
 
   const stack_info = await get_stack_info(err);
   const data = stack_info;
@@ -190,11 +187,32 @@ async function get_stack_info(err?: any) {
   return stack_info;
 }
 
+function is_third_party_error(err: any) {
+  if (is_browser_extension_error(err)) {
+    return "[browser-extension]";
+  } else if (is_from_inline_js(err)) {
+    return "[inline-js]";
+  } else if (is_cross_origin_error(err)) {
+    return "[cross-origin]";
+  } else if (is_whitelist_error(err)) {
+    return "[whitelist]";
+  } else if (no_stack_trace(err)) {
+    return "[no-stack-trace]";
+  }
+  return false;
+}
+function no_stack_trace(err: any) {
+  const stack_lines: string[] = get_stack_lines(err);
+  return stack_lines.length <= 1;
+}
 function is_cross_origin_error(err: any) {
   if (!err) {
     return false;
   }
   if (!err.stack && err.message === "Script error.") {
+    return true;
+  }
+  if (!err.stack && err.message === "illegal character") {
     return true;
   }
 
@@ -209,7 +227,7 @@ function is_from_inline_js(err: any) {
     return false;
   }
 
-  const stack_lines = (err.stack ? err.stack.split("\n") : []).filter(Boolean);
+  const stack_lines: string[] = get_stack_lines(err);
   if (stack_lines.length > 2 || stack_lines.length === 0) {
     return false;
   }
@@ -264,6 +282,9 @@ function is_from_inline_js(err: any) {
   */
 
   return false;
+}
+function get_stack_lines(err: any): string[] {
+  return (err.stack ? err.stack.split("\n") : []).filter(Boolean);
 }
 function is_browser_extension_error(err: any) {
   if (!err || !err.stack || !err.stack.includes) {

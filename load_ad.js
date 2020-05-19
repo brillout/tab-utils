@@ -238,7 +238,7 @@ function load_adsense_code() {
   let resolve;
   let already_resolved = false;
   adsense_code_load_promise = new Promise((_resolve) => {
-    resovle = (success) => {
+    resolve = (success) => {
       assert([true, false].includes(success));
       if (already_resolved) return;
       already_resolved = true;
@@ -261,6 +261,7 @@ function load_adsense_code() {
     }
   );
   setTimeout(() => {
+    if (already_resolved) return;
     track_event({ name: "[adsense] adsbygoogle.js timeout" });
     resolve(false);
   }, 5 * 1000);
