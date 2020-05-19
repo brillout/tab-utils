@@ -164,6 +164,7 @@ async function load_ads(AD_SLOTS) {
   if (!(await dont_show_adsense(AD_SLOTS))) {
     const success = await load_and_show_adsense(AD_SLOTS);
     assert(success, { success });
+    return;
   }
 
   if (!(await dont_show_custom())) {
