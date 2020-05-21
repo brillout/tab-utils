@@ -6,6 +6,7 @@ import { scrollToHideScrollElement } from "./pretty_scroll_area";
 export { make_element_zoomable };
 export let is_zoomed = null;
 export { on_zoom_end };
+export { toggle_zoom };
 
 /*
 const DEBUG = true;
@@ -56,6 +57,8 @@ function make_element_zoomable({ containerEl, scaleEl, zoomEl, toggleEl }) {
   assert(is_zoomed === null, "multiple zoomable elements are not supported.");
   is_zoomed = false;
 
+  _toggle_zoom = toggle_zoom;
+
   return;
 
   function set_zoom() {
@@ -66,18 +69,22 @@ function make_element_zoomable({ containerEl, scaleEl, zoomEl, toggleEl }) {
     }
   }
 
-  function on_click(ev) {
+  function toggle_zoom({ auto_scroll = false } = {}) {
     on_transition_start();
 
     is_zoomed = !is_zoomed;
 
     track_event({ name: is_zoomed ? "zoom_in" : "zoom_out" });
 
-    if (is_zoomed) {
+    if (auto_scroll && is_zoomed) {
       scrollToHideScrollElement();
     }
 
     set_zoom();
+  }
+
+  function on_click() {
+    toggle_zoom({ auto_scroll: true });
   }
 
   var last_size;
@@ -98,6 +105,11 @@ function make_element_zoomable({ containerEl, scaleEl, zoomEl, toggleEl }) {
     containerEl.classList.remove("zoom-transition");
     call_zoom_state_listeners();
   }
+}
+
+let _toggle_zoom;
+function toggle_zoom() {
+  _toggle_zoom();
 }
 
 const on_zoom_end_listeners = [];

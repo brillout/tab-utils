@@ -2,6 +2,7 @@ import assert from "@brillout/assert";
 import { scrollToElement, addScrollListener } from "../../pretty_scroll_area";
 import { show_toast } from "../common/show_toast";
 import { user_donated } from "../../load_ad";
+import { toggle_zoom } from "../../make_element_zoomable";
 
 export { activate_screen_buttons };
 
@@ -9,6 +10,14 @@ function activate_screen_buttons() {
   activate_view_buttons();
   activate_settings_button();
   activate_donate_button();
+  activate_zoom_button();
+}
+
+function activate_zoom_button() {
+  const zoom_button = document.querySelector("#zoom-button");
+  zoom_button.onclick = () => {
+    toggle_zoom();
+  };
 }
 
 function activate_settings_button() {
@@ -19,8 +28,8 @@ function activate_settings_button() {
 }
 
 function activate_donate_button() {
-  const settings_button = document.querySelector("#donate-button");
-  settings_button.onclick = () => {
+  const donate_button = document.querySelector("#donate-button");
+  donate_button.onclick = () => {
     if (user_donated()) {
       window.open("/thanks");
     } else {

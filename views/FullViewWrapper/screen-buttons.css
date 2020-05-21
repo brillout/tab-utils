@@ -37,6 +37,12 @@
 #fullscreen-button .button-text::before {
   content: "\A0\A0 Fullscreen";
 }
+#zoom-button .button-text::before {
+  content: "\A0\A0 Zoom In";
+}
+.zoomed-state #zoom-button .button-text::before {
+  content: "\A0\A0 Zoom Out";
+}
 #settings-button .button-text::before {
   content: "\A0\A0 Settings";
 }
@@ -73,6 +79,12 @@ html.user-donated #donate-button .button-text::before {
 }
 #fullscreen-button .button-icon {
   background-image: url(./fullscreen.svg);
+}
+#zoom-button .button-icon {
+  background-image: url(./zoom-in.svg);
+}
+.zoomed-state #zoom-button .button-icon {
+  background-image: url(./zoom-out.svg);
 }
 #settings-button .button-icon {
   background-image: url(./settings.svg);
