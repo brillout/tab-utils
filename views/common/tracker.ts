@@ -458,7 +458,14 @@ function track_error_events() {
 
       load_google_analytics();
 
-      const err = ev.error || {};
+      let err: any = {};
+      if (ev.error) {
+        if (ev.error.constructor === String) {
+          err = { message: ev.error };
+        } else {
+          err = ev.error;
+        }
+      }
       err.message = err.message || ev.message;
       if (!err.stack) {
         const { filename, lineno, colno } = ev;
