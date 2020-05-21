@@ -1,11 +1,22 @@
+import assert from "@brillout/assert";
 import { DateTime } from "luxon";
 
-export { get_current_time };
+export { display_time };
 
 // List of tokens: https://moment.github.io/luxon/docs/manual/formatting.html#table-of-tokens
 
-function get_current_time({ military_format = false }): string {
-  const d = DateTime.local();
+function display_time(
+  time: Date | number,
+  { military_format = false }
+): string {
+  let d: DateTime;
+  if (time.constructor === Date) {
+    d = DateTime.fromJSDate(time);
+  } else if (time.constructor === Number) {
+    d = DateTime.fromMillis(time);
+  } else {
+    assert(false, { time });
+  }
   const format = military_format ? "HH:mm" : "h:mm a";
   const time_string = d.toFormat(format);
   return time_string;
