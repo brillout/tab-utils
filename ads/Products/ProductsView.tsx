@@ -18,7 +18,7 @@ function ProductsView({ ad_slots }) {
       <div className="more_panel_block_title">Products</div>
       <div id="product-list">
         {product_slots.map((product_info: any) => (
-          <ProductView {...product_info} />
+          <ProductView key={product_info.product_name} {...product_info} />
         ))}
       </div>
     </div>
