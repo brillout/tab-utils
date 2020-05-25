@@ -30,12 +30,12 @@ function init() {
 }
 
 function Ad_left({ ad_slots }) {
-  const slot_id = get_adsense_slot_id("LEFT_AD", ad_slots);
-  const adsense_ad = slot_id === null ? null : <AdSenseAd slot_id={slot_id} />;
+  const slot_content = get_slot_content("LEFT_AD", ad_slots);
+
   return (
     <div id="left-slot">
       <AdHeader />
-      <div className="vertical-slot-wrapper">{adsense_ad}</div>
+      <div className="vertical-slot-wrapper">{slot_content}</div>
       <AdRemovalButton style={{ marginTop: 45 }} />
     </div>
   );
@@ -112,6 +112,36 @@ function AdSenseAd({ slot_id, responsive_width = false }) {
   );
 }
 
+function get_slot_content(slot_name, ad_slots) {
+  {
+    const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
+    if (adsense_id) {
+      return <AdSenseAd slot_id={adsense_id} />;
+    }
+  }
+  {
+    const ezoic_id = get_ezoic_slot_id(slot_name, ad_slots);
+    if (ezoic_id) {
+      return <div id={ezoic_id} />;
+    }
+  }
+  return null;
+}
+
+function get_ezoic_slot_id(slot_name, ad_slots) {
+  const ezoic_slots = get_ezoic_slots(ad_slots).filter((slot) => {
+    assert(slot_name);
+    assert(slot.slot_name);
+    return slot.slot_name === slot_name;
+  });
+  assert(ezoic_slots.length <= 1);
+  const slot = ezoic_slots[0];
+  if (!slot) return null;
+  const { slot_id } = slot;
+  assert(slot_id);
+  return slot_id;
+}
+
 function get_adsense_slot_id(slot_name, ad_slots) {
   const adsense_slots = get_adsense_slots(ad_slots).filter((slot) => {
     assert(slot_name);
@@ -126,6 +156,9 @@ function get_adsense_slot_id(slot_name, ad_slots) {
   return slot_id;
 }
 
+function get_ezoic_slots(AD_SLOTS) {
+  return filter_slots(AD_SLOTS, (slot) => slot.is_ezoic);
+}
 function get_adsense_slots(AD_SLOTS) {
   return filter_slots(AD_SLOTS, (slot) => slot.is_adsense);
 }
@@ -148,10 +181,12 @@ function filter_slots(AD_SLOTS, fn) {
     assert([true, undefined].includes(slot.is_adsense));
     assert([true, undefined].includes(slot.is_custom));
     assert([true, undefined].includes(slot.is_product));
+    assert([true, undefined].includes(slot.is_ezoic));
     assert(
       (slot.is_adsense ? 1 : 0) +
         (slot.is_custom ? 1 : 0) +
-        (slot.is_product ? 1 : 0) ===
+        (slot.is_product ? 1 : 0) +
+        (slot.is_ezoic ? 1 : 0) ===
         1
     );
     const res = fn(slot);
@@ -167,10 +202,23 @@ async function load_ads(AD_SLOTS) {
     return;
   }
 
-  if (!(await dont_show_custom())) {
-    load_custom_banner(AD_SLOTS);
+  if (await dont_show_ads()) {
     return;
   }
+
+  {
+    const success = load_ezoic_ad();
+    if (success) {
+      return;
+    }
+  }
+
+  // load_custom_banner(AD_SLOTS);
+}
+
+function load_ezoic_ad() {
+  setTimeout(show_ads, 1000);
+  return true;
 }
 
 function load_custom_banner(AD_SLOTS) {
@@ -309,7 +357,7 @@ function user_donated() {
   }
 }
 
-async function dont_show_custom() {
+async function dont_show_ads() {
   return (
     user_donated() ||
     is_small_screen() ||
@@ -438,9 +486,6 @@ function load_script(url, onload, onerror) {
 
 function show_ads() {
   document.documentElement.classList.add("show-ads");
-}
-function hide_ads() {
-  document.documentElement.classList.remove("show-ads");
 }
 
 function is_nodejs() {
