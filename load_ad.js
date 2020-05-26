@@ -11,6 +11,7 @@ import {
 import { get_browser_name } from "./utils/get_browser_info";
 import { enable_products_view } from "./ads/Products/ProductsView";
 import { app_is_disabled } from "./utils/disable_problematic_users";
+import Cookies from "js-cookie";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -203,6 +204,7 @@ async function load_ads(AD_SLOTS) {
   }
 
   if (await dont_show_ads()) {
+    disable_ezoic();
     return;
   }
 
@@ -214,6 +216,11 @@ async function load_ads(AD_SLOTS) {
   }
 
   // load_custom_banner(AD_SLOTS);
+}
+
+function disable_ezoic() {
+  const TEN_YEARS = 365 * 10;
+  Cookies.set("disable_ezoic_ads", "yes", { expires: TEN_YEARS });
 }
 
 function load_ezoic_ad() {
