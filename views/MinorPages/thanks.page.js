@@ -1,5 +1,8 @@
 import React from "react";
+import Cookies from "js-cookie";
 import { getPageConfig } from "../PageWrapper";
+import { AD_REMOVAL_KEY, disable_ezoic } from "../../load_ad";
+import { store } from "../../store";
 
 export default getPageConfig(
   () => (
@@ -9,6 +12,8 @@ export default getPageConfig(
       <p>
         If you have any suggestions, <a href="/suggest">let me know</a>!
       </p>
+
+      <p>All advertisments are removed.</p>
 
       <p>
         Warm regards,
@@ -20,5 +25,16 @@ export default getPageConfig(
     </>
   ),
   "Thank you.",
-  { route: "/thanks" }
+  { route: "/thanks", onPageLoad }
 );
+
+function onPageLoad() {
+  disable_ads();
+}
+function disable_ads() {
+  set_flag();
+  disable_ezoic();
+}
+function set_flag() {
+  store.set_val(AD_REMOVAL_KEY, true);
+}

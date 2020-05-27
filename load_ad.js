@@ -2,7 +2,6 @@ import "./ad_layout.css";
 import "./ad_layout_left.css";
 import React from "react";
 import assert from "@brillout/assert";
-import remove_hash from "./private/remove_hash";
 import { store } from "./store";
 import {
   track_event,
@@ -18,6 +17,10 @@ export { Ad_ATF, Ad_BTF };
 export { Ad_left };
 export { user_donated };
 export { get_product_slots };
+export const AD_REMOVAL_KEY = "ad_removal";
+export { disable_ezoic };
+
+const EZOIC_COOKIE_NAME = "disable_ezoic_ads";
 
 init();
 
@@ -25,9 +28,10 @@ function init() {
   if (is_nodejs()) {
     return;
   }
+  redirect_to_thanks_page();
   if (user_donated()) {
-    disable_ezoic();
     document.documentElement.classList.add("user-donated");
+    disable_ezoic();
   }
 }
 
@@ -214,16 +218,14 @@ async function load_ads(AD_SLOTS) {
   // load_custom_banner(AD_SLOTS);
 }
 
-var ezoic_is_disabled;
-function disable_ezoic() {
-  assert(ezoic_is_disabled === undefined);
-  ezoic_is_disabled = true;
-  const TEN_YEARS = 365 * 10;
-  Cookies.set("disable_ezoic_ads", "yes", { expires: TEN_YEARS });
-}
 function load_ezoic_ad() {
-  assert(ezoic_is_disabled === undefined);
+  const ezoic_cookie = Cookies.get(EZOIC_COOKIE_NAME);
+  assert(ezoic_cookie === undefined, { ezoic_cookie });
   setTimeout(show_ads, 1000);
+}
+function disable_ezoic() {
+  const TEN_YEARS = 365 * 10;
+  Cookies.set(EZOIC_COOKIE_NAME, "yes", { expires: TEN_YEARS });
 }
 
 function load_custom_banner(AD_SLOTS) {
@@ -342,23 +344,13 @@ function user_donated() {
   return _user_donated;
 
   function check_donation() {
-    const AD_REMOVAL_KEY = "ad_removal";
+    return store.has_val(AD_REMOVAL_KEY);
+  }
+}
 
-    const code_in_storage = store.has_val(AD_REMOVAL_KEY);
-
-    if (window.location.hash === "#thanks-for-your-donation") {
-      if (!code_in_storage) {
-        store.set_val(AD_REMOVAL_KEY, true);
-      }
-      remove_hash();
-      return true;
-    }
-
-    if (code_in_storage) {
-      return true;
-    }
-
-    return false;
+function redirect_to_thanks_page() {
+  if (window.location.hash === "#thanks-for-your-donation") {
+    window.location.href = window.location.origin + "/thanks";
   }
 }
 
