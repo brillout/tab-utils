@@ -26,6 +26,7 @@ function init() {
     return;
   }
   if (user_donated()) {
+    disable_ezoic();
     document.documentElement.classList.add("user-donated");
   }
 }
@@ -204,28 +205,25 @@ async function load_ads(AD_SLOTS) {
   }
 
   if (await dont_show_ads()) {
-    disable_ezoic();
     return;
   }
 
-  {
-    const success = load_ezoic_ad();
-    if (success) {
-      return;
-    }
-  }
+  load_ezoic_ad();
+  return;
 
   // load_custom_banner(AD_SLOTS);
 }
 
+var ezoic_is_disabled;
 function disable_ezoic() {
+  assert(ezoic_is_disabled === undefined);
+  ezoic_is_disabled = true;
   const TEN_YEARS = 365 * 10;
   Cookies.set("disable_ezoic_ads", "yes", { expires: TEN_YEARS });
 }
-
 function load_ezoic_ad() {
+  assert(ezoic_is_disabled === undefined);
   setTimeout(show_ads, 1000);
-  return true;
 }
 
 function load_custom_banner(AD_SLOTS) {
