@@ -3,8 +3,18 @@
   margin-left: auto;
   margin-right: auto;
 }
-.vertical-slot-wrapper,
-.vertical-slot-wrapper .adsbygoogle {
+#left-slot {
+  display: flex;
+  flex-direction: column;
+}
+.vertical-slot-wrapper {
+  overflow: hidden;
+  min-width: 120px;
+  max-width: 160px;
+  min-height: 125px;
+  max-height: 600px;
+}
+.adsbygoogle {
   display: block;
   width: 160px;
   height: 600px;
@@ -84,8 +94,10 @@ a.donate-remover-2 {
 
 /*
 #ezoic-pub-ad-placeholder-101 {
-  width: 160px;
-  height: 600px;
+  width: 1060px;
+  height: 6000px;
+  width: 125px;
+  height: 125px;
   background-color: red;
 }
 */
