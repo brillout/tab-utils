@@ -9,10 +9,7 @@
 }
 .vertical-slot-wrapper {
   overflow: hidden;
-  min-width: 120px;
   max-width: 160px;
-  min-height: 125px;
-  max-height: 600px;
 }
 .adsbygoogle {
   display: block;
@@ -101,3 +98,7 @@ a.donate-remover-2 {
   background-color: red;
 }
 */
+#ezoic-pub-ad-placeholder-101:empty {
+  width: 140px;
+  height: 400px;
+}
