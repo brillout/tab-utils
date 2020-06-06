@@ -11,6 +11,7 @@ import { get_browser_name } from "./utils/get_browser_info";
 import { enable_products_view } from "./ads/Products/ProductsView";
 import { app_is_disabled } from "./utils/disable_problematic_users";
 import Cookies from "js-cookie";
+import { tab_app_google_adsense } from "../tab_app_info";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -108,10 +109,11 @@ function AdView({ ad_slots, slot_name }) {
 }
 
 function AdSenseAd({ slot_id, responsive_width = false }) {
+  assert(tab_app_google_adsense.startsWith("ca-pub-"));
   return (
     <ins
       className="adsbygoogle"
-      data-ad-client="ca-pub-6953474219479917"
+      data-ad-client={tab_app_google_adsense}
       data-full-width-responsive={responsive_width ? "true" : null}
       data-ad-slot={slot_id}
     ></ins>
