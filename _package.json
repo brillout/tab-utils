@@ -15,6 +15,7 @@
   "dependencies": {
     "@brillout/assert": "^0.1.7",
     "@brillout/json-s": "^0.1.0",
+    "@brillout/website-legals": "^0.0.4",
     "@goldpage/react": "^0.5.6",
     "@goldpage/serverless": "^0.5.6",
     "@goldpage/typescript": "^0.5.6",

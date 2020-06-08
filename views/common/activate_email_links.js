@@ -3,17 +3,19 @@ import { tab_app_mail } from "../../../tab_app_info";
 export default activate_email_links;
 
 function activate_email_links() {
-  Array.from(document.querySelectorAll("a.contact-address")).forEach((link) => {
-    link.innerHTML = link.innerHTML || tab_app_mail;
-    link.setAttribute("target", "_blank");
-    link.setAttribute("href", getHref(link));
+  Array.from(document.querySelectorAll(".contact-address")).forEach((el) => {
+    el.innerHTML = el.innerHTML || tab_app_mail;
+    if (el.tagName === "A") {
+      el.setAttribute("target", "_blank");
+      el.setAttribute("href", getHref(el));
+    }
   });
 }
 
-function getHref(link) {
+function getHref(el) {
   let href = "mailto:" + tab_app_mail;
-  const data_subject = link.getAttribute("data-subject");
-  const data_body = link.getAttribute("data-body");
+  const data_subject = el.getAttribute("data-subject");
+  const data_body = el.getAttribute("data-body");
 
   if (!data_subject && !data_body) {
     return href;

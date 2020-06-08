@@ -1058,6 +1058,14 @@
     lodash.escaperegexp "^4.1.2"
     reassert "^1.1.12"
 
+"@brillout/website-legals@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.npmjs.org/@brillout/website-legals/-/website-legals-0.0.4.tgz#838f74b6fc4552ca08982bc7c01b8169ab70f504"
+  integrity sha512-uJCxwbQD/PNqFPT1TdekDmBZ77AMo0nUyBq/74/RkV4n1BM+wvgx+S5SxcDvAf6JpzOCwJvGm6SLmdE3jTYiPg==
+  dependencies:
+    "@brillout/assert" "^0.1.7"
+    react "^16.13.1"
+
 "@goldpage/browser@0.5.6":
   version "0.5.6"
   resolved "https://registry.npmjs.org/@goldpage/browser/-/browser-0.5.6.tgz#9a097ede3054a3526df4af64bce08dbcc1ca0858"
@@ -4300,6 +4308,15 @@ react@^16.13.0:
   version "16.13.0"
   resolved "https://registry.npmjs.org/react/-/react-16.13.0.tgz#d046eabcdf64e457bbeed1e792e235e1b9934cf7"
   integrity sha512-TSavZz2iSLkq5/oiE7gnFzmURKZMltmi193rm5HEoUDAXpzT9Kzw6oNZnGoai/4+fUnm7FqS5dwgUL34TujcWQ==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+
+react@^16.13.1:
+  version "16.13.1"
+  resolved "https://registry.npmjs.org/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
+  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
