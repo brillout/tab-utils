@@ -93,7 +93,7 @@ function google_analytics_link(
     `_u.date01=${get_date_string(0)}&` +
     `explorer-segmentExplorer.segmentId=analytics.${segmentId}&` +
     `explorer-table.filter=${filter}&` +
-    "explorer-table.plotKeys=%5B%5D&explorer-table.rowStart=0&explorer-table.rowCount=100/"
+    "explorer-table.plotKeys=%5B%5D&explorer-table.rowStart=0&explorer-table.rowCount=5000/"
   );
 }
 
