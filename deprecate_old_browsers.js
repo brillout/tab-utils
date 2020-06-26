@@ -20,7 +20,7 @@ function is_old_browser() {
 }
 
 function browser_supports_css_variables() {
-  return window.CSS && CSS.supports("color", "var(--fake-var)");
+  return window.CSS && CSS.supports && CSS.supports("color", "var(--fake-var)");
 }
 
 function addHtml({ email, projectName }) {
