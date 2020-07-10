@@ -13,9 +13,10 @@ function Terms() {
     <>
       <TermsOfService
         website_name={tab_app_name}
-        website_url={tab_app_url}
         email_component={<span className="contact-address" />}
         legal_country={"Germany"}
+        website_url={tab_app_url}
+        no_registration={true}
       />
     </>
   );

@@ -14,6 +14,7 @@ function Privacy() {
       email_component={<span className="contact-address" />}
       legal_country={"Germany"}
       has_ads={true}
+      no_user_tracking={false}
     />
   );
 }

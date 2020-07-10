@@ -1058,10 +1058,10 @@
     lodash.escaperegexp "^4.1.2"
     reassert "^1.1.12"
 
-"@brillout/website-legals@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/@brillout/website-legals/-/website-legals-0.0.4.tgz#838f74b6fc4552ca08982bc7c01b8169ab70f504"
-  integrity sha512-uJCxwbQD/PNqFPT1TdekDmBZ77AMo0nUyBq/74/RkV4n1BM+wvgx+S5SxcDvAf6JpzOCwJvGm6SLmdE3jTYiPg==
+"@brillout/website-legals@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.npmjs.org/@brillout/website-legals/-/website-legals-0.0.6.tgz#33b606d4562b56aff3b60cb6721f1ab5369b472b"
+  integrity sha512-+tqnpV6+5ljA/8fC/aYwfxOA68x0P7VUqyIoBeu8sYgq2MKGCu2T1/0vN6g1dugGUPdIZK8Q39ILve4s1pxKKw==
   dependencies:
     "@brillout/assert" "^0.1.7"
     react "^16.13.1"
