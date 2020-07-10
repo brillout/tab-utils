@@ -1,3 +1,6 @@
+// TODO
+// - use `@brillout/activate_email_links` instead
+
 import { tab_app_mail } from "../../../tab_app_info";
 
 export default activate_email_links;
