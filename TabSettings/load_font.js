@@ -21,9 +21,7 @@ async function load_font(font_name) {
   function do_it() {
     assert(font_name, { font_name });
     WebFont.load({
-      google: {
-        families: [font_name],
-      },
+      ...get_font_spec(font_name),
       fontactive: resolve,
       fontinactive: () => {
         attempts++;
@@ -34,5 +32,23 @@ async function load_font(font_name) {
         setTimeout(do_it, timeout);
       },
     });
+  }
+}
+
+function get_font_spec(font_name) {
+  const HOSTED = ["AirbnbCereal", "LCD"];
+  if (HOSTED.includes(font_name)) {
+    return {
+      custom: {
+        families: [font_name],
+        urls: ["/fonts/" + font_name + "/" + font_name + ".css"],
+      },
+    };
+  } else {
+    return {
+      google: {
+        families: [font_name],
+      },
+    };
   }
 }
