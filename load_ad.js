@@ -41,47 +41,8 @@ function Ad_left({ ad_slots }) {
 
   return (
     <div id="left-slot">
-      <AdHeader />
       <div className="vertical-slot-wrapper">{slot_content}</div>
-      <AdRemovalButton style={{ marginTop: 45 }} />
     </div>
-  );
-}
-
-function AdHeader() {
-  return (
-    <div
-      style={{
-        height: 61,
-        fontWeight: 300,
-        width: "100%",
-        color: "#aaa",
-        fontSize: "0.95em",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      className="unselectable"
-    >
-      Advertisement
-    </div>
-  );
-}
-function AdRemovalButton(props) {
-  return (
-    <a
-      className="donate-remover-2 glass-background"
-      click-name="donate-button-left"
-      href="/donate"
-      target="_blank"
-      {...props}
-    >
-      <span id="left-donate-icon"></span>
-      <span id="left-donate-text">
-        Donate &<br />
-        Remove ads
-      </span>
-    </a>
   );
 }
 

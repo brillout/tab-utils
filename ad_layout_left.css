@@ -1,5 +1,7 @@
 .vertical-slot-wrapper {
+  /*
   outline: 1px solid var(--ad-border-color);
+  */
   margin-left: auto;
   margin-right: auto;
 }
@@ -33,30 +35,6 @@ html:not(.show-ads) {
   transition: margin-left 0.7s ease-in-out;
 }
 
-a.donate-remover-2 {
-  text-decoration: none !important;
-}
-.donate-remover-2,
-.donate-remover-2.glass-background,
-.donate-remover-2.glass-background::after {
-  border-radius: 8px;
-}
-.donate-remover-2 {
-  cursor: pointer;
-  padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 160px;
-}
-.donate-remover-2 {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-.donate-remover-2 > span {
-  display: inline-block;
-  text-align: left;
-}
 #left-donate-icon,
 #left-donate-text {
   vertical-align: middle;
@@ -82,9 +60,6 @@ a.donate-remover-2 {
   }
 }
 
-.custom-banner .donate-remover-2 {
-  margin-top: 30px !important;
-}
 .custom-banner #custom-banner {
   cursor: pointer;
 }
