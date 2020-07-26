@@ -26,6 +26,15 @@ function FullView(props) {
         {children}
         <div id="screen-buttons-wrapper">
           <div
+            id="donate-button"
+            click-name="donate-button-right"
+            className="screen-button"
+          >
+            <div className="button-background glass-background" />
+            <span className="button-icon"></span>
+            <span className="button-text"></span>
+          </div>
+          <div
             id="center-button"
             click-name="center-button"
             className="screen-button"
@@ -34,7 +43,6 @@ function FullView(props) {
             <span className="button-icon"></span>
             <span className="button-text"></span>
           </div>
-          <br />
           <div
             id="fullscreen-button"
             click-name="fullscreen-button"
@@ -44,7 +52,6 @@ function FullView(props) {
             <span className="button-icon"></span>
             <span className="button-text"></span>
           </div>
-          <br />
           <div
             id="zoom-button"
             click-name="zoom-button"
@@ -54,20 +61,9 @@ function FullView(props) {
             <span className="button-icon"></span>
             <span className="button-text"></span>
           </div>
-          <br />
           <div
             id="settings-button"
             click-name="settings-button"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <br />
-          <div
-            id="donate-button"
-            click-name="donate-button-right"
             className="screen-button"
           >
             <div className="button-background glass-background" />

@@ -3,7 +3,7 @@
   flex-wrap: wrap;
 }
 #header-content > * {
-  height: 60px;
+  height: 70px;
   display: flex;
   align-items: center;
 }
@@ -12,6 +12,7 @@
   padding: 0 14px;
   text-decoration: none;
   padding-top: 1px;
+  font-size: 1.02em;
 }
 
 a#header-logo {
@@ -26,7 +27,7 @@ a#header-logo {
 }
 
 #header-logo > img {
-  height: 39px;
+  height: 34px;
   vertical-align: middle;
   display: inline-block;
 }

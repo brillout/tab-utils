@@ -612,7 +612,7 @@ interface Option {
 class Option {
   tab_settings: TabSettings;
   option_id: string;
-  option_description: string;
+  option_description?: string;
   input_args: any;
   is_creator_option: Boolean;
   option_default: any;
@@ -628,7 +628,6 @@ class Option {
     ...props
   }) {
     assert(option_id);
-    assert(option_description);
     assert(tab_settings);
     Object.assign(this, {
       option_id,

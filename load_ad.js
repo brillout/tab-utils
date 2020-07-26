@@ -223,7 +223,7 @@ async function load_ads(AD_SLOTS) {
 function load_ezoic_ad() {
   const ezoic_cookie = Cookies.get(EZOIC_COOKIE_NAME);
   assert(ezoic_cookie === undefined, { ezoic_cookie });
-  setTimeout(show_ads, 1000);
+  show_ads();
 }
 function disable_ezoic() {
   const TEN_YEARS = 365 * 10;
@@ -263,7 +263,7 @@ function load_custom_banner(AD_SLOTS) {
 
   enable_products_view(custom_slot);
 
-  setTimeout(show_ads, 1000);
+  show_ads();
 
   track_event({ name: "[custom-ad] activated" });
 }
@@ -280,9 +280,9 @@ async function load_and_show_adsense(AD_SLOTS) {
     window.adsbygoogle.push({});
   });
 
-  track_event({ name: "[adsense] activated" });
-
   show_ads();
+
+  track_event({ name: "[adsense] activated" });
 
   return true;
 }
@@ -484,7 +484,10 @@ function load_script(url, onload, onerror) {
 }
 
 function show_ads() {
-  document.documentElement.classList.add("show-ads");
+  setTimeout(show, 2.3 * 1000);
+  function show() {
+    document.documentElement.classList.add("show-ads");
+  }
 }
 
 function is_nodejs() {

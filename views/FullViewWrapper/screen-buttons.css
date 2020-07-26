@@ -1,4 +1,4 @@
-/* Layout */
+/* Layout - Overall */
 .pretty_scroll_area__hide_scroll_element {
   position: relative;
 }
@@ -7,26 +7,31 @@
 }
 #screen-buttons-wrapper {
   top: 10px;
-}
-#screen-buttons-wrapper {
-  text-align: right;
-}
-#screen-buttons-wrapper > .screen-button {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
 }
 .screen-button {
-  margin-top: 10px;
-  padding: 11px 15px;
+  --height: 40px;
+  --margin: 10px;
+  height: var(--height);
+  margin-top: var(--margin);
   white-space: nowrap;
 }
 
-/* Inner Layout */
+/* Layout - Inside Button */
 .screen-button {
-  line-height: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
 }
 .screen-button .button-icon {
   vertical-align: middle;
   position: relative;
+  --adjust-margin: calc(
+    -1 * (var(--icon-width) - var(--icon-default-width)) / 2
+  );
+  margin-right: var(--adjust-margin);
+  margin-left: var(--adjust-margin);
 }
 .screen-button .button-text {
   position: relative;
@@ -38,16 +43,16 @@
   content: "\A0\A0 Fullscreen";
 }
 #zoom-button .button-text::before {
-  content: "\A0\A0 Zoom In";
+  content: "\A0\A0 Zoom in";
 }
 .zoomed-state #zoom-button .button-text::before {
-  content: "\A0\A0 Zoom Out";
+  content: "\A0\A0 Zoom out";
 }
 #settings-button .button-text::before {
   content: "\A0\A0 Settings";
 }
 #donate-button .button-text::before {
-  content: "\A0\A0 Donate";
+  content: "\A0\A0 Remove ads";
 }
 html.user-donated #donate-button .button-text::before {
   content: "\A0\A0 Thanks";
@@ -71,7 +76,11 @@ html.user-donated #donate-button .button-text::before {
 .screen-button .button-icon {
   display: inline-block;
   height: 15px;
-  width: 15px;
+  --icon-default-width: 15px;
+  --icon-width: var(--icon-default-width);
+  width: var(--icon-width);
+  margin-top: -10px;
+  margin-bottom: -10px;
 
   background-size: contain;
   background-repeat: no-repeat;
@@ -89,17 +98,19 @@ html.user-donated #donate-button .button-text::before {
 #settings-button .button-icon {
   background-image: url(./settings.svg);
   height: 17px;
-  width: 19px;
+  --icon-width: 19px;
 }
 #donate-button .button-icon {
-  background-image: url(../../utils/icons/donate.svg);
-  height: 18px;
-  width: 18px;
+  background-image: url(../../utils/icons/sweep.svg);
+  height: 20px;
+  --icon-width: 20px;
+  margin-top: -2px;
+  margin-bottom: -2px;
 }
 html.user-donated #donate-button .button-icon {
   background-image: url(../../utils/icons/thanks.svg);
   height: 16px;
-  width: 16px;
+  --icon-width: 16px;
 }
 #center-button .button-icon {
   background-image: url(./center.svg);
@@ -170,4 +181,15 @@ html.user-donated #donate-button .button-icon {
 }
 .hide_scroll #screen-buttons-wrapper {
   right: var(--base-width);
+}
+
+#donate-button {
+  transition: right 0.7s ease-out, margin-bottom 0.7s ease-out;
+  position: relative;
+  right: 0;
+  margin-bottom: 0;
+}
+html:not(.show-ads) #donate-button {
+  margin-bottom: calc(-1 * (var(--height) + var(--margin)));
+  right: -160px;
 }

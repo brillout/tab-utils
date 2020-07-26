@@ -370,7 +370,6 @@ function generate_input({
   assert(input_tag);
   assert(input_type || input_tag !== "input");
   assert(input_id);
-  assert(input_description);
   assert(input_container, { input_id });
 
   const dom_el = document.createElement("label");
@@ -380,14 +379,21 @@ function generate_input({
   input_el.id = input_id;
   if (input_type) input_el.setAttribute("type", input_type);
 
-  const description_el = document.createElement("span");
-  description_el.textContent = input_description; //+'&nbsp;';
+  let description_el;
+  if (input_description) {
+    description_el = document.createElement("span");
+    description_el.textContent = input_description; //+'&nbsp;';
+  }
 
   if (input_type === "checkbox") {
     dom_el.appendChild(input_el);
-    dom_el.appendChild(description_el);
+    if (description_el) {
+      dom_el.appendChild(description_el);
+    }
   } else {
-    dom_el.appendChild(description_el);
+    if (description_el) {
+      dom_el.appendChild(description_el);
+    }
     dom_el.appendChild(input_el);
   }
 

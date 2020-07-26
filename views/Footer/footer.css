@@ -16,6 +16,7 @@
   src: local("Lato Light"), local("Lato-Light"),
     url("./Lato-Light.woff") format("woff");
 }
+#more_panel,
 #footer_container,
 #header-container,
 #screen-buttons-wrapper,
