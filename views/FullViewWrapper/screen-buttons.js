@@ -10,6 +10,7 @@ function activate_screen_buttons() {
   activate_view_buttons();
   activate_settings_button();
   activate_donate_button();
+  activate_thanks_button();
   activate_zoom_button();
 }
 
@@ -30,11 +31,14 @@ function activate_settings_button() {
 function activate_donate_button() {
   const donate_button = document.querySelector("#donate-button");
   donate_button.onclick = () => {
-    if (user_donated()) {
-      window.open("/thanks");
-    } else {
-      window.open("/donate", "_blank");
-    }
+    window.open("/donate", "_self");
+  };
+}
+
+function activate_thanks_button() {
+  const donate_button = document.querySelector("#thanks-button");
+  donate_button.onclick = () => {
+    window.open("/thanks", "_self");
   };
 }
 

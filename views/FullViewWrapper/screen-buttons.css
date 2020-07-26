@@ -54,7 +54,7 @@
 #donate-button .button-text::before {
   content: "\A0\A0 Remove ads";
 }
-html.user-donated #donate-button .button-text::before {
+#thanks-button .button-text::before {
   content: "\A0\A0 Thanks";
 }
 #center-button .button-text::before {
@@ -107,7 +107,7 @@ html.user-donated #donate-button .button-text::before {
   margin-top: -2px;
   margin-bottom: -2px;
 }
-html.user-donated #donate-button .button-icon {
+#thanks-button .button-icon {
   background-image: url(../../utils/icons/thanks.svg);
   height: 16px;
   --icon-width: 16px;
@@ -165,14 +165,15 @@ html.user-donated #donate-button .button-icon {
 .screen-button {
   opacity: 100;
   visibility: visible;
-  transition: opacity 0.7s ease-out;
+  --button-transition: opacity 0.7s ease-out;
+  transition: var(--button-transition);
 }
 .hide_scroll .screen-button {
   pointer-events: none;
   /* we set `visibility: hidden` in order to skip the animation computation of `center__blinking.svg` */
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 0.7s, opacity 0.7s ease-in;
+  --button-transition: visibility 0s 0.7s, opacity 0.7s ease-in;
 }
 #screen-buttons-wrapper {
   --base-width: 16px;
@@ -182,9 +183,17 @@ html.user-donated #donate-button .button-icon {
 .hide_scroll #screen-buttons-wrapper {
   right: var(--base-width);
 }
+html:not(.user-donated) #thanks-button,
+html.user-donated #donate-button {
+  display: none;
+}
 
 #donate-button {
-  transition: right 0.7s ease-out, margin-bottom 0.7s ease-out;
+  transition: var(--button-transition), right 0.7s ease-out,
+    margin-bottom 0.7s ease-out;
+  opacity: 100 !important;
+  visibility: visible !important;
+  pointer-events: all !important;
   position: relative;
   right: 0;
   margin-bottom: 0;
