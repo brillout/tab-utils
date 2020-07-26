@@ -456,7 +456,8 @@ export class TabSettings {
   update_background() {
     const image = this.current_backgroud_image;
     const color = this.current_backgroud_color;
-    set_background(color, image, "fv_right-side");
+    // set_background(color, image, "#fv_right-side");
+    set_background(color, image, "body");
   }
   async update_font() {
     const { text_container } = this;

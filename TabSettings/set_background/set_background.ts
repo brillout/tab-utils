@@ -23,11 +23,11 @@ export { set_background };
 async function set_background(
   color_code: ColorVal,
   image_uri: ImageUri,
-  bg_container_id: string
+  bg_container_selector: string
 ) {
   const is_outdated = get_is_outdated();
 
-  init(bg_container_id);
+  init(bg_container_selector);
 
   const bg_img_val: BgImgVal = await load_image(image_uri, is_outdated);
 
@@ -151,17 +151,17 @@ function apply_image(bg_img_val: BgImgVal) {
 }
 
 let BG_EL: HTMLElement;
-function init(bg_container_id: string) {
+function init(bg_container_selector: string) {
   if (BG_EL) {
     const bg_container_id__previous = BG_EL.parentElement.parentElement.id;
-    assert(bg_container_id__previous === bg_container_id, {
-      bg_container_id,
+    assert(bg_container_id__previous === bg_container_selector, {
+      bg_container_selector,
       bg_container_id__previous,
     });
     return;
   }
-  const bg_container = document.querySelector("#" + bg_container_id);
-  assert(bg_container, { bg_container_id });
+  const bg_container = document.querySelector(bg_container_selector);
+  assert(bg_container, { bg_container_selector });
 
   const el1 = document.createElement("div");
   el1.id = "background-area-wrapper";

@@ -1,8 +1,6 @@
 import React from "react";
-import Cookies from "js-cookie";
 import { getPageConfig } from "../PageWrapper";
-import { AD_REMOVAL_KEY, disable_ezoic } from "../../load_ad";
-import { store } from "../../store";
+import { disable_ads } from "../../load_ad";
 
 export default getPageConfig(
   () => (
@@ -30,11 +28,4 @@ export default getPageConfig(
 
 function onPageLoad() {
   disable_ads();
-}
-function disable_ads() {
-  set_flag();
-  disable_ezoic();
-}
-function set_flag() {
-  store.set_val(AD_REMOVAL_KEY, true);
 }

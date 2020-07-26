@@ -10,8 +10,8 @@ import {
 import { get_browser_name } from "./utils/get_browser_info";
 import { enable_products_view } from "./ads/Products/ProductsView";
 import { app_is_disabled } from "./utils/disable_problematic_users";
-import Cookies from "js-cookie";
 import { tab_app_google_adsense } from "../tab_app_info";
+import { disable_ezoic, enable_ezoic } from "./ads/ezoic.ts";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -19,9 +19,7 @@ export { Ad_left };
 export { user_donated };
 export { get_product_slots };
 export const AD_REMOVAL_KEY = "ad_removal";
-export { disable_ezoic };
-
-const EZOIC_COOKIE_NAME = "disable_ezoic_ads";
+export { disable_ads };
 
 init();
 
@@ -29,11 +27,36 @@ function init() {
   if (is_nodejs()) {
     return;
   }
-  redirect_to_thanks_page();
+  thanks_page_redirection();
   if (user_donated()) {
     document.documentElement.classList.add("user-donated");
     disable_ezoic();
+  } else {
+    enable_ezoic();
   }
+}
+
+async function load_ads(AD_SLOTS) {
+  if (!(await dont_show_adsense(AD_SLOTS))) {
+    const success = await load_and_show_adsense(AD_SLOTS);
+    assert(success, { success });
+    return;
+  }
+
+  if (await dont_show_ads()) {
+    return;
+  }
+
+  show_ads();
+  return;
+
+  // load_custom_banner(AD_SLOTS);
+}
+
+function disable_ads() {
+  store.set_val(AD_REMOVAL_KEY, true);
+  set_flag();
+  disable_ezoic();
 }
 
 function Ad_left({ ad_slots }) {
@@ -164,33 +187,6 @@ function filter_slots(AD_SLOTS, fn) {
   });
 }
 
-async function load_ads(AD_SLOTS) {
-  if (!(await dont_show_adsense(AD_SLOTS))) {
-    const success = await load_and_show_adsense(AD_SLOTS);
-    assert(success, { success });
-    return;
-  }
-
-  if (await dont_show_ads()) {
-    return;
-  }
-
-  load_ezoic_ad();
-  return;
-
-  // load_custom_banner(AD_SLOTS);
-}
-
-function load_ezoic_ad() {
-  const ezoic_cookie = Cookies.get(EZOIC_COOKIE_NAME);
-  assert(ezoic_cookie === undefined, { ezoic_cookie });
-  show_ads();
-}
-function disable_ezoic() {
-  const TEN_YEARS = 365 * 10;
-  Cookies.set(EZOIC_COOKIE_NAME, "yes", { expires: TEN_YEARS });
-}
-
 function load_custom_banner(AD_SLOTS) {
   const custom_slot = get_custom_slot(AD_SLOTS);
 
@@ -311,7 +307,7 @@ function user_donated() {
   }
 }
 
-function redirect_to_thanks_page() {
+function thanks_page_redirection() {
   if (window.location.hash === "#thanks-for-your-donation") {
     window.location.href = window.location.origin + "/thanks";
   }
