@@ -12,6 +12,7 @@ import { enable_products_view } from "./ads/Products/ProductsView";
 import { app_is_disabled } from "./utils/disable_problematic_users";
 import { tab_app_google_adsense } from "../tab_app_info";
 import { disable_ezoic, enable_ezoic } from "./ads/ezoic.ts";
+import { getElementScrollPos, addScrollListener } from "./pretty_scroll_area";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
@@ -29,9 +30,16 @@ function init() {
   if (is_nodejs()) {
     return;
   }
+
   thanks_page_redirection();
-  if (user_donated()) {
+
+  const donated = user_donated();
+
+  if (donated) {
     document.documentElement.classList.add("user-donated");
+  }
+
+  if (donated) {
     disable_ezoic();
   } else {
     enable_ezoic();
@@ -49,6 +57,7 @@ async function load_ads(AD_SLOTS) {
   } else {
     setTimeout(() => {
       document.documentElement.classList.add("show-ads");
+      enable_floating_ads();
     }, SHOW_DELAY * 1000);
   }
 }
@@ -61,6 +70,8 @@ function disable_ads() {
 function Ad_left({ ad_slots }) {
   const slot_atf = get_slot_content("LEFT_AD_ATF", ad_slots);
   const slot_btf = get_slot_content("LEFT_AD_BTF", ad_slots);
+  assert(slot_atf);
+  assert(slot_btf);
 
   return (
     <div id="ads-left">
@@ -117,15 +128,23 @@ function get_slot_content(slot_name, ad_slots) {
     }
   }
   {
-    const ezoic_id = get_ezoic_slot_id(slot_name, ad_slots);
+    const ezoic_slot = get_ezoic_slot(slot_name, ad_slots);
+    const ezoic_id = ezoic_slot.slot_id;
+    assert(ezoic_id);
+
+    const { is_floating } = ezoic_slot;
+    assert([true, undefined].includes(is_floating));
+
     if (ezoic_id) {
-      return <div id={ezoic_id} />;
+      return (
+        <div id={ezoic_id} className={is_floating ? " is_floating" : ""} />
+      );
     }
   }
   return null;
 }
 
-function get_ezoic_slot_id(slot_name, ad_slots) {
+function get_ezoic_slot(slot_name, ad_slots) {
   const ezoic_slots = get_ezoic_slots(ad_slots).filter((slot) => {
     assert(slot_name);
     assert(slot.slot_name);
@@ -136,7 +155,7 @@ function get_ezoic_slot_id(slot_name, ad_slots) {
   if (!slot) return null;
   const { slot_id } = slot;
   assert(slot_id);
-  return slot_id;
+  return slot;
 }
 
 function get_adsense_slot_id(slot_name, ad_slots) {
@@ -443,4 +462,48 @@ function load_script(url, onload, onerror) {
 
 function is_nodejs() {
   return typeof window === "undefined";
+}
+
+function enable_floating_ads() {
+  Array.from(document.querySelectorAll(".is_floating")).forEach((el) => {
+    let positionOriginal = el.style.position;
+    let topOriginal = el.style.top;
+    let leftOriginal = el.style.left;
+    let oldPosition = positionOriginal;
+    let positionTopOriginal;
+    let isFixedLayout = false;
+
+    addScrollListener(
+      (scrollPos) => {
+        assert(scrollPos >= 0);
+        const { positionLeft, positionTop } = getElementScrollPos(el);
+
+        if (isFixedLayout) {
+          assert(positionTopOriginal);
+          isFixedLayout = scrollPos > positionTopOriginal;
+        } else {
+          isFixedLayout = scrollPos > positionTop;
+          positionTopOriginal = positionTop;
+        }
+
+        const newPosition = isFixedLayout ? "fixed" : positionOriginal;
+
+        console.log(scrollPos, newPosition, positionLeft);
+
+        if (newPosition !== oldPosition) {
+          if (newPosition === "fixed") {
+            el.style.position = newPosition;
+            el.style.top = "0px";
+            el.style.left = positionLeft + "px";
+          } else {
+            el.style.position = positionOriginal;
+            el.style.top = topOriginal;
+            el.style.left = leftOriginal;
+          }
+          oldPosition = newPosition;
+        }
+      },
+      { fireInitialScroll: true, onlyUserScroll: false }
+    );
+  });
 }

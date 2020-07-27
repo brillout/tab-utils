@@ -14,6 +14,7 @@ export {
 
   addScrollListener,
   removeScrollListener,
+  getElementScrollPos,
 };
 
 /*
@@ -60,12 +61,9 @@ function pretty_scroll_area() {
 
   addScrollListener(
     (scroll_pos) => {
-      const hide_scroll_element_pos = get_element_scroll_pos(
-        hide_scroll_element
-      );
-      // assert.log({hide_scroll_element_pos, scroll_pos});
-      hide_scroll_state.is_on_hide_scroll_element =
-        scroll_pos === hide_scroll_element_pos;
+      const { positionTop } = getElementScrollPos(hide_scroll_element);
+      // assert.log({positionTop, scroll_pos});
+      hide_scroll_state.is_on_hide_scroll_element = scroll_pos === positionTop;
       onStateChange();
     },
     { fireInitialScroll: true }
@@ -175,17 +173,27 @@ async function slideTo(top) {
 }
 
 function scrollToElement(selector_or_element, { smooth = true } = {}) {
-  const top = get_element_scroll_pos(selector_or_element);
-  return setScroll(top, { smooth });
+  const { positionTop } = getElementScrollPos(selector_or_element);
+  return setScroll(positionTop, { smooth });
 }
 
-function get_element_scroll_pos(selector_or_element) {
+function getElementScrollPos(selector_or_element) {
   const element =
     selector_or_element.constructor === String
       ? document.querySelector(selector_or_element)
       : selector_or_element;
-  const top = element.getBoundingClientRect().top + getScroll();
-  return top;
+
+  const pos = element.getBoundingClientRect();
+
+  const positionTop = pos.top + getScroll();
+  assert(positionTop.constructor === Number);
+
+  const { scrollLeft } = scroll_el;
+  assert(scrollLeft.constructor === Number);
+  const positionLeft = pos.left + scrollLeft;
+  assert(positionLeft.constructor === Number);
+
+  return { positionTop, positionLeft };
 }
 
 function scrollToHideScrollElement({ smooth = true } = {}) {
