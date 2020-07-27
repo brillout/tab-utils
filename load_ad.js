@@ -40,24 +40,21 @@ function init() {
 
 async function load_ads(AD_SLOTS) {
   if (!(await dont_show_adsense(AD_SLOTS))) {
-    const success = await load_and_show_adsense(AD_SLOTS);
-    assert(success, { success });
-    return;
+    await enable_adsense(AD_SLOTS);
+    assert(!(await dont_show_ads()));
   }
 
   if (await dont_show_ads()) {
-    return;
+    document.documentElement.classList.add("ads-are-disabled");
+  } else {
+    setTimeout(() => {
+      document.documentElement.classList.add("show-ads");
+    }, SHOW_DELAY * 1000);
   }
-
-  show_ads();
-  return;
-
-  // load_custom_banner(AD_SLOTS);
 }
 
 function disable_ads() {
   store.set_val(AD_REMOVAL_KEY, true);
-  set_flag();
   disable_ezoic();
 }
 
@@ -228,12 +225,12 @@ function load_custom_banner(AD_SLOTS) {
 
   enable_products_view(custom_slot);
 
-  show_ads();
+  //show_ads();
 
   track_event({ name: "[custom-ad] activated" });
 }
 
-async function load_and_show_adsense(AD_SLOTS) {
+async function enable_adsense(AD_SLOTS) {
   const adsense_slots = get_adsense_slots(AD_SLOTS);
   assert(adsense_slots.length > 0);
 
@@ -245,11 +242,7 @@ async function load_and_show_adsense(AD_SLOTS) {
     window.adsbygoogle.push({});
   });
 
-  show_ads();
-
   track_event({ name: "[adsense] activated" });
-
-  return true;
 }
 
 var adsense_code_load_promise;
@@ -446,13 +439,6 @@ function load_script(url, onload, onerror) {
   scriptEl.onload = onload;
   scriptEl.onerror = onerror;
   document.getElementsByTagName("head")[0].appendChild(scriptEl);
-}
-
-function show_ads() {
-  setTimeout(show, SHOW_DELAY * 1000);
-  function show() {
-    document.documentElement.classList.add("show-ads");
-  }
 }
 
 function is_nodejs() {

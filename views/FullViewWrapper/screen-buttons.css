@@ -51,8 +51,12 @@
 #settings-button .button-text::before {
   content: "\A0\A0 Settings";
 }
-#donate-button .button-text::before {
+#donate-button .button-text::before,
+#width-setter-button .button-text::before {
   content: "\A0\A0 Remove ads";
+}
+html:not(.show-ads) #donate-button .button-text::before {
+  content: "\A0\A0 Donate";
 }
 #thanks-button .button-text::before {
   content: "\A0\A0 Thanks";
@@ -100,12 +104,18 @@
   height: 17px;
   --icon-width: 19px;
 }
-#donate-button .button-icon {
+#donate-button .button-icon,
+#width-setter-button .button-text::before {
   background-image: url(../../utils/icons/sweep.svg);
   height: 20px;
   --icon-width: 20px;
   margin-top: -2px;
   margin-bottom: -2px;
+}
+html:not(.show-ads) #donate-button .button-icon {
+  background-image: url(../../utils/icons/donate.svg);
+  height: 16px;
+  --icon-width: 16px;
 }
 #thanks-button .button-icon {
   background-image: url(../../utils/icons/thanks.svg);
@@ -183,22 +193,31 @@
 .hide_scroll #screen-buttons-wrapper {
   right: var(--base-width);
 }
-html:not(.user-donated) #thanks-button,
-html.user-donated #donate-button {
+html:not(.user-donated) #thanks-button {
   display: none;
 }
-
+/* Donate button logic */
 #donate-button {
-  transition: var(--button-transition), right 0.7s ease-out,
-    margin-bottom 0.7s ease-out;
   opacity: 100 !important;
   visibility: visible !important;
   pointer-events: all !important;
+}
+#donate-button {
+  transition: right 0.7s ease-out, margin-bottom 0.7s ease-out;
   position: relative;
   right: 0;
   margin-bottom: 0;
 }
-html:not(.show-ads) #donate-button {
+html:not(.show-ads):not(.ads-are-disabled) #donate-button,
+html.user-donated #donate-button {
   margin-bottom: calc(-1 * (var(--height) + var(--margin)));
   right: -160px;
 }
+/* Width setter */
+/* Role of #width-setter-button: set the width of the screen button column. */
+/* So that column width is constant, no matter what buttons are shown. */
+#width-setter-button {
+  visibility: hidden !important;
+  pointer-events: all !important;
+}
+

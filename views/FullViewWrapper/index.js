@@ -25,63 +25,26 @@ function FullView(props) {
       >
         {children}
         <div id="screen-buttons-wrapper">
-          <div
-            id="donate-button"
-            click-name="donate-button-right"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <div
-            id="center-button"
-            click-name="center-button"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <div
-            id="fullscreen-button"
-            click-name="fullscreen-button"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <div
-            id="zoom-button"
-            click-name="zoom-button"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <div
-            id="settings-button"
-            click-name="settings-button"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
-          <div
-            id="thanks-button"
-            click-name="thanks-button"
-            className="screen-button"
-          >
-            <div className="button-background glass-background" />
-            <span className="button-icon"></span>
-            <span className="button-text"></span>
-          </div>
+          <ScreenButton id="donate-button" />
+          <ScreenButton id="center-button" />
+          <ScreenButton id="fullscreen-button" />
+          <ScreenButton id="zoom-button" />
+          <ScreenButton id="settings-button" />
+          <ScreenButton id="thanks-button" />
+          <ScreenButton id="width-setter-button" />
         </div>
       </div>
     </>
+  );
+}
+
+function ScreenButton({ id }) {
+  return (
+    <div id={id} click-name={id} className="screen-button">
+      <div className="button-background glass-background" />
+      <span className="button-icon"></span>
+      <span className="button-text"></span>
+    </div>
   );
 }
 
