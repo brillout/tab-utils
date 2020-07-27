@@ -16,7 +16,7 @@
   position: absolute;
 }
 #left-slot:before {
-  top: 0;
+  top: var(--header-height);
   left: 0;
   width: 100%;
   height: 100%;

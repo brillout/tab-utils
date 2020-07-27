@@ -85,9 +85,21 @@ function FullView(props) {
   );
 }
 
-function LeftSide(props) {
+function LeftSide({ children, ...props }) {
   assert(!props.id);
-  return <div id="fv_left-side" {...props} click-name="fv_left-side" />;
+  return (
+    <div
+      id="fv_left-side"
+      {...props}
+      click-name="fv_left-side"
+      style={{
+        position: "relative",
+      }}
+    >
+      <div id="fv_left-side_background" className="glass-background" />
+      {children}
+    </div>
+  );
 }
 
 function RightSide(props) {

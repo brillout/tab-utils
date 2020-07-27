@@ -2,8 +2,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+:root {
+  --header-height: 70px;
+}
 #header-content > * {
-  height: 70px;
+  height: var(--header-height);
   display: flex;
   align-items: center;
 }
