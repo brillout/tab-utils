@@ -5,28 +5,31 @@
   margin-left: auto;
   margin-right: auto;
 }
-#left-slot {
+.slot-left {
   display: flex;
   flex-direction: column;
 }
-#left-slot {
+.slot-left ~ .slot-left {
+  margin-top: 10px;
+}
+#ads-left {
   position: relative;
 }
-#left-slot:before {
+#ads-left:before {
   position: absolute;
-}
-#left-slot:before {
   top: var(--header-height);
   left: 0;
+}
+#ads-left:before {
+  content: "\A A \A d \A v \A e \A r \A t";
   width: 100%;
-  height: 100%;
+  height: 100vh;
   font-size: 1.44em;
   text-transform: uppercase;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #31343d;
-  content: "\A A \A d \A v \A e \A r \A t";
   white-space: pre;
 }
 .vertical-slot-wrapper {

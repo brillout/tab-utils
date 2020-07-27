@@ -21,6 +21,8 @@ export { get_product_slots };
 export const AD_REMOVAL_KEY = "ad_removal";
 export { disable_ads };
 
+const SHOW_DELAY = 1.3;
+
 init();
 
 function init() {
@@ -60,11 +62,17 @@ function disable_ads() {
 }
 
 function Ad_left({ ad_slots }) {
-  const slot_content = get_slot_content("LEFT_AD", ad_slots);
+  const slot_atf = get_slot_content("LEFT_AD_ATF", ad_slots);
+  const slot_btf = get_slot_content("LEFT_AD_BTF", ad_slots);
 
   return (
-    <div id="left-slot">
-      <div className="vertical-slot-wrapper">{slot_content}</div>
+    <div id="ads-left">
+      <div className="slot-left">
+        <div className="vertical-slot-wrapper">{slot_atf}</div>
+      </div>
+      <div className="slot-left">
+        <div className="vertical-slot-wrapper">{slot_btf}</div>
+      </div>
     </div>
   );
 }
@@ -194,7 +202,7 @@ function load_custom_banner(AD_SLOTS) {
     return;
   }
 
-  const left_slot = document.querySelector("#left-slot");
+  const left_slot = document.querySelector(".slot-left");
   assert(left_slot, "couldn't find left_slot");
 
   left_slot.classList.add("custom-banner");
@@ -207,7 +215,7 @@ function load_custom_banner(AD_SLOTS) {
   const { img_src, click_name, slot_name, is_custom } = custom_slot;
   assert(img_src);
   assert(click_name === "monitor_banner");
-  assert(slot_name === "LEFT_AD");
+  assert(slot_name === "LEFT_AD_ATF");
   assert(is_custom === true);
 
   vertical_slot_wrapper.innerHTML = `
@@ -441,7 +449,7 @@ function load_script(url, onload, onerror) {
 }
 
 function show_ads() {
-  setTimeout(show, 2.3 * 1000);
+  setTimeout(show, SHOW_DELAY * 1000);
   function show() {
     document.documentElement.classList.add("show-ads");
   }
