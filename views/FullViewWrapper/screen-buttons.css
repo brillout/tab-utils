@@ -71,7 +71,7 @@ html:not(.show-ads) #donate-button .button-text::before {
   .screen-button {
     padding: 11px;
   }
-  .button-text::before {
+  .button-text {
     display: none;
   }
 }
