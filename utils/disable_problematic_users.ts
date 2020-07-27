@@ -16,6 +16,10 @@ const APP_IS_DISABLED = "app_is_disabled";
 function disable_problematic_users() {
   assert(is_browser());
 
+  if (is_dev()) {
+    return;
+  }
+
   if (user_donated()) {
     store.del_val(APP_IS_DISABLED);
     return;
@@ -47,7 +51,6 @@ function check_and_kill_if_disabled() {
 
 function kill_app() {
   const TARGET_PAGE = "/contact";
-  if (is_dev()) return;
   if ([TARGET_PAGE, "/repair"].includes(window.location.pathname)) return;
   alert(
     "You have been deactivated. Please contact Romuald, he will let you know why, and how to solve the problem."
@@ -56,6 +59,9 @@ function kill_app() {
 }
 
 function app_is_disabled() {
+  if (is_dev()) {
+    return false;
+  }
   const app_is_disabled = store.get_val(APP_IS_DISABLED);
   assert([true, undefined].includes(app_is_disabled), { app_is_disabled });
   return app_is_disabled;
