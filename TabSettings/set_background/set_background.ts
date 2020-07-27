@@ -150,18 +150,28 @@ function apply_image(bg_img_val: BgImgVal) {
   }
 }
 
-let BG_EL: HTMLElement;
+var BG_EL: HTMLElement;
+var bg_container_;
+var bg_container_selector_;
 function init(bg_container_selector: string) {
-  if (BG_EL) {
-    const bg_container_id__previous = BG_EL.parentElement.parentElement.id;
-    assert(bg_container_id__previous === bg_container_selector, {
-      bg_container_selector,
-      bg_container_id__previous,
-    });
-    return;
-  }
+  assert(bg_container_selector, { bg_container_selector });
+  assert(
+    bg_container_selector_ === undefined ||
+      bg_container_selector === bg_container_selector_,
+    { bg_container_selector, bg_container_selector_ }
+  );
+  bg_container_selector_ = bg_container_selector;
+
   const bg_container = document.querySelector(bg_container_selector);
   assert(bg_container, { bg_container_selector });
+  assert(bg_container_ === undefined || bg_container_ === bg_container, {
+    bg_container,
+    bg_container_,
+  });
+
+  if (BG_EL) {
+    return;
+  }
 
   const el1 = document.createElement("div");
   el1.id = "background-area-wrapper";

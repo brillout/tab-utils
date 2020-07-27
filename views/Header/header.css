@@ -26,20 +26,22 @@ a#header-logo {
   }
 }
 
+#header-logo {
+  position: relative;
+  top: -1px;
+}
 #header-logo > img {
-  height: 34px;
+  height: 33px;
   vertical-align: middle;
   display: inline-block;
+  position: relative;
+  top: -1px;
 }
 #header-logo > h1 {
   vertical-align: middle;
   padding-left: 10px;
   font-size: 1.55em;
   margin: 0;
-  /*
-  position: relative;
-  top: 2px;
-  */
 }
 
 #header-logo > h1 {
