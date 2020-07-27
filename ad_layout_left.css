@@ -29,7 +29,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #31343d;
+  color: var(--text-color);
   white-space: pre;
 }
 .vertical-slot-wrapper {

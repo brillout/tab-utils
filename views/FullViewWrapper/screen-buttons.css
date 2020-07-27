@@ -124,7 +124,7 @@
 .screen-button {
   cursor: pointer;
   user-select: none;
-  color: var(--panel-color);
+  color: var(--text-color);
 }
 .screen-button {
   position: relative;

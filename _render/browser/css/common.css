@@ -17,3 +17,10 @@ a {
 * {
   box-sizing: border-box;
 }
+
+:root {
+  /*
+  --text-color: #31343d;
+  */
+  --text-color: #373a4a;
+}

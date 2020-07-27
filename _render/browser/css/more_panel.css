@@ -2,7 +2,6 @@
   --panel_bg_1: rgba(255, 255, 255, 0.55);
   --panel_bg_2: rgba(0, 0, 0, 0.065);
   --panel-bg-blur: 5px;
-  --panel-color: #373a4a;
 }
 
 #more_panel {
@@ -21,7 +20,7 @@
 }
 
 #more_panel {
-  color: var(--panel-color);
+  color: var(--text-color);
 }
 
 .more_panel_block {

@@ -19,5 +19,5 @@
   backdrop-filter: blur(var(--panel-bg-blur));
 }
 .glass-background {
-  color: var(--panel-color);
+  color: var(--text-color);
 }
