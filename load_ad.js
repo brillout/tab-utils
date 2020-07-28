@@ -68,19 +68,15 @@ function disable_ads() {
 }
 
 function Ad_left({ ad_slots }) {
-  const slot_atf = get_slot_content("LEFT_AD_ATF", ad_slots);
-  const slot_btf = get_slot_content("LEFT_AD_BTF", ad_slots);
+  const slot_atf = get_slot("LEFT_AD_ATF", ad_slots);
+  const slot_btf = get_slot("LEFT_AD_BTF", ad_slots);
   assert(slot_atf);
   assert(slot_btf);
 
   return (
     <div id="ads-left">
-      <div className="slot-left">
-        <div className="vertical-slot-wrapper">{slot_atf}</div>
-      </div>
-      <div className="slot-left">
-        <div className="vertical-slot-wrapper">{slot_btf}</div>
-      </div>
+      {slot_atf}
+      {slot_btf}
     </div>
   );
 }
@@ -120,28 +116,44 @@ function AdSenseAd({ slot_id, responsive_width = false }) {
   );
 }
 
-function get_slot_content(slot_name, ad_slots) {
+function get_slot(slot_name, ad_slots) {
+  let content;
+  let is_floating;
   {
     const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
     if (adsense_id) {
-      return <AdSenseAd slot_id={adsense_id} />;
+      content = <AdSenseAd slot_id={adsense_id} />;
     }
   }
+
   {
     const ezoic_slot = get_ezoic_slot(slot_name, ad_slots);
     const ezoic_id = ezoic_slot.slot_id;
     assert(ezoic_id);
 
-    const { is_floating } = ezoic_slot;
+    is_floating = ezoic_slot.is_floating;
     assert([true, undefined].includes(is_floating));
 
     if (ezoic_id) {
-      return (
-        <div id={ezoic_id} className={is_floating ? " is_floating" : ""} />
-      );
+      content = <div id={ezoic_id} />;
     }
   }
-  return null;
+
+  if (!content) {
+    return null;
+  }
+
+  return (
+    <div className="slot-left">
+      <div
+        className={
+          "vertical-slot-wrapper" + (is_floating ? " is_floating" : "")
+        }
+      >
+        {content}
+      </div>
+    </div>
+  );
 }
 
 function get_ezoic_slot(slot_name, ad_slots) {

@@ -1,6 +1,7 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
 import { disable_ads } from "../../load_ad";
+import { tab_app_name } from "../../../tab_app_info";
 
 export default getPageConfig(
   () => (
@@ -24,6 +25,10 @@ export default getPageConfig(
         <a target="_blank" className="contact-address"></a>
       */}
       </p>
+
+      <p>
+        You will be redirected to {tab_app_name} in <span id="counter">x</span>.
+      </p>
     </>
   ),
   "Thank you.",
@@ -32,4 +37,16 @@ export default getPageConfig(
 
 function onPageLoad() {
   disable_ads();
+  const counterEl = document.getElementById("counter");
+  let counter = 10;
+  countdown();
+  return;
+  function countdown() {
+    --counter;
+    counterEl.textContent = (counter < 10 ? "0" : "") + counter.toString();
+    if (counter === 0) {
+      window.location.href = "/";
+    }
+    setTimeout(countdown, 1000);
+  }
 }
