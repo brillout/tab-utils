@@ -488,8 +488,6 @@ function enable_floating_ads() {
 
         const newPosition = isFixedLayout ? "fixed" : positionOriginal;
 
-        console.log(scrollPos, newPosition, positionLeft);
-
         if (newPosition !== oldPosition) {
           if (newPosition === "fixed") {
             el.style.position = newPosition;
