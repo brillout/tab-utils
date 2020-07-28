@@ -128,13 +128,13 @@ function get_slot(slot_name, ad_slots) {
 
   {
     const ezoic_slot = get_ezoic_slot(slot_name, ad_slots);
-    const ezoic_id = ezoic_slot.slot_id;
-    assert(ezoic_id);
+    if (ezoic_slot) {
+      const ezoic_id = ezoic_slot.slot_id;
+      assert(ezoic_id);
 
-    is_floating = ezoic_slot.is_floating;
-    assert([true, undefined].includes(is_floating));
+      is_floating = ezoic_slot.is_floating;
+      assert([true, undefined].includes(is_floating));
 
-    if (ezoic_id) {
       content = <div id={ezoic_id} />;
     }
   }
