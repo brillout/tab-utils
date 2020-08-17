@@ -63,7 +63,8 @@ function pretty_scroll_area() {
     (scroll_pos) => {
       const { positionTop } = getElementScrollPos(hide_scroll_element);
       // assert.log({positionTop, scroll_pos});
-      hide_scroll_state.is_on_hide_scroll_element = scroll_pos === positionTop;
+      const distance = Math.abs(scroll_pos - positionTop);
+      hide_scroll_state.is_on_hide_scroll_element = distance <= 1;
       onStateChange();
     },
     { fireInitialScroll: true }
