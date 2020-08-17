@@ -97,9 +97,6 @@ function AdView({ ad_slots, slot_name }) {
       <div className="horizontal-slot-wrapper">
         <AdSenseAd slot_id={slot_id} responsive_width={true} />
       </div>
-      <a className="donate-remover" href="donate" target="_blank">
-        Remove ad
-      </a>
     </div>
   );
 }

@@ -43,14 +43,6 @@
   */
 }
 
-/* ad remover layout */
-.donate-remover {
-  width: 106px;
-  margin: auto;
-  box-sizing: border-box;
-  height: var(--ad-remover-height);
-}
-
 /* function */
 
 html:not(.show-ads) .a-wrap {
@@ -68,25 +60,4 @@ html:not(.show-ads) .a-wrap {
   border: var(--ad-border-width) solid var(--ad-border-color);
   border-top-width: 0;
   box-sizing: border-box !important;
-}
-
-/* remove button */
-.donate-remover {
-  border-radius: 0 0 10px 10px;
-  background-color: var(--ad-border-color);
-  padding: 2px 10px;
-}
-.donate-remover {
-  font-family: Lato, "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
-  font-weight: 300;
-  display: block;
-  text-align: center;
-  text-decoration: none !important;
-  color: #333;
-  text-shadow: none;
-  white-space: nowrap;
-}
-/* Override Timer Tab's style */
-.donate-remover {
-  cursor: pointer !important;
 }
