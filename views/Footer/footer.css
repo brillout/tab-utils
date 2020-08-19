@@ -14,7 +14,7 @@
   font-family: "Lato";
   font-weight: 300;
   src: local("Lato Light"), local("Lato-Light"),
-    url("./Lato-Light.woff") format("woff");
+    url("./Lato-Light.ttf") format("truetype");
 }
 #more_panel,
 #footer_container,
