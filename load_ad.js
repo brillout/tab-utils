@@ -143,8 +143,8 @@ function Ad_btf_2({ ad_slots }) {
 
   {
     const ezoic_slot = get_ezoic_slot(slot_name, ad_slots);
-    assert(slot_content === undefined);
     if (ezoic_slot) {
+      assert(slot_content === undefined);
       const ezoic_id = ezoic_slot.slot_id;
       assert(ezoic_id);
       slot_content = <div id={ezoic_id} className={className} />;

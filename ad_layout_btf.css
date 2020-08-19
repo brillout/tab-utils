@@ -1,4 +1,5 @@
-.slot_btf:not(:empty) {
+.slot_btf:not(:empty),
+.slot_btf.adsbygoogle {
   border: 2px solid var(--text-color);
   border-top: 0;
 }
@@ -28,4 +29,10 @@
 }
 .slot_btf {
   position: relative;
+}
+
+.adsbygoogle.slot_btf {
+  display: block;
+  height: 90px;
+  width: 728px;
 }
