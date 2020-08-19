@@ -20,6 +20,9 @@
   max-width: var(--max-content-width);
   padding-left: var(--content-side-padding);
   padding-right: var(--content-side-padding);
+  padding-top: 17px;
+}
+.more_panel_block ~ .more_panel_block {
   padding-top: 34px;
 }
 

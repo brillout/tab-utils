@@ -1,5 +1,6 @@
 import "./ad_layout.css";
 import "./ad_layout_left.css";
+import "./ad_layout_btf.css";
 import React from "react";
 import assert from "@brillout/assert";
 import { store } from "./store";
@@ -16,6 +17,7 @@ import { getElementScrollPos, addScrollListener } from "./pretty_scroll_area";
 
 export { load_ads };
 export { Ad_ATF, Ad_BTF };
+export { Ad_btf_2 };
 export { Ad_left };
 export { user_donated };
 export { get_product_slots };
@@ -68,58 +70,26 @@ function disable_ads() {
 }
 
 function Ad_left({ ad_slots }) {
-  const slot_atf = get_slot("LEFT_AD_ATF", ad_slots);
-  const slot_btf = get_slot("LEFT_AD_BTF", ad_slots);
-  assert(slot_atf);
-  assert(slot_btf);
+  const slot_left_atf = get_left_slot("LEFT_AD_ATF", ad_slots);
+  const slot_left_btf = get_left_slot("LEFT_AD_BTF", ad_slots);
+  assert(slot_left_atf);
+  assert(slot_left_btf);
 
   return (
     <div id="ads-left">
-      {slot_atf}
-      {slot_btf}
+      {slot_left_atf}
+      {slot_left_btf}
     </div>
   );
 }
 
-function Ad_ATF({ ad_slots }) {
-  return <AdView ad_slots={ad_slots} slot_name={"ATF"} />;
-}
-function Ad_BTF({ ad_slots }) {
-  return <AdView ad_slots={ad_slots} slot_name={"BTF"} />;
-}
-
-function AdView({ ad_slots, slot_name }) {
-  assert(["ATF", "BTF"].includes(slot_name));
-  const slot_id = get_adsense_slot_id(slot_name, ad_slots);
-  if (slot_id === null) return null;
-  return (
-    <div className="a-wrap">
-      <div className="horizontal-slot-wrapper">
-        <AdSenseAd slot_id={slot_id} responsive_width={true} />
-      </div>
-    </div>
-  );
-}
-
-function AdSenseAd({ slot_id, responsive_width = false }) {
-  assert(tab_app_google_adsense.startsWith("ca-pub-"));
-  return (
-    <ins
-      className="adsbygoogle"
-      data-ad-client={tab_app_google_adsense}
-      data-full-width-responsive={responsive_width ? "true" : null}
-      data-ad-slot={slot_id}
-    ></ins>
-  );
-}
-
-function get_slot(slot_name, ad_slots) {
+function get_left_slot(slot_name, ad_slots) {
   let content;
   let is_floating;
   {
     const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
     if (adsense_id) {
-      content = <AdSenseAd slot_id={adsense_id} />;
+      content = <AdSenseAd slot_id={adsense_id} responsive_width={false} />;
     }
   }
 
@@ -150,6 +120,75 @@ function get_slot(slot_name, ad_slots) {
         {content}
       </div>
     </div>
+  );
+}
+
+function Ad_btf_2({ ad_slots }) {
+  const slot_name = "BTF_2";
+  const className = "slot_btf";
+
+  let slot_content;
+  {
+    const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
+    if (adsense_id) {
+      slot_content = (
+        <AdSenseAd
+          className={className}
+          slot_id={adsense_id}
+          responsive_width={true}
+        />
+      );
+    }
+  }
+
+  {
+    const ezoic_slot = get_ezoic_slot(slot_name, ad_slots);
+    assert(slot_content === undefined);
+    if (ezoic_slot) {
+      const ezoic_id = ezoic_slot.slot_id;
+      assert(ezoic_id);
+      slot_content = <div id={ezoic_id} className={className} />;
+    }
+  }
+
+  if (!slot_content) {
+    return null;
+  }
+
+  let slot_wrapper = <div className="slot_btf_wrapper">{slot_content}</div>;
+  return slot_wrapper;
+}
+
+function Ad_ATF({ ad_slots }) {
+  return <AdView ad_slots={ad_slots} slot_name={"ATF"} />;
+}
+function Ad_BTF({ ad_slots }) {
+  return <AdView ad_slots={ad_slots} slot_name={"BTF"} />;
+}
+
+function AdView({ ad_slots, slot_name }) {
+  assert(["ATF", "BTF"].includes(slot_name));
+  const slot_id = get_adsense_slot_id(slot_name, ad_slots);
+  if (slot_id === null) return null;
+  return (
+    <div className="a-wrap">
+      <div className="horizontal-slot-wrapper">
+        <AdSenseAd slot_id={slot_id} responsive_width={true} />
+      </div>
+    </div>
+  );
+}
+
+function AdSenseAd({ slot_id, className, responsive_width }) {
+  assert(tab_app_google_adsense.startsWith("ca-pub-"));
+  assert([true, false].includes(responsive_width));
+  return (
+    <ins
+      className={"adsbygoogle " + (className || "")}
+      data-ad-client={tab_app_google_adsense}
+      data-full-width-responsive={responsive_width ? "true" : null}
+      data-ad-slot={slot_id}
+    ></ins>
   );
 }
 

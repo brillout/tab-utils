@@ -94,7 +94,14 @@ html:not(.show-ads) {
 #ezoic-pub-ad-placeholder-104 {
   background-color: blue;
 }
-*/
+#ezoic-pub-ad-placeholder-105:empty {
+  width: 728px;
+  height: 100px;
+}
+#ezoic-pub-ad-placeholder-105 {
+  background-color: yellow;
+  box-sizing: content-box;
+}
 #ezoic-pub-ad-placeholder-101:empty {
   width: 140px;
   height: 400px;
@@ -104,3 +111,4 @@ html:not(.show-ads) {
   width: 140px;
   height: 400px;
 }
+*/

@@ -23,10 +23,6 @@
   color: var(--text-color);
 }
 
-.more_panel_block {
-  padding-top: 24px;
-}
-
 .more_panel_block_title {
   font-size: 1.5em;
   margin-bottom: 7px;

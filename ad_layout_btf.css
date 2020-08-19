@@ -1,0 +1,31 @@
+.slot_btf:not(:empty) {
+  border: 2px solid var(--text-color);
+  border-top: 0;
+}
+
+.slot_btf_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slot_btf_wrapper:before {
+  content: "Advert";
+  text-transform: uppercase;
+  font-size: 1.44em;
+  letter-spacing: 0.6em;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure the right stacking context order */
+.slot_btf_wrapper:before {
+  position: absolute;
+}
+.slot_btf {
+  position: relative;
+}
