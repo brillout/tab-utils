@@ -1,7 +1,7 @@
 .slot_btf {
   display: block;
   overflow: hidden;
-  max-height: 100px;
+  max-height: calc(100px + var(--border-size));
   max-width: 100%;
 }
 
@@ -17,7 +17,8 @@
 }
 
 .slot_btf {
-  border: 2px solid var(--text-color);
+  --border-size: 2px;
+  border: var(--border-size) solid var(--text-color);
   border-top: 0;
 }
 
