@@ -12,15 +12,19 @@
 
 .slot_btf.adsbygoogle {
   width: 100%;
-  height: 100px;
-  box-sizing: content-box;
+  height: 90px;
+  min-width: 50px;
+  max-width: 970px;
 }
 
+/*
+  box-sizing: content-box;
 .slot_btf {
   --border-size: 2px;
   border: var(--border-size) solid var(--text-color);
   border-top: 0;
 }
+*/
 
 .slot_btf_wrapper {
   width: 100%;
