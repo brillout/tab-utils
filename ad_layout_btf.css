@@ -1,5 +1,13 @@
 .slot_btf {
   display: block;
+  overflow: hidden;
+  max-height: 100px;
+  max-width: 100%;
+}
+
+.slot_btf.ezoic-ad-slot {
+  min-height: 50px;
+  min-width: 234px;
 }
 
 .slot_btf.adsbygoogle {
@@ -8,9 +16,7 @@
   box-sizing: content-box;
 }
 
-.slot_btf.ezoic-ad-slot:not(:empty),
-html.is-dev .slot_btf.ezoic-ad-slot,
-.slot_btf.adsbygoogle {
+.slot_btf {
   border: 2px solid var(--text-color);
   border-top: 0;
 }
@@ -44,6 +50,6 @@ html.is-dev .slot_btf.ezoic-ad-slot,
 
 html.is-dev #ezoic-pub-ad-placeholder-105 + .ezoic-dev-demo {
   background-color: yellow;
-  width: 100%;
-  height: 100px;
+  width: 728px;
+  height: 90px;
 }

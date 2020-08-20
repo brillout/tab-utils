@@ -89,11 +89,11 @@ html:not(.show-ads) {
 
 html.is-dev #ezoic-pub-ad-placeholder-101 + .ezoic-dev-demo {
   background-color: red;
-  width: 140px;
-  height: 400px;
+  width: 160px;
+  height: 600px;
 }
 html.is-dev #ezoic-pub-ad-placeholder-104 + .ezoic-dev-demo {
   background-color: blue;
-  width: 140px;
-  height: 400px;
+  width: 160px;
+  height: 600px;
 }
