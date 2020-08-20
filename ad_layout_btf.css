@@ -8,6 +8,7 @@
 }
 
 .slot_btf.ezoic-ad-slot:not(:empty),
+html.is-dev .slot_btf.ezoic-ad-slot,
 .slot_btf.adsbygoogle {
   box-sizing: content-box;
   border: 2px solid var(--text-color);
@@ -41,3 +42,8 @@
   position: relative;
 }
 
+html.is-dev #ezoic-pub-ad-placeholder-105:empty {
+  background-color: yellow;
+  width: 100%;
+  height: 100px;
+}

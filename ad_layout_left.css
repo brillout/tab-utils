@@ -87,24 +87,13 @@ html:not(.show-ads) {
   cursor: pointer;
 }
 
-/*
-*/
-#ezoic-pub-ad-placeholder-101:empty {
+html.is-dev #ezoic-pub-ad-placeholder-101:empty {
   background-color: red;
   width: 140px;
   height: 400px;
 }
-#ezoic-pub-ad-placeholder-104:empty {
+html.is-dev #ezoic-pub-ad-placeholder-104:empty {
   background-color: blue;
   width: 140px;
   height: 400px;
-}
-#ezoic-pub-ad-placeholder-105:empty {
-  background-color: yellow;
-  width: 100%;
-  height: 100px;
-
-  box-sizing: content-box;
-  border: 2px solid var(--text-color);
-  border-top: 0;
 }

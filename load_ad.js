@@ -97,13 +97,10 @@ function get_left_slot(slot_name, ad_slots) {
     const ezoic_slot = get_ezoic_slot(slot_name, ad_slots);
     if (ezoic_slot) {
       const ezoic_id = ezoic_slot.slot_id;
-      assert(ezoic_id);
+      content = <EzoicAd ezoic_id={ezoic_id} />;
 
       is_floating = ezoic_slot.is_floating;
       assert([true, undefined].includes(is_floating));
-
-      assert(ezoic_id.startsWith("ezoic-pub-ad-placeholder-1"));
-      content = <div id={ezoic_id} className="ezoic-ad-slot" />;
     }
   }
 
@@ -141,8 +138,7 @@ function Ad_btf_2({ ad_slots }) {
     if (ezoic_slot) {
       assert(slot_content === undefined);
       const ezoic_id = ezoic_slot.slot_id;
-      assert(ezoic_id);
-      slot_content = <div id={ezoic_id} className={className} />;
+      slot_content = <EzoicAd ezoic_id={ezoic_id} className={className} />;
     }
   }
 
@@ -172,6 +168,13 @@ function AdView({ ad_slots, slot_name }) {
       </div>
     </div>
   );
+}
+
+function EzoicAd({ ezoic_id, className }) {
+  assert(ezoic_id);
+  assert(ezoic_id.startsWith("ezoic-pub-ad-placeholder-1"));
+  className = "ezoic-ad-slot " + (className || "");
+  return <div id={ezoic_id} className={className} />;
 }
 
 function AdSenseAd({ slot_id, className }) {
