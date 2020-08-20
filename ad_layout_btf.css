@@ -4,7 +4,6 @@
 
 .slot_btf.ezoic-ad-slot {
   max-height: 100px;
-  max-width: 100%;
   overflow: hidden;
 }
 
@@ -20,6 +19,8 @@
   border-top: 0;
   min-height: 50px;
   min-width: 234px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .slot_btf_wrapper:before {
