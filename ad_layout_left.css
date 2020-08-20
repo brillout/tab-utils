@@ -36,7 +36,7 @@
   overflow: hidden;
   max-width: 160px;
 }
-.adsbygoogle {
+.slot-left .vertical-slot-wrapper .adsbygoogle {
   display: block;
   width: 160px;
   height: 600px;
@@ -75,7 +75,7 @@ html:not(.show-ads) {
 }
 
 @media (max-width: 700px) {
-  .vertical-slot-wrapper .adsbygoogle {
+  .slot-left .vertical-slot-wrapper .adsbygoogle {
     display: none !important;
   }
   html {
@@ -87,12 +87,14 @@ html:not(.show-ads) {
   cursor: pointer;
 }
 
-html.is-dev #ezoic-pub-ad-placeholder-101 + .ezoic-dev-demo {
+html.is-dev #ezoic-pub-ad-placeholder-101 + .ezoic-dev-demo,
+html.is-dev .slot-left .adsbygoogle[data-ad-slot="7889725703"] {
   background-color: red;
   width: 160px;
   height: 600px;
 }
-html.is-dev #ezoic-pub-ad-placeholder-104 + .ezoic-dev-demo {
+html.is-dev #ezoic-pub-ad-placeholder-104 + .ezoic-dev-demo,
+html.is-dev .slot-left .adsbygoogle[data-ad-slot="1075920200"] {
   background-color: blue;
   width: 160px;
   height: 600px;
