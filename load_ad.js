@@ -89,7 +89,7 @@ function get_left_slot(slot_name, ad_slots) {
   {
     const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
     if (adsense_id) {
-      content = <AdSenseAd slot_id={adsense_id} responsive_width={false} />;
+      content = <AdSenseAd slot_id={adsense_id} />;
     }
   }
 
@@ -132,13 +132,7 @@ function Ad_btf_2({ ad_slots }) {
   {
     const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
     if (adsense_id) {
-      slot_content = (
-        <AdSenseAd
-          className={className}
-          slot_id={adsense_id}
-          responsive_width={true}
-        />
-      );
+      slot_content = <AdSenseAd className={className} slot_id={adsense_id} />;
     }
   }
 
@@ -174,32 +168,22 @@ function AdView({ ad_slots, slot_name }) {
   return (
     <div className="a-wrap">
       <div className="horizontal-slot-wrapper">
-        <AdSenseAd slot_id={slot_id} responsive_width={true} />
+        <AdSenseAd slot_id={slot_id} />
       </div>
     </div>
   );
 }
 
-function AdSenseAd({ slot_id, className, responsive_width }) {
+function AdSenseAd({ slot_id, className }) {
   assert(tab_app_google_adsense.startsWith("ca-pub-"));
-  assert([true, false].includes(responsive_width));
 
   className = "adsbygoogle " + (className || "");
-
-  const props = {};
-  if (responsive_width) {
-    Object.assign(props, {
-      "data-ad-format": "auto",
-      "data-full-width-responsive": true,
-    });
-  }
 
   return (
     <ins
       className={className}
       data-ad-client={tab_app_google_adsense}
       data-ad-slot={slot_id}
-      {...props}
     ></ins>
   );
 }
