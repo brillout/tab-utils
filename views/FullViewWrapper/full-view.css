@@ -55,3 +55,7 @@
   height: 100%;
   border-right: 2px solid var(--text-color);
 }
+
+#fv_right-side > :not(.pretty_scroll_area__hide_scroll_element) {
+  padding-right: var(--scroll-bar-width);
+}

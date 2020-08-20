@@ -88,27 +88,23 @@ html:not(.show-ads) {
 }
 
 /*
-#ezoic-pub-ad-placeholder-101 {
+*/
+#ezoic-pub-ad-placeholder-101:empty {
   background-color: red;
+  width: 140px;
+  height: 400px;
 }
-#ezoic-pub-ad-placeholder-104 {
+#ezoic-pub-ad-placeholder-104:empty {
   background-color: blue;
+  width: 140px;
+  height: 400px;
 }
 #ezoic-pub-ad-placeholder-105:empty {
-  width: 728px;
-  height: 100px;
-}
-#ezoic-pub-ad-placeholder-105 {
   background-color: yellow;
-  box-sizing: content-box;
-}
-#ezoic-pub-ad-placeholder-101:empty {
-  width: 140px;
-  height: 400px;
-}
+  width: 100%;
+  height: 100px;
 
-#ezoic-pub-ad-placeholder-104:empty {
-  width: 140px;
-  height: 400px;
+  box-sizing: content-box;
+  border: 2px solid var(--text-color);
+  border-top: 0;
 }
-*/

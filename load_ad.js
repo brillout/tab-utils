@@ -102,7 +102,8 @@ function get_left_slot(slot_name, ad_slots) {
       is_floating = ezoic_slot.is_floating;
       assert([true, undefined].includes(is_floating));
 
-      content = <div id={ezoic_id} />;
+      assert(ezoic_id.startsWith("ezoic-pub-ad-placeholder-1"));
+      content = <div id={ezoic_id} className="ezoic-ad-slot" />;
     }
   }
 
@@ -182,12 +183,23 @@ function AdView({ ad_slots, slot_name }) {
 function AdSenseAd({ slot_id, className, responsive_width }) {
   assert(tab_app_google_adsense.startsWith("ca-pub-"));
   assert([true, false].includes(responsive_width));
+
+  className = "adsbygoogle " + (className || "");
+
+  const props = {};
+  if (responsive_width) {
+    Object.assign(props, {
+      "data-ad-format": "auto",
+      "data-full-width-responsive": true,
+    });
+  }
+
   return (
     <ins
-      className={"adsbygoogle " + (className || "")}
+      className={className}
       data-ad-client={tab_app_google_adsense}
-      data-full-width-responsive={responsive_width ? "true" : null}
       data-ad-slot={slot_id}
+      {...props}
     ></ins>
   );
 }

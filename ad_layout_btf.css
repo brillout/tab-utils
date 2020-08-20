@@ -1,5 +1,15 @@
-.slot_btf:not(:empty),
+.slot_btf {
+  display: block;
+}
+
 .slot_btf.adsbygoogle {
+  width: 100%;
+  height: 100px;
+}
+
+.slot_btf.ezoic-ad-slot:not(:empty),
+.slot_btf.adsbygoogle {
+  box-sizing: content-box;
   border: 2px solid var(--text-color);
   border-top: 0;
 }
@@ -31,8 +41,3 @@
   position: relative;
 }
 
-.adsbygoogle.slot_btf {
-  display: block;
-  height: 90px;
-  width: 728px;
-}
