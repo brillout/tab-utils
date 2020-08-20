@@ -87,12 +87,12 @@ html:not(.show-ads) {
   cursor: pointer;
 }
 
-html.is-dev #ezoic-pub-ad-placeholder-101:empty {
+html.is-dev #ezoic-pub-ad-placeholder-101 + .ezoic-dev-demo {
   background-color: red;
   width: 140px;
   height: 400px;
 }
-html.is-dev #ezoic-pub-ad-placeholder-104:empty {
+html.is-dev #ezoic-pub-ad-placeholder-104 + .ezoic-dev-demo {
   background-color: blue;
   width: 140px;
   height: 400px;

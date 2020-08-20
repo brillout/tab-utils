@@ -174,7 +174,12 @@ function EzoicAd({ ezoic_id, className }) {
   assert(ezoic_id);
   assert(ezoic_id.startsWith("ezoic-pub-ad-placeholder-1"));
   className = "ezoic-ad-slot " + (className || "");
-  return <div id={ezoic_id} className={className} />;
+  return (
+    <div className={className}>
+      <div id={ezoic_id} />
+      <div className="ezoic-dev-demo" />
+    </div>
+  );
 }
 
 function AdSenseAd({ slot_id, className }) {
