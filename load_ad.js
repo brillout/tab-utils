@@ -72,8 +72,7 @@ function disable_ads() {
 function Ad_left({ ad_slots }) {
   const slot_left_atf = get_left_slot("LEFT_AD_ATF", ad_slots);
   const slot_left_btf = get_left_slot("LEFT_AD_BTF", ad_slots);
-  assert(slot_left_atf);
-  assert(slot_left_btf);
+  assert(slot_left_atf || slot_left_btf);
 
   return (
     <div id="ads-left">
@@ -535,7 +534,7 @@ function enable_floating_ads() {
         const { positionLeft, positionTop } = getElementScrollPos(el);
 
         if (isFixedLayout) {
-          assert(positionTopOriginal);
+          assert(positionTopOriginal >= 0);
           isFixedLayout = scrollPos > positionTopOriginal;
         } else {
           isFixedLayout = scrollPos > positionTop;
