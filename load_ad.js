@@ -145,12 +145,7 @@ function Ad_btf_2({ ad_slots }) {
     return null;
   }
 
-  let slot_wrapper = (
-    <div className="slot_btf_container">
-      <div className="slot_btf_wrapper">{slot_content}</div>
-    </div>
-  );
-  return slot_wrapper;
+  return <div className="slot_btf_container">{slot_content}</div>;
 }
 
 function Ad_ATF({ ad_slots }) {
