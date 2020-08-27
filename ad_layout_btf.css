@@ -6,10 +6,6 @@
   max-height: 100px;
   overflow: hidden;
 }
-.slot_btf.adsbygoogle {
-  width: 728px;
-  height: 90px;
-}
 
 .slot_btf_container {
   width: 100%;
@@ -18,9 +14,7 @@
   overflow: hidden;
 }
 
-html.is-dev #ezoic-pub-ad-placeholder-105 + .ezoic-dev-demo,
-html.is-dev .slot_btf.adsbygoogle {
+html.is-dev:not(.user-donated) #ezoic-pub-ad-placeholder-105 + .ezoic-dev-demo,
+html.is-dev:not(.user-donated) .slot_btf.adsbygoogle {
   background-color: yellow;
-  width: 728px;
-  height: 90px;
 }

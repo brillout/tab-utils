@@ -128,7 +128,15 @@ function Ad_btf_2({ ad_slots }) {
   {
     const adsense_id = get_adsense_slot_id(slot_name, ad_slots);
     if (adsense_id) {
-      slot_content = <AdSenseAd className={className} slot_id={adsense_id} />;
+      slot_content = (
+        <AdSenseAd
+          className={className}
+          slot_id={adsense_id}
+          auto_sizing={"horizontal"}
+        />
+      );
+      // Do no include the container when doing auto_sizing
+      return slot_content;
     }
   }
 
@@ -180,16 +188,26 @@ function EzoicAd({ ezoic_id, className }) {
   );
 }
 
-function AdSenseAd({ slot_id, className }) {
+function AdSenseAd({ slot_id, className, auto_sizing }) {
   assert(tab_app_google_adsense.startsWith("ca-pub-"));
+  assert([undefined, "horizontal"].includes(auto_sizing));
 
   className = "adsbygoogle " + (className || "");
+
+  const props = {};
+  if (auto_sizing) {
+    Object.assign(props, {
+      "data-ad-format": auto_sizing,
+      "data-full-width-responsive": true,
+    });
+  }
 
   return (
     <ins
       className={className}
       data-ad-client={tab_app_google_adsense}
       data-ad-slot={slot_id}
+      {...props}
     ></ins>
   );
 }
