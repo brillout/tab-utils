@@ -10,7 +10,6 @@ import {
 } from "./views/common/tracker";
 import { get_browser_name } from "./utils/get_browser_info";
 import { enable_products_view } from "./ads/Products/ProductsView";
-import { app_is_disabled } from "./utils/disable_problematic_users";
 import { tab_app_google_adsense } from "../tab_app_info";
 import { disable_ezoic, enable_ezoic } from "./ads/ezoic.ts";
 import { getElementScrollPos, addScrollListener } from "./pretty_scroll_area";
@@ -445,10 +444,6 @@ function no_adsense_slots(AD_SLOTS) {
 
 function is_too_many_visits() {
   if (get_number_of_visits_in_the_last_24_hours() >= 8) {
-    return true;
-  }
-  if (app_is_disabled()) {
-    assert(false);
     return true;
   }
   return false;

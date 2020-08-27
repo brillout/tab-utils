@@ -3,7 +3,6 @@ import activate_app from "./activate_app";
 import { set_dev_mode } from "./set_dev_mode";
 import { load_google_analytics } from "./tracker";
 import init_wake_lock from "./init_wake_lock";
-import { disable_problematic_users } from "../../utils/disable_problematic_users";
 
 export default load_common;
 
@@ -17,8 +16,6 @@ function load_common() {
   } catch (e) {}
 
   load_google_analytics();
-
-  disable_problematic_users();
 
   set_dev_mode();
 }
