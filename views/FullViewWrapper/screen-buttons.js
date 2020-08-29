@@ -36,8 +36,8 @@ function activate_donate_button() {
 }
 
 function activate_thanks_button() {
-  const donate_button = document.querySelector("#thanks-button");
-  donate_button.onclick = () => {
+  const thanks_button = document.querySelector("#thanks-button");
+  thanks_button.onclick = () => {
     window.open("/thanks", "_self");
   };
 }
