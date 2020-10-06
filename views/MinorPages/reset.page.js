@@ -1,11 +1,17 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
 import Cookies from "js-cookie";
+import { tab_app_name } from "../../../tab_app_info";
 
 export default getPageConfig(
   () => (
     <>
-      <p>Remove all your settings and set Timer Tab to a pristine state.</p>
+      <p>Remove your settings; set {tab_app_name} to a pristine state.</p>
+
+      <p>
+        <b>WARNING</b> This will remove all your {tab_app_name} settings,
+        including all your themes and presets.
+      </p>
 
       <p>
         <button type="button">Factory Reset</button>
