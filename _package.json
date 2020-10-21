@@ -11,7 +11,7 @@
     "prod:serve": "serve .build/browser/ --listen 3000",
     "prod:deploy": "push-dir --dir=.build/browser/ --branch=gh-pages --cleanup",
     "clean": "yarn clean:all",
-    "clean:all": "git -Xdf",
+    "clean:all": "git clean -Xdf",
     "clean:build": "rm -rf .build/",
     "goldpage:dev": "goldpage dev",
     "goldpage:build": "goldpage build"
