@@ -1,14 +1,18 @@
 {
   "scripts": {
+    "// Dev": "",
     "dev": "yarn goldpage:dev",
     "dev:link": "ln -s `pwd`/static/* `pwd`/tab-utils/static/* .build/browser/",
-    "prod:build": "yarn prod:build:clean && yarn goldpage:build && yarn prod:build:static && yarn prod:build:link && yarn prod:build:deployId",
-    "prod:build:link": "(cd .build/browser/ && mv tab-utils/ tab-utils-moved/ && ln -s tab-utils-moved/ tab-utils)",
-    "prod:build:clean": "rm -rf .build/",
+    "// Prod": "",
+    "prod:build": "yarn clean:all && yarn install && yarn goldpage:build && yarn prod:build:static && yarn prod:build:link && yarn prod:build:deployId",
     "prod:build:static": "mkdir -p .build/browser/ && cp -r static/* tab-utils/static/* .build/browser/",
+    "prod:build:link": "(cd .build/browser/ && mv tab-utils/ tab-utils-moved/ && ln -s tab-utils-moved/ tab-utils)",
     "prod:build:deployId": "(cd .build/browser/ && grep __DEPLOY -rl | xargs sed -i \"s/__DEPLOY/$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)/g\")",
     "prod:serve": "serve .build/browser/ --listen 3000",
     "prod:deploy": "push-dir --dir=.build/browser/ --branch=gh-pages --cleanup",
+    "clean": "yarn clean:all",
+    "clean:all": "git -Xdf",
+    "clean:build": "rm -rf .build/",
     "goldpage:dev": "goldpage dev",
     "goldpage:build": "goldpage build"
   },
