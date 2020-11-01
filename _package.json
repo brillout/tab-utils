@@ -6,7 +6,7 @@
     "// Prod": "",
     "deploy": "yarn prod:build && yarn prod:deploy",
     "prod:build": "yarn clean:all && yarn install && yarn goldpage:build && yarn prod:build:static && yarn prod:build:link && yarn prod:build:deployId",
-    "prod:build:static": "mkdir -p .build/browser/ && cp -r static/* tab-utils/static/* .build/browser/",
+    "prod:build:static": "mkdir -p .build/browser/ && cp -r static/* .build/browser/",
     "prod:build:link": "(cd .build/browser/ && mv tab-utils/ tab-utils-moved/ && ln -s tab-utils-moved/ tab-utils)",
     "prod:build:deployId": "(cd .build/browser/ && grep __DEPLOY -rl | xargs sed -i \"s/__DEPLOY/$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)/g\")",
     "prod:serve": "serve .build/browser/ --listen 3000",
