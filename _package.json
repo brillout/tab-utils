@@ -4,6 +4,7 @@
     "dev": "yarn goldpage:dev",
     "dev:link": "ln -s `pwd`/static/* `pwd`/tab-utils/static/* .build/browser/",
     "// Prod": "",
+    "deploy": "yarn prod:build && yarn prod:deploy",
     "prod:build": "yarn clean:all && yarn install && yarn goldpage:build && yarn prod:build:static && yarn prod:build:link && yarn prod:build:deployId",
     "prod:build:static": "mkdir -p .build/browser/ && cp -r static/* tab-utils/static/* .build/browser/",
     "prod:build:link": "(cd .build/browser/ && mv tab-utils/ tab-utils-moved/ && ln -s tab-utils-moved/ tab-utils)",
