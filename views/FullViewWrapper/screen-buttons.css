@@ -208,7 +208,7 @@ html:not(.user-donated) #thanks-button {
   right: 0;
   margin-bottom: 0;
 }
-html:not(.show-ads):not(.ads-are-disabled) #donate-button,
+html:not(.show-ads):not(.no-ads) #donate-button,
 html.user-donated #donate-button {
   margin-bottom: calc(-1 * (var(--height) + var(--margin)));
   right: -160px;

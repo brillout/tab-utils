@@ -1,7 +1,6 @@
 import assert from "@brillout/assert";
 import { scrollToElement, addScrollListener } from "../../pretty_scroll_area";
 import { show_toast } from "../common/show_toast";
-import { user_donated } from "../../load_ad";
 import { toggle_zoom } from "../../make_element_zoomable";
 
 export { activate_screen_buttons };

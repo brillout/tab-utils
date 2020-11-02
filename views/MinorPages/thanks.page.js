@@ -1,6 +1,5 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
-import { disable_ads } from "../../load_ad";
 import { tab_app_name } from "../../../tab_app_info";
 
 export default getPageConfig(

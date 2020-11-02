@@ -1,7 +1,7 @@
 import "./ProductsView.css";
 import React from "react";
 import { scrollToElement } from "../../../tab-utils/pretty_scroll_area";
-import { get_product_slots } from "../../load_ad";
+import { get_product_slots } from "../../ads/adSlots";
 
 export { enable_products_view };
 
