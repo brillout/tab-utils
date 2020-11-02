@@ -27,3 +27,12 @@
   font-size: 1.5em;
   margin-bottom: 7px;
 }
+
+/* Grow panel to cover whole height */
+.grow-more-panel {
+  display: flex;
+  flex-direction: column;
+}
+#more_panel {
+  flex-grow: 1;
+}

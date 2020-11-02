@@ -1,6 +1,7 @@
 import React from "react";
 import { getPageConfig } from "../PageWrapper";
 import { tab_app_name } from "../../../tab_app_info";
+import { disableAds } from "../../ads/loadAds";
 
 export default getPageConfig(
   () => (
@@ -35,7 +36,7 @@ export default getPageConfig(
 );
 
 function onPageLoad() {
-  disable_ads();
+  disableAds();
   const counterEl = document.getElementById("counter");
   let counter = 10;
   countdown();

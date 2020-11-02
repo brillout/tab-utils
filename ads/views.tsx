@@ -129,7 +129,7 @@ function AdView({ ad_slots, slot_name }: {ad_slots: AdSlots, slot_name: SlotName
   const slot_id = getAdsenseSlotId(slot_name, ad_slots);
   if (slot_id === null) return null;
   return (
-    <div className="a-wrap">
+    <div className="advi-wrap">
       <div className="horizontal-slot-wrapper">
         <AdSenseAd slot_id={slot_id} slotName={slot_name} />
       </div>

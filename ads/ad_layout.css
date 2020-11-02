@@ -35,17 +35,19 @@
   display: block;
 }
 
+/*
 .horizontal-slot-wrapper .adsbygoogle {
-  /*
   width: 550px;
   height: 76px;
   background: red;
-  */
 }
+*/
 
 /* function */
 
-html:not(.show-ads) .a-wrap {
+html.no-ads .advi-wrap,
+html.no-ads .slot-left,
+html.no-ads .slot-BTF_2 {
   display: none;
 }
 
