@@ -64,7 +64,7 @@ html:not(.show-ads) {
   display: inline-block;
 }
 #left-donate-icon {
-  background-image: url(./utils/icons/donate.svg);
+  background-image: url(../utils/icons/donate.svg);
   height: 22px;
   width: 22px;
 }

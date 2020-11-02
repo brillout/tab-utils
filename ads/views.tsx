@@ -4,7 +4,13 @@ import "./ad_layout_btf.css";
 import { tab_app_google_adsense } from "../../tab_app_info";
 import React from "react";
 import assert from "@brillout/assert";
-import { AdSlots, getAdsenseSlotId, getEzoicSlot } from "./adSlots";
+import {
+  AdSlots,
+  getAdsenseSlotId,
+  getEzoicSlot,
+  getGptSlot,
+  GptSlot,
+} from "./adSlots";
 
 export { Ad_ATF, Ad_BTF };
 export { Ad_btf_2 };
@@ -30,6 +36,12 @@ function get_left_slot(slot_name: string, ad_slots: AdSlots) {
     const adsense_id = getAdsenseSlotId(slot_name, ad_slots);
     if (adsense_id) {
       content = <AdSenseAd slot_id={adsense_id} />;
+    }
+  }
+  {
+    const gptSlot = getGptSlot(slot_name, ad_slots);
+    if (gptSlot) {
+      content = <GptAd gptSlot={gptSlot} />;
     }
   }
 
@@ -80,6 +92,12 @@ function Ad_btf_2({ ad_slots }) {
       return slot_content;
     }
   }
+  {
+    const gptSlot = getGptSlot(slot_name, ad_slots);
+    if (gptSlot) {
+      slot_content = <GptAd gptSlot={gptSlot} className={className} />;
+    }
+  }
 
   {
     const ezoic_slot = getEzoicSlot(slot_name, ad_slots);
@@ -126,6 +144,22 @@ function EzoicAd({ ezoic_id, className = "" }) {
       <div id={ezoic_id} />
       <div className="ezoic-dev-demo" />
     </div>
+  );
+}
+
+function GptAd({
+  gptSlot,
+  className = "",
+}: {
+  gptSlot: GptSlot;
+  className?: string;
+}): React.ReactElement {
+  return (
+    <div
+      id={gptSlot.slot_id}
+      className={className}
+      style={{ width: gptSlot.slotSize[0], height: gptSlot.slotSize[1] }}
+    />
   );
 }
 

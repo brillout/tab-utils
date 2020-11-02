@@ -1,3 +1,4 @@
+/*
 import "./ProductsView.css";
 import React from "react";
 import { scrollToElement } from "../../../tab-utils/pretty_scroll_area";
@@ -62,3 +63,4 @@ function enable_products_view() {
     scrollToElement(products_section);
   };
 }
+*/

@@ -1,6 +1,7 @@
 import assert from "@brillout/assert";
 
 export {
+  getGptSlot,
   getEzoicSlot,
   getAdsenseSlotId,
   isAdsense,
@@ -44,11 +45,23 @@ function getEzoicSlot(slot_name: string, ad_slots: AdSlots): EzoicSlot {
   return slot;
 }
 
-function getAdsenseSlotId(slot_name: string, ad_slots: AdSlots) {
-  const adsense_slots = getAdsenseSlots(ad_slots).filter((slot) => {
-    assert(slot_name);
+function getGptSlot(slotName: string, adSlots: AdSlots): GptSlot | null {
+  const slots: GptSlot[] = getGptSlots(adSlots).filter((slot) => {
+    assert(slotName);
     assert(slot.slot_name);
-    return slot.slot_name === slot_name;
+    return slot.slot_name === slotName;
+  });
+  assert(slots.length <= 1);
+  const slot = slots[0];
+  if (!slot) return null;
+  return slot;
+}
+
+function getAdsenseSlotId(slotName: string, ad_slots: AdSlots) {
+  const adsense_slots = getAdsenseSlots(ad_slots).filter((slot) => {
+    assert(slotName);
+    assert(slot.slot_name);
+    return slot.slot_name === slotName;
   });
   assert(adsense_slots.length <= 1);
   const slot = adsense_slots[0];
