@@ -54,13 +54,17 @@ async function loadAds(adSlots: AdSlots) {
   }
 
   if (!noAds) {
-    if (isAdsense(adSlots)) {
-      const success = await loadAdsense(adSlots);
-      if (!success) noAds = true;
+    let success: boolean;
+    if (isEzoic(adSlots)) {
+      // We don't need the adSense code but we try to load it
+      // in order to test if the user is using an ad blocker
+      success = await loadAdsenseCode();
+    } else if (isAdsense(adSlots)) {
+      success = await loadAdsense(adSlots);
     } else if (isGpt(adSlots)) {
-      const success = await loadGpt(adSlots);
-      if (!success) noAds = true;
+      success = await loadGpt(adSlots);
     }
+    if (!success) noAds = true;
   }
 
   if (noAds) {
@@ -142,10 +146,7 @@ async function loadAdsense(adSlots: AdSlots): Promise<boolean> {
   const adsenseSlots = getAdsenseSlots(adSlots);
   assert(adsenseSlots.length > 0);
 
-  const success = await loadScript(
-    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
-    "adsense"
-  );
+  const success = await loadAdsenseCode();
 
   if (success) {
     window.adsbygoogle = window.adsbygoogle || [];
@@ -154,6 +155,13 @@ async function loadAdsense(adSlots: AdSlots): Promise<boolean> {
     });
   }
 
+  return success;
+}
+async function loadAdsenseCode() {
+  const success = await loadScript(
+    "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
+    "adsense"
+  );
   return success;
 }
 
