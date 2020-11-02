@@ -1,6 +1,7 @@
 import "./ad_layout.css";
 import "./ad_layout_left.css";
 import "./ad_layout_btf.css";
+import "./ad-dev-debug.css";
 import { tab_app_google_adsense } from "../../tab_app_info";
 import React from "react";
 import assert from "@brillout/assert";

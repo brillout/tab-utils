@@ -86,20 +86,3 @@ html:not(.show-ads) {
 .custom-banner #custom-banner {
   cursor: pointer;
 }
-
-html.is-dev #ezoic-pub-ad-placeholder-101 + .ezoic-dev-demo,
-html.is-dev .slot-left .adsbygoogle[data-ad-slot="7889725703"] {
-  background-color: red;
-  width: 160px;
-  height: 600px;
-}
-html.is-dev #ezoic-pub-ad-placeholder-104 + .ezoic-dev-demo,
-html.is-dev .slot-left .adsbygoogle[data-ad-slot="1075920200"] {
-  background-color: blue;
-  width: 160px;
-  height: 600px;
-}
-
-html.is-dev .slot_btf {
-  background-color: yellow;
-}

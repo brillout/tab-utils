@@ -1,0 +1,17 @@
+html.is-dev:not(.user-donated) .slot-left .ezoic-dev-demo {
+  width: 728px;
+  height: 90px;
+}
+html.is-dev:not(.user-donated) .slot-BTF_2 .ezoic-dev-demo {
+  width: 160px;
+  height: 600px;
+}
+html.is-dev .slot-LEFT_AD_ATF {
+  background-color: green;
+}
+html.is-dev .slot-LEFT_AD_BTF {
+  background-color: yellow;
+}
+html.is-dev .slot-BTF_2 {
+  background-color: blue;
+}
