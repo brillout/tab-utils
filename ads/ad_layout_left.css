@@ -99,3 +99,7 @@ html.is-dev .slot-left .adsbygoogle[data-ad-slot="1075920200"] {
   width: 160px;
   height: 600px;
 }
+
+html.is-dev .slot_btf {
+  background-color: yellow;
+}

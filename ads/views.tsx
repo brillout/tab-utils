@@ -10,9 +10,10 @@ import {
   getEzoicSlot,
   getGptSlot,
   GptSlot,
+  SlotName,
 } from "./adSlots";
 
-export { Ad_ATF, Ad_BTF };
+// export { Ad_ATF, Ad_BTF };
 export { Ad_btf_2 };
 export { Ad_left };
 
@@ -29,19 +30,19 @@ function Ad_left({ ad_slots }) {
   );
 }
 
-function get_left_slot(slot_name: string, ad_slots: AdSlots) {
+function get_left_slot(slot_name: SlotName, ad_slots: AdSlots) {
   let content: React.ReactElement;
   let is_floating: boolean;
   {
     const adsense_id = getAdsenseSlotId(slot_name, ad_slots);
     if (adsense_id) {
-      content = <AdSenseAd slot_id={adsense_id} />;
+      content = <AdSenseAd slot_id={adsense_id} slotName={slot_name} />;
     }
   }
   {
     const gptSlot = getGptSlot(slot_name, ad_slots);
     if (gptSlot) {
-      content = <GptAd gptSlot={gptSlot} />;
+      content = <GptAd gptSlot={gptSlot} slotName={slot_name} />;
     }
   }
 
@@ -49,7 +50,7 @@ function get_left_slot(slot_name: string, ad_slots: AdSlots) {
     const ezoic_slot = getEzoicSlot(slot_name, ad_slots);
     if (ezoic_slot) {
       const ezoic_id = ezoic_slot.slot_id;
-      content = <EzoicAd ezoic_id={ezoic_id} />;
+      content = <EzoicAd ezoic_id={ezoic_id} slotName={slot_name} />;
 
       is_floating = ezoic_slot.is_floating;
       assert([true, undefined].includes(is_floating));
@@ -75,7 +76,6 @@ function get_left_slot(slot_name: string, ad_slots: AdSlots) {
 
 function Ad_btf_2({ ad_slots }) {
   const slot_name = "BTF_2";
-  const className = "slot_btf";
 
   let slot_content: React.ReactElement;
   {
@@ -83,7 +83,7 @@ function Ad_btf_2({ ad_slots }) {
     if (adsense_id) {
       slot_content = (
         <AdSenseAd
-          className={className}
+          slotName={slot_name}
           slot_id={adsense_id}
           auto_sizing={"horizontal"}
         />
@@ -95,7 +95,7 @@ function Ad_btf_2({ ad_slots }) {
   {
     const gptSlot = getGptSlot(slot_name, ad_slots);
     if (gptSlot) {
-      slot_content = <GptAd gptSlot={gptSlot} className={className} />;
+      slot_content = <GptAd gptSlot={gptSlot} slotName={slot_name} />;
     }
   }
 
@@ -104,7 +104,7 @@ function Ad_btf_2({ ad_slots }) {
     if (ezoic_slot) {
       assert(slot_content === undefined);
       const ezoic_id = ezoic_slot.slot_id;
-      slot_content = <EzoicAd ezoic_id={ezoic_id} className={className} />;
+      slot_content = <EzoicAd ezoic_id={ezoic_id} slotName={slot_name} />;
     }
   }
 
@@ -115,6 +115,7 @@ function Ad_btf_2({ ad_slots }) {
   return <div className="slot_btf_container">{slot_content}</div>;
 }
 
+/*
 function Ad_ATF({ ad_slots }) {
   return <AdView ad_slots={ad_slots} slot_name={"ATF"} />;
 }
@@ -122,25 +123,31 @@ function Ad_BTF({ ad_slots }) {
   return <AdView ad_slots={ad_slots} slot_name={"BTF"} />;
 }
 
-function AdView({ ad_slots, slot_name }) {
+function AdView({ ad_slots, slot_name }: {ad_slots: AdSlots, slot_name: SlotName}) {
   assert(["ATF", "BTF"].includes(slot_name));
   const slot_id = getAdsenseSlotId(slot_name, ad_slots);
   if (slot_id === null) return null;
   return (
     <div className="a-wrap">
       <div className="horizontal-slot-wrapper">
-        <AdSenseAd slot_id={slot_id} />
+        <AdSenseAd slot_id={slot_id} slotName={slot_name} />
       </div>
     </div>
   );
 }
+ */
 
-function EzoicAd({ ezoic_id, className = "" }) {
+function EzoicAd({
+  ezoic_id,
+  slotName,
+}: {
+  ezoic_id: string;
+  slotName: SlotName;
+}) {
   assert(ezoic_id);
   assert(ezoic_id.startsWith("ezoic-pub-ad-placeholder-1"));
-  className = "ezoic-ad-slot " + (className || "");
   return (
-    <div className={className}>
+    <div className={"ezoic-ad-slot slot-" + slotName}>
       <div id={ezoic_id} />
       <div className="ezoic-dev-demo" />
     </div>
@@ -149,25 +156,31 @@ function EzoicAd({ ezoic_id, className = "" }) {
 
 function GptAd({
   gptSlot,
-  className = "",
+  slotName,
 }: {
   gptSlot: GptSlot;
-  className?: string;
+  slotName: SlotName;
 }): React.ReactElement {
   return (
     <div
       id={gptSlot.slot_id}
-      className={className}
+      className={"slot-" + slotName}
       style={{ width: gptSlot.slotSize[0], height: gptSlot.slotSize[1] }}
     />
   );
 }
 
-function AdSenseAd({ slot_id, className = "", auto_sizing = undefined }) {
+function AdSenseAd({
+  slot_id,
+  slotName,
+  auto_sizing = undefined,
+}: {
+  slot_id: string;
+  slotName: SlotName;
+  auto_sizing?: "horizontal";
+}) {
   assert(tab_app_google_adsense.startsWith("ca-pub-"));
   assert([undefined, "horizontal"].includes(auto_sizing));
-
-  className = "adsbygoogle " + className;
 
   const props = {};
   if (auto_sizing) {
@@ -179,7 +192,7 @@ function AdSenseAd({ slot_id, className = "", auto_sizing = undefined }) {
 
   return (
     <ins
-      className={className}
+      className={"adsbygoogle slot-" + slotName}
       data-ad-client={tab_app_google_adsense}
       data-ad-slot={slot_id}
       {...props}

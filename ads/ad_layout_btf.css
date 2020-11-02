@@ -1,4 +1,4 @@
-.slot_btf {
+.slot-BTF_2 {
   display: block;
 }
 
@@ -9,11 +9,16 @@
   overflow: hidden;
 }
 
-html.is-dev:not(.user-donated) #ezoic-pub-ad-placeholder-105 + .ezoic-dev-demo {
+html.is-dev:not(.user-donated) .slot-left .ezoic-dev-demo {
   width: 728px;
   height: 90px;
+}
+html.is-dev .slot-LEFT_AD_ATF {
+  background-color: green;
+}
+html.is-dev .slot-LEFT_AD_BTF {
   background-color: yellow;
 }
-html.is-dev:not(.user-donated) .slot_btf.adsbygoogle {
-  background-color: yellow;
+html.is-dev .slot-BTF_2 {
+  background-color: blue;
 }

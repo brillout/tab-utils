@@ -13,7 +13,7 @@ export {
 
 export type AdSlots = EzoicSlot[] | AdsenseSlot[] | GptSlot[];
 export type AdSlot = EzoicSlot | AdsenseSlot | GptSlot;
-type SlotName = "LEFT_AD_ATF" | "LEFT_AD_BTF" | "BTF_2";
+export type SlotName = "LEFT_AD_ATF" | "LEFT_AD_BTF" | "BTF_2";
 type AdSpec = {
   slot_id: string;
   slot_name: SlotName;
