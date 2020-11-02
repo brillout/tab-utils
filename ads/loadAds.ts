@@ -5,7 +5,6 @@ import {
   get_number_of_visits_in_the_last_24_hours,
 } from "../views/common/tracker";
 import { get_browser_name } from "../utils/get_browser_info";
-// import { enable_products_view } from "./Products/ProductsView";
 import { disable_ezoic, enable_ezoic } from "./ezoic";
 import { getElementScrollPos, addScrollListener } from "../pretty_scroll_area";
 import { loadScript } from "../loadScript";
@@ -20,7 +19,6 @@ import {
 
 export { loadAds };
 export { user_donated };
-// export { get_product_slots };
 export const AD_REMOVAL_KEY = "ad_removal";
 export { disableAds };
 
@@ -79,62 +77,6 @@ function disableAds() {
   store.set_val(AD_REMOVAL_KEY, true);
   disable_ezoic();
 }
-/*
-function get_product_slots(AD_SLOTS) {
-  const product_slots = filter_slots(AD_SLOTS, (slot) => slot.is_product);
-  return product_slots;
-}
-function get_custom_slot(AD_SLOTS) {
-  const slots__match = filter_slots(AD_SLOTS, (slot) => slot.is_custom);
-  if (slots__match.length === 0) {
-    return null;
-  }
-  assert(slots__match.length === 1);
-  const custom_slot = slots__match[0];
-  assert(custom_slot.is_custom === true);
-  return custom_slot;
-}
-*/
-
-/*
-function load_custom_banner(AD_SLOTS) {
-  const custom_slot = get_custom_slot(AD_SLOTS);
-
-  if (custom_slot === null) {
-    return;
-  }
-
-  const left_slot = document.querySelector(".slot-left");
-  assert(left_slot, "couldn't find left_slot");
-
-  left_slot.classList.add("custom-banner");
-
-  const vertical_slot_wrapper = left_slot.querySelector(
-    ".vertical-slot-wrapper"
-  );
-  assert(vertical_slot_wrapper, "couldn't find vertical_slot_wrapper");
-
-  const { img_src, click_name, slot_name, is_custom } = custom_slot;
-  assert(img_src);
-  assert(click_name === "monitor_banner");
-  assert(slot_name === "LEFT_AD_ATF");
-  assert(is_custom === true);
-
-  vertical_slot_wrapper.innerHTML = `
-    <img
-      click-name="${click_name}"
-      src="${img_src}"
-      id="custom-banner"
-    />
-  `;
-
-  // enable_products_view(custom_slot);
-
-  //show_ads();
-
-  track_event({ name: "[custom-ad] activated" });
-}
- */
 
 type GoogleTag = {
   cmd: (() => void)[];
