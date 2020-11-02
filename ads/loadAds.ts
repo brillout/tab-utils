@@ -15,7 +15,7 @@ import {
   getGptSlots,
   getAdsenseSlots,
   isEzoic,
-} from "./adSlots";
+} from "./slots";
 
 export { loadAds };
 export { user_donated };

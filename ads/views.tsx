@@ -12,7 +12,7 @@ import {
   getGptSlot,
   GptSlot,
   SlotName,
-} from "./adSlots";
+} from "./slots";
 
 // export { Ad_ATF, Ad_BTF };
 export { Ad_btf_2 };
