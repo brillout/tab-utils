@@ -12,6 +12,26 @@
 .slot-left ~ .slot-left {
   margin-top: 10px;
 }
+#ads-left {
+  position: relative;
+}
+#ads-left:before {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+}
+#ads-left:before {
+  content: "\A A \A d \A v \A e \A r \A t";
+  width: 100%;
+  height: 100vh;
+  font-size: 1.44em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  white-space: pre;
+}
 .vertical-slot-wrapper {
   overflow: hidden;
   max-width: 160px;

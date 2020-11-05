@@ -24,7 +24,7 @@ function Ad_left({ ad_slots }) {
   assert(slot_left_atf || slot_left_btf);
 
   return (
-    <div>
+    <div id="ads-left">
       {slot_left_atf}
       {slot_left_btf}
     </div>
