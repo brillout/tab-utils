@@ -15,6 +15,7 @@ import {
   getGptSlots,
   getAdsenseSlots,
   isEzoic,
+  GptSizeMap,
 } from "./slots";
 
 export { loadAds };
@@ -82,14 +83,30 @@ function disableAds() {
   disable_ezoic();
 }
 
+type SizeMap = {
+  addSize: (
+    viewport: GptSizeMap["viewport"],
+    adSize: GptSizeMap["adSize"]
+  ) => SizeMap;
+  build: () => SizeMap;
+};
+type GptService = {
+  enableSingleRequest: () => void;
+  _brand?: "GptService";
+};
+type GptSlot = {
+  addService: (arg: GptService) => void;
+  defineSizeMapping: (arg: SizeMap) => GptSlot;
+};
 type GoogleTag = {
   cmd: (() => void)[];
   defineSlot: (
     adName: string,
     slotSize: [number, number],
     slotId: string
-  ) => any;
-  pubads: () => any;
+  ) => GptSlot;
+  sizeMapping: () => SizeMap;
+  pubads: () => GptService;
   enableServices: () => void;
   display: (slotId: string) => void;
 };
@@ -110,7 +127,7 @@ async function loadGpt(adSlots: AdSlots): Promise<boolean> {
   if (success) {
     window.googletag = window.googletag || ({ cmd: [] } as GoogleTag);
     window.googletag.cmd.push(function () {
-      gptSlots.forEach(({ slot_id, adName, slotSize }) => {
+      gptSlots.forEach(({ slot_id, adName, slotSize, sizeMapping }) => {
         assert(slot_id.constructor === String);
         assert(adName.constructor === String);
         assert(
@@ -118,9 +135,19 @@ async function loadGpt(adSlots: AdSlots): Promise<boolean> {
             slotSize[0].constructor === Number &&
             slotSize[1].constructor === Number
         );
-        window.googletag
-          .defineSlot(adName, slotSize, slot_id)
-          .addService(window.googletag.pubads());
+
+        let slot = window.googletag.defineSlot(adName, slotSize, slot_id);
+
+        if (sizeMapping) {
+          let mapping = window.googletag.sizeMapping();
+          sizeMapping.forEach((map) => {
+            mapping = mapping.addSize(map.viewport, map.adSize);
+          });
+          mapping = mapping.build();
+          slot = slot.defineSizeMapping(mapping);
+        }
+
+        slot.addService(window.googletag.pubads());
       });
 
       window.googletag.pubads().enableSingleRequest();

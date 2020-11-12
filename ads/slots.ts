@@ -25,10 +25,15 @@ export type EzoicSlot = AdSpec & {
 export type AdsenseSlot = AdSpec & {
   is_adsense: true;
 };
+export type GptSizeMap = {
+  viewport: [number, number];
+  adSize: [number, number] | [];
+};
 export type GptSlot = AdSpec & {
   slotSize: [number, number];
   adName: string;
   is_gpt: true;
+  sizeMapping?: GptSizeMap[];
 };
 
 function getEzoicSlot(slot_name: string, ad_slots: AdSlots): EzoicSlot {
