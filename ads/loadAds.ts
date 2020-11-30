@@ -17,6 +17,7 @@ import {
   isEzoic,
   GptSizeMap,
 } from "./slots";
+import { loadQuantcastConsent } from "./quantcast-consent";
 
 export { loadAds };
 export { user_donated };
@@ -24,6 +25,10 @@ export const AD_REMOVAL_KEY = "ad_removal";
 export { disableAds };
 
 const SHOW_DELAY = 1.3;
+
+export type AdSettings = {
+  loadQuantcastConsent?: true;
+};
 
 initAds();
 
@@ -47,7 +52,7 @@ function initAds() {
   }
 }
 
-async function loadAds(adSlots: AdSlots) {
+async function loadAds(adSlots: AdSlots, adSettings: AdSettings = {}) {
   let noAds: true | undefined;
 
   if (dont_show_ads(adSlots)) {
@@ -74,6 +79,7 @@ async function loadAds(adSlots: AdSlots) {
     setTimeout(() => {
       document.documentElement.classList.add("show-ads");
       enable_floating_ads();
+      if (adSettings.loadQuantcastConsent) loadQuantcastConsent();
     }, SHOW_DELAY * 1000);
   }
 }
