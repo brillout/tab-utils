@@ -2,6 +2,8 @@
 
 // Quantcast Choice. Consent Manager Tag v2.0 (for TCF 2.0)
 
+import "./quantcast-consent.css";
+
 export { loadQuantcastConsent };
 
 function loadQuantcastConsent() {
