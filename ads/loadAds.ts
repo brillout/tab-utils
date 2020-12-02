@@ -18,6 +18,7 @@ import {
   GptSizeMap,
 } from "./slots";
 import { loadQuantcastConsent } from "./quantcast-consent";
+import { loadOneTagScript } from "./onetag";
 
 export { loadAds };
 export { user_donated };
@@ -28,6 +29,7 @@ const SHOW_DELAY = 1.3;
 
 export type AdSettings = {
   loadQuantcastConsent?: true;
+  loadOneTag?: true;
 };
 
 initAds();
@@ -80,6 +82,7 @@ async function loadAds(adSlots: AdSlots, adSettings: AdSettings = {}) {
       document.documentElement.classList.add("show-ads");
       enable_floating_ads();
       if (adSettings.loadQuantcastConsent) loadQuantcastConsent();
+      if (adSettings.loadOneTag) loadOneTagScript();
     }, SHOW_DELAY * 1000);
   }
 }

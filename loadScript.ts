@@ -5,7 +5,7 @@ export { loadScript };
 
 const LOAD_TIMEOUT = 5;
 
-type ScriptName = "adsense" | "gpt";
+type ScriptName = "adsense" | "gpt" | "onetag";
 
 async function loadScript(
   scriptUrl: string,
