@@ -4,5 +4,8 @@ html {
   background-attachment: fixed;
   min-height: 100%;
   min-width: 100%;
+  /* TODO
+  background-image: url(../../../utils/icons/loader-1.gif);
+  */
   background-image: url("https://i.imgur.com/zqG5F.gif");
 }
